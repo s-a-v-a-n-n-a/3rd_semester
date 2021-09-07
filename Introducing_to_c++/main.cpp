@@ -20,9 +20,9 @@ int main()
     axes_2.init(400, 100, 0, 100, -100, 100);
 
     Vector vector_w_arrow = {};
-    vector_w_arrow.init_relative(axes_1, 200, 200, 50, 50);
+    vector_w_arrow.init_relative(axes_1, {200, 200}, 50, 50);
     Vector vector_w_arrow2 = {};
-    vector_w_arrow2.init_relative(axes_1, 50, 200, -100, 200);
+    vector_w_arrow2.init_relative(axes_1, {50, 200}, -100, 200);
     
 
     Chart chart_1 = {};

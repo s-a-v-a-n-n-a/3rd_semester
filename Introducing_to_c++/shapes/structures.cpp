@@ -66,13 +66,13 @@ void draw_axes(sf::RenderWindow *window, System_of_axes coordinates)
 	// sf::Vertex ord_end  (sf::Vector2f(fabs(abs_min), fabs(ord_max)));
 
 	Vector abscissa_axe = {};
-    abscissa_axe.init_simple(offset_x, fabs(ord_max) + offset_y, fabs(abs_max - abs_min) + offset_x + (coordinates.x_max < 0 && coordinates.y_max < 0 ? fabs(coordinates.x_max) : 0), fabs(ord_max) + offset_y);
+    abscissa_axe.init_simple({offset_x, fabs(ord_max) + offset_y}, {fabs(abs_max - abs_min) + offset_x + (coordinates.x_max < 0 && coordinates.y_max < 0 ? fabs(coordinates.x_max) : 0), fabs(ord_max) + offset_y});
     // if (coordinates.x_max < 0 && coordinates.y_max < 0)
     // 	abscissa_axe.end_point_x += fabs(coordinates.x_max);
     abscissa_axe.draw_shape(&abscissa_axe, window);
 
     Vector ordinate_axe = {};
-    ordinate_axe.init_simple(fabs(abs_min) + offset_x, fabs(ord_max - ord_min) + offset_y, fabs(abs_min) + offset_x, offset_y + (coordinates.x_min > 0 && coordinates.y_min > 0 ? coordinates.y_min : 0));
+    ordinate_axe.init_simple({fabs(abs_min) + offset_x, fabs(ord_max - ord_min) + offset_y}, {fabs(abs_min) + offset_x, offset_y + (coordinates.x_min > 0 && coordinates.y_min > 0 ? coordinates.y_min : 0)});
     // if (coordinates.x_min > 0 && coordinates.y_min > 0)
     // 	ordinate_axe.end_point_y += coordinates.y_min;
     ordinate_axe.draw_shape(&ordinate_axe, window);

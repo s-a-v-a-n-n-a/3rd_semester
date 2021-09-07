@@ -1,6 +1,6 @@
 #include "simple_list.hpp"
 
-extern const size_t LIST_SIZE = 10;
+const size_t LIST_SIZE = 10;
 
 List *list_create(size_t capacity)
 {

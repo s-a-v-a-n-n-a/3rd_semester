@@ -1,88 +1,63 @@
 #include "derived_shapes.hpp"
 
-extern const sf::Color DEFAULT_COLOR = sf::Color(196, 0, 171); 
+const sf::Color DEFAULT_COLOR = sf::Color(196, 0, 171); 
 
-extern const double ARROW_ANGLE = 45.0 * 180.0 / M_PI;
-extern const double ARROW_LEN_PERCENTAGE = 0.3;
+const double ARROW_ANGLE = 45.0 * 180.0 / M_PI;
+const double ARROW_LEN_PERCENTAGE = 0.3;
 
-extern const double VECTOR_LEN_DEFAULT = 100;
-extern const double ARROW_LEN_DEFAULT = VECTOR_LEN_DEFAULT * ARROW_LEN_PERCENTAGE;
+const double VECTOR_LEN_DEFAULT = 100;
+const double ARROW_LEN_DEFAULT = VECTOR_LEN_DEFAULT * ARROW_LEN_PERCENTAGE;
 
-extern const size_t POINTS_AMOUNT = 10000;
+const size_t POINTS_AMOUNT = 10000;
 
-extern const double COEF_A = 0.5;
-extern const double COEF_B = 0.0;
-extern const double COEF_C = 0.0;
+const double COEF_A = 0.5;
+const double COEF_B = 0.0;
+const double COEF_C = 0.0;
 
-void Vector::calculate_arrow_ends()
+void Vector::calculate_arrow_ends(double par_projection_vertical, double par_projection_horizontal)
 {
-	double tmp_arrow_tail_length = length < VECTOR_LEN_DEFAULT? ARROW_LEN_PERCENTAGE * length : ARROW_LEN_DEFAULT; 
-	
-	Point left_end = rotate_point(Point{ end_point_x, end_point_y}, 
-								  Point{ end_point_x - tmp_arrow_tail_length * (double)sin(ARROW_ANGLE), end_point_y - tmp_arrow_tail_length * (double)cos(ARROW_ANGLE)},
-								   		 angle);
-	
-	left_tail_end = sf::Vertex(sf::Vector2f(left_end.x, left_end.y), DEFAULT_COLOR);
+	double tmp_length = sqrt(par_projection_horizontal * par_projection_horizontal + par_projection_vertical * par_projection_vertical);
+	double tmp_arrow_tail_length = tmp_length < VECTOR_LEN_DEFAULT? ARROW_LEN_PERCENTAGE * tmp_length : ARROW_LEN_DEFAULT; 
+	double tmp_angle = atan2(par_projection_vertical, par_projection_horizontal);
 
-	Point right_end = rotate_point(Point{ end_point_x, end_point_y}, 
-								   Point{ end_point_x - tmp_arrow_tail_length * (double)sin(ARROW_ANGLE), end_point_y + tmp_arrow_tail_length * (double)cos(ARROW_ANGLE)},
-								   		  angle);
-
-	right_tail_end = sf::Vertex(sf::Vector2f(right_end.x, right_end.y), DEFAULT_COLOR);
+	left_tail_end = rotate_point(end_point, 
+								  Point{ end_point.x - tmp_arrow_tail_length * (double)sin(ARROW_ANGLE), end_point.y - tmp_arrow_tail_length * (double)cos(ARROW_ANGLE)},
+								   		 tmp_angle);
+	
+	right_tail_end = rotate_point(end_point, 
+								   Point{ end_point.x - tmp_arrow_tail_length * (double)sin(ARROW_ANGLE), end_point.y + tmp_arrow_tail_length * (double)cos(ARROW_ANGLE)},
+								   		  tmp_angle);
 }
 
-void Vector::init_simple(double par_begin_point_x, double par_begin_point_y, double par_end_point_x, double par_end_point_y)
+void Vector::init_simple(Point par_begin_point, Point par_end_point)
 {
 	draw_shape = draw_vector;
 
-	begin_point_x = par_begin_point_x;
-	begin_point_y = par_begin_point_y;
-	end_point_x = par_end_point_x;
-	end_point_y = par_end_point_y;
+	begin_point = par_begin_point;
 
-	begin_point = sf::Vertex(sf::Vector2f(begin_point_x, begin_point_y), DEFAULT_COLOR);
-	end_point   = sf::Vertex(sf::Vector2f(end_point_x, end_point_y), DEFAULT_COLOR);
+	end_point = par_end_point;
 
-	projection_horizontal = end_point_x - begin_point_x;
-	projection_vertical   = end_point_y - begin_point_y;
-
-	length = sqrt(projection_horizontal * projection_horizontal + projection_vertical * projection_vertical);
-
-	calculate_arrow_ends();
-	calculate_angle();
+	double projection_horizontal = end_point.x - begin_point.x;
+	double projection_vertical   = end_point.y - begin_point.y;
+	calculate_arrow_ends(projection_vertical, projection_horizontal);
 }
 
-void Vector::init_relative(System_of_axes coordinates, double par_begin_point_x, double par_begin_point_y, double par_projection_horizontal, double par_projection_vertical)
+void Vector::init_relative(System_of_axes coordinates, Point par_begin_point, double par_projection_horizontal, double par_projection_vertical)
 {
 	draw_shape = draw_vector;
 
-	begin_point_x = par_begin_point_x + coordinates.zero_point_x;
-	begin_point_y = par_begin_point_y + coordinates.zero_point_y;
-	end_point_x = begin_point_x + par_projection_horizontal;
-	end_point_y = begin_point_y + par_projection_vertical;
+	begin_point = { par_begin_point.x + coordinates.zero_point_x, par_begin_point.y + coordinates.zero_point_y};
 
-	begin_point = sf::Vertex(sf::Vector2f(begin_point_x, begin_point_y), DEFAULT_COLOR);
-	end_point   = sf::Vertex(sf::Vector2f(end_point_x, end_point_y), DEFAULT_COLOR);
+	end_point = { begin_point.x + par_projection_horizontal, begin_point.y + par_projection_vertical};
 
-	projection_horizontal = par_projection_horizontal;
-	projection_vertical   = par_projection_vertical;
-
-	length = sqrt(projection_horizontal * projection_horizontal + projection_vertical * projection_vertical);
-
-	calculate_arrow_ends();
-	calculate_angle();
+	calculate_arrow_ends(par_projection_vertical, par_projection_horizontal);
 }
 
 
-void Vector::calculate_angle()
-{
-	angle = atan(projection_vertical/projection_horizontal);
-
-	if (projection_horizontal < 0)
-	{
-		angle += M_PI;
-	}
-}
+// double Vector::calculate_angle(double projection_vertical, double projection_horizontal)
+// {
+// 	return atan2(projection_vertical, projection_horizontal);
+// }
 
 // double get_angle(Vector *thus)
 // {
@@ -106,25 +81,11 @@ void draw_vector(Shape *shape, sf::RenderWindow *window)
 {
 	Vector *this_vector = (Vector*)shape;
 
-	draw_line(window, this_vector->begin_point, this_vector->end_point);
+	draw_line_sfml(window, this_vector->begin_point, this_vector->end_point);
 
-	double arrow_tail_length = this_vector->length < VECTOR_LEN_DEFAULT? ARROW_LEN_PERCENTAGE * this_vector->length : ARROW_LEN_DEFAULT; 
-	
-	Point above_end = rotate_point(Point{ this_vector->end_point_x, this_vector->end_point_y}, 
-								   Point{ this_vector->end_point_x - arrow_tail_length * (double)sin(ARROW_ANGLE), this_vector->end_point_y - arrow_tail_length * (double)cos(ARROW_ANGLE)},
-								   		  this_vector->angle);
-	
-	Vector above = {};
-	above.init_simple(this_vector->end_point_x, this_vector->end_point_y, above_end.x, above_end.y);
-	draw_line(window, above.begin_point, above.end_point);
+	draw_line_sfml(window, this_vector->end_point, this_vector->left_tail_end);
 
-	Point under_end = rotate_point(Point{ this_vector->end_point_x, this_vector->end_point_y}, 
-								   Point{ this_vector->end_point_x - arrow_tail_length * (double)sin(ARROW_ANGLE), this_vector->end_point_y + arrow_tail_length * (double)cos(ARROW_ANGLE)},
-								   		  this_vector->angle);
-
-	Vector under = {};
-	under.init_simple(this_vector->end_point_x, this_vector->end_point_y, under_end.x, under_end.y);
-	draw_line(window, under.begin_point, under.end_point);
+	draw_line_sfml(window, this_vector->end_point, this_vector->right_tail_end);
 }
 
 
@@ -159,8 +120,8 @@ void draw_chart(Shape *shape, sf::RenderWindow *window)
 		double ordinate = this_chart->chart_equation(i);
 		if (ordinate >= this_chart->field.y_min && ordinate <= this_chart->field.y_max)
 		{
-			sf::Vertex tmp_point(sf::Vector2f(i + offset_x, -1 * (ordinate) + offset_y), DEFAULT_COLOR);
-			draw_point(window, tmp_point);
+			Point tmp_point = {i + offset_x, -1 * (ordinate) + offset_y};
+			draw_point_sfml(window, tmp_point);
 		}
 	}
 }

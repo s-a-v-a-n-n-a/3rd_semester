@@ -21,35 +21,22 @@ extern const double COEF_A;
 extern const double COEF_B;
 extern const double COEF_C;
 
+
 struct Vector : Shape
 {
-	double begin_point_x;
-	double begin_point_y;
+	Point begin_point;
 
-	double end_point_x;
-	double end_point_y;
+	Point end_point;
 
-	sf::Vertex begin_point;
-	sf::Vertex end_point;
+	Point left_tail_end;
+	Point right_tail_end;
 
-	sf::Vertex left_tail_end;
-	sf::Vertex right_tail_end;
+	void init_simple(Point par_begin_point, Point par_end_point);
+	void init_relative(System_of_axes where, Point par_begin_point, double par_projection_horizontal, double par_projection_vertical);
 
-	double angle;
-	double length;
-
-	double projection_horizontal;
-	double projection_vertical;
-
-	void init_simple(double par_begin_point_x, double par_begin_point_y, double par_end_point_x, double par_end_point_y);
-	void init_relative(System_of_axes where, double par_begin_point_x, double par_begin_point_y, double par_projection_horizontal, double par_projection_vertical);
-
-	void calculate_arrow_ends();
-	void calculate_angle();
+	void calculate_arrow_ends(double par_projection_vertical, double par_projection_horizontal);
 };
 
-// void draw_point(sf::Vertex point, sf::RenderWindow *window);
-// void draw_line(sf::Vertex begin, sf::Vertex end, sf::RenderWindow *window);
 void draw_vector(Shape *shape, sf::RenderWindow *window);
 Point rotate_point(Point point_0, Point point, double angle);
 
