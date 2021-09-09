@@ -13,11 +13,11 @@ class Work_field
 {
 public:
 	System_of_axes coordinates;
-	List *shapes;
+	List<Shape*> *shapes;
 
 	Work_field(System_of_axes &coordinates, size_t list_size = LIST_SIZE) : coordinates(coordinates)
 	{
-		shapes = new List(list_size);
+		shapes = new List<Shape*>(list_size);
 	}
 
 	~Work_field()
@@ -28,7 +28,6 @@ public:
 	void add_shape(Shape *shape);
 
 	void draw(sf::RenderWindow *window);
-	// friend draw_axes(sf::RenderWindow *window, System_of_axes coordinates);
 };
 
 Work_field *work_field_create(System_of_axes coordinates, size_t list_size = LIST_SIZE);

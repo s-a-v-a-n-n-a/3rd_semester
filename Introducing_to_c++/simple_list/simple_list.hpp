@@ -4,19 +4,17 @@
 #include <cstddef>
 #include <cstdio>
 
-#include "../shapes/shape_base.hpp"
+const size_t LIST_SIZE = 10;
 
-extern const size_t LIST_SIZE;
-
-typedef Shape* list_type;
-
-class List
+template <typename list_type> class List
 {
 private:
+	
 	list_type *array;
 
 	size_t capacity;
 	size_t length;
+
 public:
 
 	List(size_t capacity)
