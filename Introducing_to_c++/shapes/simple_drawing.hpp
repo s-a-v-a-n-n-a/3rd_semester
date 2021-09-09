@@ -3,10 +3,22 @@
 
 #include <SFML/Graphics.hpp>
 
-struct Point
+enum Shapes_types
 {
+	POINT = 1,
+	LINE  = 2
+};
+
+class Point
+{
+public:
 	double x;
 	double y;
+
+	const Point operator+=(const Point &other)
+	{
+		return { x += other.x, y += other.y };
+	} 
 };
 
 inline void draw_point_sfml(sf::RenderWindow *window, Point point)

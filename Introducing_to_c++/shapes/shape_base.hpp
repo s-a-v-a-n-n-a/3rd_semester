@@ -4,15 +4,13 @@
 
 #include <SFML/Graphics.hpp>
 
-enum Shapes_types
+class Shape
 {
-	POINT = 1,
-	LINE  = 2
-};
-
-struct Shape
-{
-	void (*draw_shape)(Shape *shape, sf::RenderWindow *window);
+public:
+	virtual void draw_shape(sf::RenderWindow *window)
+	{
+		
+	}
 };
 
 

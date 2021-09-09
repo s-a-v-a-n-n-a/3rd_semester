@@ -1,4 +1,4 @@
-CFLAGS = -g -masm=intel -no-pie -march=native -O1
+CFLAGS = -g -masm=intel -no-pie -march=native -O1 -std=c++11
 
 link: main.o simple_list.o coordinate_axes.o derived_shapes.o structures.o
 	g++ main.o simple_list.o coordinate_axes.o derived_shapes.o structures.o -o main -lsfml-graphics -lsfml-window -lsfml-system
