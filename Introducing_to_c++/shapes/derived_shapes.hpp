@@ -69,6 +69,16 @@ public:
 	{
 		return Vector(begin_point += other.get_begin_point(), end_point += other.get_end_point());
 	}
+
+	const Vector operator*=(const double scale)
+	{
+		Point radius_vector = end_point;
+
+		radius_vector -= begin_point;
+		radius_vector *= scale;
+
+		return Vector(begin_point, end_point += radius_vector);
+	}
 };
 
 class Vector_w_arrow : public Vector
@@ -105,6 +115,16 @@ public:
 	const Vector_w_arrow operator+=(const Vector_w_arrow &other)
 	{
 		return Vector_w_arrow(begin_point += other.get_begin_point(), end_point += other.get_end_point());
+	}
+
+	const Vector_w_arrow operator*=(const double scale)
+	{
+		Point radius_vector = end_point;
+
+		radius_vector -= begin_point;
+		radius_vector *= scale;
+		
+		return Vector_w_arrow(begin_point, end_point += radius_vector);
 	}
 };
 

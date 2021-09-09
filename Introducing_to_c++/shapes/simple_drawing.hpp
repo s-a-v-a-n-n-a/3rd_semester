@@ -19,6 +19,16 @@ public:
 	{
 		return { x += other.x, y += other.y };
 	} 
+
+	const Point operator-=(const Point &other)
+	{
+		return { x -= other.x, y -= other.y };
+	} 
+
+	const Point operator*=(const double scale)
+	{
+		return { x *= scale, y *= scale };
+	} 
 };
 
 inline void draw_point_sfml(sf::RenderWindow *window, Point point)
