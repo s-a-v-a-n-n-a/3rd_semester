@@ -38,6 +38,14 @@ inline void draw_point_sfml(sf::RenderWindow *window, Point point)
 	window->draw(&sfml_point, POINT, sf::Points);
 }
 
+// inline void draw_point_sfml(Screen_information *screen, Point point)
+// {
+// 	// sf::Vertex sfml_point(sf::Vector2f(point.x, point.y), sf::Color(196, 0, 171));
+
+// 	// window->draw(&sfml_point, POINT, sf::Points);
+	
+// }
+
 inline void draw_line_sfml(sf::RenderWindow *window, Point begin, Point end) // redo // redid
 {
 	sf::Vertex sfml_begin(sf::Vector2f(begin.x, begin.y), sf::Color(196, 0, 171));
