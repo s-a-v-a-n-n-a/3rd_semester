@@ -11,9 +11,6 @@
 
 int main()
 {
-    // sf::Image image;
-    // image.create(700, 700, sf::Color::Black);
-
     sf::RenderWindow window(sf::VideoMode(700, 700), "It works");
 
     Screen_information screen(700, 700);
@@ -21,8 +18,9 @@ int main()
     Circle test({150, 150}, 200);
     // test.draw_shape(&screen);
 
-    Lightened_sphere test_sphere(test, {0, 300, 100});
-    test_sphere.draw_lambert(&screen);
+    Lightened_sphere test_sphere(test, {0, 0, 300}, {700, 700, 0});
+    // test_sphere.draw_z(&screen);
+    test_sphere.draw_lambert_and_fong(&screen);
 
     while (window.isOpen())
     {

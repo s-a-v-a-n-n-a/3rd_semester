@@ -40,20 +40,28 @@ public:
 	Point_3d get_begin_point() const { return begin_point; }
 	Point_3d get_end_point()   const { return end_point; }
 
+	virtual void set_begin_point(Point_3d par_begin_point);
 	virtual void set_end_point(Point_3d par_end_point);
+	void set_length(double par_length);
 
-	const Vector_3d operator+=(const Vector_3d &other)
+	Vector_3d& operator+=(const Vector_3d &other)
 	{
-		return Vector_3d(begin_point += other.get_begin_point(), end_point += other.get_end_point());
+		begin_point += other.get_begin_point();
+		end_point += other.get_end_point();
+		
+		return *this;
 	}
-	const Vector_3d operator*=(const double scale)
+	Vector_3d& operator*=(const double scale)
 	{
 		Point_3d radius_vector = end_point;
 
 		radius_vector -= begin_point;
 		radius_vector *= scale;
+		
+		end_point = begin_point;
+		end_point += radius_vector;
 
-		return Vector_3d(begin_point, end_point += radius_vector);
+		return *this;
 	}
 
 	const Vector_3d normalize();
@@ -61,6 +69,16 @@ public:
 	const double    scalar_multiplication(const Vector_3d &other) const;
 	const double    length() const;
 	const double    cosine_of_angle_between(const Vector_3d &other);
+
+	// const void parallel_transfer(Point_3d future_begin_point)
+	// {
+	// 	Point_3d changes = future_begin_point - begin_point;
+
+	// 	set_begin_point(future_begin_point);
+	// 	set_end_point(end_point + changes);
+	// }
+
+	Vector_3d reflect_vector_relative_vector(Vector_3d &vector_0);
 };
 
 class Vector_w_arrow_3d : public Vector_3d

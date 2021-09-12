@@ -39,14 +39,19 @@ void Vector_3d::draw_shape(sf::RenderWindow *window)
 const Vector_3d Vector_3d::normalize()
 {
 	Point_3d normalized_vector_begin_point = end_point;
-
-	Point_3d normalized_vector_end_point = rotate_point_on_flat(begin_point, end_point, M_PI); // в какую сторону поворачивать????	
+	Point_3d normalized_vector_end_point = end_point.rotate_point_on_flat(begin_point, M_PI); // в какую сторону поворачивать????	
+	
 	return Vector_3d(normalized_vector_begin_point, normalized_vector_end_point);		
 }
 
-const Vector_3d Vector_3d::to_mathematical() const
+const Vector_3d Vector_3d::to_mathematical() const // здесь нужно относительно кое-чего другого
 {
-	return Vector_3d({0, 0, 0}, end_point - begin_point);
+	Point_3d radius_vector = end_point;
+	radius_vector -= begin_point;
+
+	return Vector_3d({0, 0, 0}, radius_vector);
+
+	// return Vector_3d(center, (end_point - begin_point) + center_point;
 }
 
 const double Vector_3d::scalar_multiplication(const Vector_3d &other) const
@@ -74,9 +79,37 @@ const double Vector_3d::cosine_of_angle_between(const Vector_3d &other)
 	if (!this_length || !other_length)
 		return 0;
 
-	// printf("scalar %lg\n", scalar_multiplication(other));
-
 	return scalar_multiplication(other)/(this_length * other_length);
+}
+
+void Vector_3d::set_length(double par_length)
+{
+	double length = this->length();
+	// printf("len before %lg\n", length);
+	double scale = par_length / length;
+
+	(*this) *= scale;
+}
+
+Vector_3d Vector_3d::reflect_vector_relative_vector(Vector_3d &vector_0)
+{
+	double cos_angle = this->cosine_of_angle_between(vector_0);
+	if (cos_angle == 0)
+		return *this;
+	
+	Vector_3d tmp_vector_0(vector_0);
+	tmp_vector_0.set_length(cos_angle / abs(cos_angle));
+
+	Vector_3d tmp_this(*this);
+	tmp_this.set_length(1.0/cos_angle);
+
+	Point_3d change = tmp_vector_0.end_point;// - this->end_point;
+	change -= this->end_point;
+
+	Point_3d reflected_vector_end = vector_0.end_point;// + change;
+	reflected_vector_end += change;
+
+	return Vector_3d(this->begin_point, reflected_vector_end);
 }
 
 
@@ -101,7 +134,7 @@ const Vector_w_arrow_3d Vector_w_arrow_3d::normalize()
 {
 	Point_3d normalized_vector_begin_point = end_point;
 
-	Point_3d normalized_vector_end_point = rotate_point_on_flat(begin_point, end_point, M_PI); // в какую сторону поворачивать????	
+	Point_3d normalized_vector_end_point = end_point.rotate_point_on_flat(begin_point, M_PI); // в какую сторону поворачивать????	
 	return Vector_w_arrow_3d(normalized_vector_begin_point, normalized_vector_end_point);		
 }
 
@@ -111,18 +144,21 @@ void Vector_w_arrow_3d::calculate_arrow_ends(double par_projection_y, double par
 	double tmp_arrow_tail_length = tmp_length < VECTOR_LEN_DEFAULT? ARROW_LEN_PERCENTAGE * tmp_length : ARROW_LEN_DEFAULT; 
 	double tmp_angle = atan2(par_projection_y, par_projection_x);
 
-	left_tail_end = rotate_point_on_flat(end_point, 
-								         Point_3d{ end_point.x - tmp_arrow_tail_length * (double)sin(ARROW_ANGLE), end_point.y - tmp_arrow_tail_length * (double)cos(ARROW_ANGLE), end_point.z},
-								   		 tmp_angle);
+	Point_3d left_point_to_rotate = { end_point.x - tmp_arrow_tail_length * (double)sin(ARROW_ANGLE), end_point.y - tmp_arrow_tail_length * (double)cos(ARROW_ANGLE), end_point.z };
+	left_tail_end = left_point_to_rotate.rotate_point_on_flat(end_point, tmp_angle);
 	
-	right_tail_end = rotate_point_on_flat(end_point, 
-								          Point_3d{ end_point.x - tmp_arrow_tail_length * (double)sin(ARROW_ANGLE), end_point.y + tmp_arrow_tail_length * (double)cos(ARROW_ANGLE), end_point.z},
-								   		  tmp_angle);
+	Point_3d right_point_to_rotate = { end_point.x - tmp_arrow_tail_length * (double)sin(ARROW_ANGLE), end_point.y + tmp_arrow_tail_length * (double)cos(ARROW_ANGLE), end_point.z };
+	right_tail_end = right_point_to_rotate.rotate_point_on_flat(end_point, tmp_angle);
 }
 
 void Vector_3d::set_end_point(Point_3d par_end_point)
 {
 	end_point = par_end_point;
+}
+
+void Vector_3d::set_begin_point(Point_3d par_begin_point)
+{
+	begin_point = par_begin_point;
 }
 
 
@@ -131,14 +167,5 @@ void Vector_w_arrow_3d::set_end_point(Point_3d par_end_point)
 	end_point = par_end_point;
 
 	calculate_arrow_ends(end_point.y - begin_point.y, end_point.x - begin_point.x, end_point.z - begin_point.z);
-}
-
-
-//в плоскости xy
-Point_3d rotate_point_on_flat(Point_3d point_0, Point_3d point, double angle)
-{
-	return { point_0.x + (point.x - point_0.x) * cos(angle) - (point.y - point_0.y) * sin(angle),
-			 point_0.y + (point.x - point_0.x) * sin(angle) + (point.y - point_0.y) * cos(angle),
-			 point.z };
 }
 
