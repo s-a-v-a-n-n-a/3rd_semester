@@ -25,7 +25,7 @@ Vector_3d::Vector_3d(const Vector_3d &other)
 	end_point = other.end_point;
 }
 
-virtual void Vector_3d::draw_shape(sf::RenderWindow *window)
+void Vector_3d::draw_shape(sf::RenderWindow *window)
 {
 	draw_line_sfml(window, begin_point.section_along_z(), end_point.section_along_z());
 	
@@ -36,22 +36,7 @@ virtual void Vector_3d::draw_shape(sf::RenderWindow *window)
 	window->draw(circle_end);
 }
 
-const Vector_3d operator+=(const Vector_3d &other)
-{
-	return Vector_3d(begin_point += other.get_begin_point(), end_point += other.get_end_point());
-}
-
-const Vector_3d operator*=(const double scale)
-{
-	Point_3d radius_vector = end_point;
-
-	radius_vector -= begin_point;
-	radius_vector *= scale;
-
-	return Vector_3d(begin_point, end_point += radius_vector);
-}
-
-const Vector_3d normalize()
+const Vector_3d Vector_3d::normalize()
 {
 	Point_3d normalized_vector_begin_point = end_point;
 
@@ -59,12 +44,12 @@ const Vector_3d normalize()
 	return Vector_3d(normalized_vector_begin_point, normalized_vector_end_point);		
 }
 
-const Vector_3d to_mathematical() const
+const Vector_3d Vector_3d::to_mathematical() const
 {
 	return Vector_3d({0, 0, 0}, end_point - begin_point);
 }
 
-const double scalar_multiplication(const Vector_3d &other)
+const double Vector_3d::scalar_multiplication(const Vector_3d &other) const
 {
 	Vector_3d this_mathematical(to_mathematical());
 	Vector_3d other_mathematical(other.to_mathematical());
@@ -74,14 +59,14 @@ const double scalar_multiplication(const Vector_3d &other)
 		   this_mathematical.end_point.z * other_mathematical.end_point.z;
 }
 
-const double length() const
+const double Vector_3d::length() const
 {
 	return sqrt((end_point.x - begin_point.x) * (end_point.x - begin_point.x) +
 				(end_point.y - begin_point.y) * (end_point.y - begin_point.y) +
 				(end_point.z - begin_point.z) * (end_point.z - begin_point.z));
 }
 
-const double cosine_of_angle_between(const Vector_3d &other)
+const double Vector_3d::cosine_of_angle_between(const Vector_3d &other)
 {
 	double this_length = this->length();
 	double other_length = other.length();
@@ -99,12 +84,12 @@ const double cosine_of_angle_between(const Vector_3d &other)
 /**
 Vector_w_arrow_3d functions:
 */
-Vector_w_arrow_3d(Point_3d par_begin_point, Point_3d par_end_point) : Vector_3d(par_begin_point, par_end_point)
+Vector_w_arrow_3d::Vector_w_arrow_3d(Point_3d par_begin_point, Point_3d par_end_point) : Vector_3d(par_begin_point, par_end_point)
 {
 	calculate_arrow_ends(end_point.y - begin_point.y, end_point.x - begin_point.x, end_point.z - begin_point.z);
 }
 
-virtual void draw_shape(sf::RenderWindow *window)
+void Vector_w_arrow_3d::draw_shape(sf::RenderWindow *window)
 {
 	draw_line_sfml(window, begin_point.section_along_z(), end_point.section_along_z());
 
@@ -112,22 +97,7 @@ virtual void draw_shape(sf::RenderWindow *window)
 	draw_line_sfml(window, end_point.section_along_z(), right_tail_end.section_along_z());
 }
 
-const Vector_w_arrow_3d operator+=(const Vector_w_arrow_3d &other)
-{
-	return Vector_w_arrow_3d(begin_point += other.get_begin_point(), end_point += other.get_end_point());
-}
-
-const Vector_w_arrow_3d operator*=(const double scale)
-{
-	Point_3d radius_vector = end_point;
-
-	radius_vector -= begin_point;
-	radius_vector *= scale;
-	
-	return Vector_w_arrow_3d(begin_point, end_point += radius_vector);
-}
-
-const Vector_w_arrow_3d normalize()
+const Vector_w_arrow_3d Vector_w_arrow_3d::normalize()
 {
 	Point_3d normalized_vector_begin_point = end_point;
 

@@ -42,8 +42,19 @@ public:
 
 	virtual void set_end_point(Point_3d par_end_point);
 
-	const Vector_3d operator+=(const Vector_3d &other);
-	const Vector_3d operator*=(const double scale);
+	const Vector_3d operator+=(const Vector_3d &other)
+	{
+		return Vector_3d(begin_point += other.get_begin_point(), end_point += other.get_end_point());
+	}
+	const Vector_3d operator*=(const double scale)
+	{
+		Point_3d radius_vector = end_point;
+
+		radius_vector -= begin_point;
+		radius_vector *= scale;
+
+		return Vector_3d(begin_point, end_point += radius_vector);
+	}
 
 	const Vector_3d normalize();
 	const Vector_3d to_mathematical() const;
@@ -62,14 +73,25 @@ private:
 	void calculate_arrow_ends(double par_projection_y, double par_projection_x, double par_projection_z);
 
 public:
-	Vector_w_arrow_3d(Point_3d par_begin_point, Point_3d par_end_point) : Vector_3d(par_begin_point, par_end_point);
+	Vector_w_arrow_3d(Point_3d par_begin_point, Point_3d par_end_point);
 
 	virtual void draw_shape(sf::RenderWindow *window);
 
 	virtual void set_end_point(Point_3d par_end_point);
 
-	const Vector_w_arrow_3d operator+=(const Vector_w_arrow_3d &other);
-	const Vector_w_arrow_3d operator*=(const double scale);
+	const Vector_w_arrow_3d operator+=(const Vector_w_arrow_3d &other)
+	{
+		return Vector_w_arrow_3d(begin_point += other.get_begin_point(), end_point += other.get_end_point());
+	}
+	const Vector_w_arrow_3d operator*=(const double scale)
+	{
+		Point_3d radius_vector = end_point;
+
+		radius_vector -= begin_point;
+		radius_vector *= scale;
+		
+		return Vector_w_arrow_3d(begin_point, end_point += radius_vector);
+	}
 
 	const Vector_w_arrow_3d normalize();
 };

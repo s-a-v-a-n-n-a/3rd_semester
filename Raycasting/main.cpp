@@ -21,7 +21,7 @@ int main()
     Circle test({150, 150}, 200);
     // test.draw_shape(&screen);
 
-    Lightened_sphere test_sphere(test, {100, 300, 100});
+    Lightened_sphere test_sphere(test, {0, 300, 100});
     test_sphere.draw_lambert(&screen);
 
     while (window.isOpen())

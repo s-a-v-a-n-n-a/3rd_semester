@@ -1,4 +1,4 @@
-#include "screen_functions.h"
+#include "screen_functions.hpp"
 
 const char *screen_state_text[]
 {

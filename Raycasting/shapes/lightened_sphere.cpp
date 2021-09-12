@@ -1,6 +1,6 @@
 #include "lightened_sphere.hpp"
 
-const unsigned char EMBEDDING = 50;
+const unsigned char EMBEDDING = 10;
 
 Lightened_sphere::Lightened_sphere(Circle other, Point_3d par_lighting_point) : Circle(other)
 {
