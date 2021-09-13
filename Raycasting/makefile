@@ -1,7 +1,7 @@
 CFLAGS = -g -masm=intel -no-pie -march=native -O1 -std=c++11
 
-link: main.o screen_functions.o circle.o lightened_sphere.o vector.o
-	g++ main.o screen_functions.o circle.o lightened_sphere.o vector.o -o main -lsfml-graphics -lsfml-window -lsfml-system
+link: main.o screen_functions.o circle.o lightened_sphere.o light_point.o vector.o
+	g++ main.o screen_functions.o circle.o lightened_sphere.o light_point.o vector.o -o main -lsfml-graphics -lsfml-window -lsfml-system
 
 main.o : main.cpp
 	g++ $(CFLAGS) -c -o main.o main.cpp
@@ -11,6 +11,9 @@ screen_functions.o: sfml_drawing/screen_functions.cpp
 
 circle.o: shapes/circle.cpp
 	g++ $(CFLAGS) -c -o circle.o shapes/circle.cpp
+
+light_point.o: lighting/light_point.cpp
+	g++ $(CFLAGS) -c -o light_point.o lighting/light_point.cpp
 
 lightened_sphere.o: shapes/lightened_sphere.cpp
 	g++ $(CFLAGS) -c -o lightened_sphere.o shapes/lightened_sphere.cpp

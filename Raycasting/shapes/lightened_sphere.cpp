@@ -8,6 +8,17 @@ Lightened_sphere::Lightened_sphere(Circle other, Point_3d par_lighting_point, Po
 	view_point     = par_view_point;
 }
 
+Lightened_sphere::Lightened_sphere(Circle other, Color par_sphere_color, Light_point &par_light, Point_3d par_view_point) : Circle(other)
+{
+	light = par_light;
+	lighting_point = par_light.light_point;
+
+	// printf("%lg, %lg, %lg\n", lighting_point.x, lighting_point.y, lighting_point.z);
+
+	sphere_color = par_sphere_color;
+	view_point = par_view_point;
+}
+
 double Lightened_sphere::count_z_coordinate(double x, double y)
 {
 	return sqrt(radius * radius - x * x - y * y);
@@ -85,7 +96,11 @@ double Lightened_sphere::angle_for_raycasting(Vector_3d &normal, Vector_3d &ligh
 double Lightened_sphere::angle_for_glare(Vector_3d &normal, Vector_3d &light_vector, Vector_3d &view_vector)
 {
 	Vector_3d reflected_vector = light_vector.reflect_vector_relative_vector(normal);
+	// printf("x %lg\n", reflected_vector.get_end_point().x);
 	double cos_angle = reflected_vector.cosine_of_angle_between(view_vector);
+	if (cos_angle < 0)
+		cos_angle = 0;
+	// printf("angle %lg\n", cos_angle);
 
 	return cos_angle;
 }
@@ -98,6 +113,29 @@ Vector_3d Lightened_sphere::count_normal_to_surface(double x, double y, double z
 	return Vector_3d(Point_3d{x, y, z}, radius_vector.get_end_point());
 }
 
+
+
+double calculate_power(double value, int power)
+{
+	if (power == 0)
+		return 1.0;
+
+	double answer = 1.0;
+	double multiplier = value;
+
+	while (power)
+	{
+		if (power & 1)
+			answer = (answer * multiplier);
+		multiplier *= multiplier;
+		power >>= 1;
+	}
+
+	return answer;
+}
+
+
+// что делать с "рефлексом"?
 void Lightened_sphere::draw_lambert_and_fong(Screen_information *screen)
 {
 	size_t width = screen->get_width();
@@ -114,10 +152,16 @@ void Lightened_sphere::draw_lambert_and_fong(Screen_information *screen)
 
 				Vector_3d perpendicular_to_the_surface(count_normal_to_surface((double)x, (double)y, z));
 				Vector_3d light_vector({(double)x, (double)y, z}, lighting_point);
+				if (perpendicular_to_the_surface.scalar_multiplication(light_vector) < 0)
+				{
+					screen->set_color(y, x, {255, EMBEDDING, EMBEDDING, EMBEDDING});
+					continue;
+				}
 				Vector_3d view_vector ({(double)x, (double)y, z}, view_point);
 
 				double light_angle_cos = angle_for_raycasting(perpendicular_to_the_surface, light_vector);
 				double glare_angle_cos = angle_for_glare(perpendicular_to_the_surface, light_vector, view_vector);
+				glare_angle_cos = calculate_power(glare_angle_cos, 15); 
 
 				unsigned char grey_color = ((unsigned char)(255.0 * light_angle_cos) + (unsigned char)(255.0 * glare_angle_cos) + EMBEDDING > 255 ? 255 : ((unsigned char)(255.0 * light_angle_cos) + (unsigned char)(255.0 * glare_angle_cos) + EMBEDDING));
 				
@@ -131,143 +175,44 @@ void Lightened_sphere::draw_lambert_and_fong(Screen_information *screen)
 	}
 }
 
+void Lightened_sphere::draw_lambert_and_fong_in_color (Screen_information *screen)
+{
+	size_t width = screen->get_width();
+	size_t height = screen->get_height();
 
+	for (unsigned x = 0; x < width; ++x)
+	{
+		for (unsigned y = 0; y < height; ++y)
+		{
+			if ((x - center_point.x) * (x - center_point.x) + (y - center_point.y) * (y - center_point.y) <= radius * radius)
+			{
+				double z = count_z_coordinate((double)(x - center_point.x), (double)(y - center_point.y)); // + center_point.z;
+				sphere_center = { center_point.x, center_point.y, 0 };
 
-// #include "lightened_sphere.hpp"
+				Vector_3d perpendicular_to_the_surface(count_normal_to_surface((double)x, (double)y, z));
+				Vector_3d light_vector({(double)x, (double)y, z}, lighting_point);
+				if (perpendicular_to_the_surface.scalar_multiplication(light_vector) < 0)
+				{
+					screen->set_color(y, x, {255, EMBEDDING, EMBEDDING, EMBEDDING});
+					continue;
+				}
 
-// const unsigned char EMBEDDING = 10;
+				Vector_3d view_vector ({(double)x, (double)y, z}, view_point);
 
-// Lightened_sphere::Lightened_sphere(Circle other, Point_3d par_lighting_point, Point_3d par_view_point) : Circle(other)
-// {
-// 	lighting_point = par_lighting_point;
-// 	view_point     = par_view_point;
-// }
+				double light_angle_cos = angle_for_raycasting(perpendicular_to_the_surface, light_vector);
+				double glare_angle_cos = angle_for_glare(perpendicular_to_the_surface, light_vector, view_vector);
+				glare_angle_cos = calculate_power(glare_angle_cos, 15); 
+				// printf("%lg, %lg\n", light_angle_cos, glare_angle_cos);
 
-// double Lightened_sphere::count_z_coordinate(double x, double y)
-// {
-// 	return sqrt(radius * radius - x * x - y * y);
-// }
+				// unsigned char grey_color = ((unsigned char)(255.0 * light_angle_cos) + (unsigned char)(255.0 * glare_angle_cos) + EMBEDDING > 255 ? 255 : ((unsigned char)(255.0 * light_angle_cos) + (unsigned char)(255.0 * glare_angle_cos) + EMBEDDING));
+				Color point_color = result_color(light_angle_cos, glare_angle_cos);
 
-// void Lightened_sphere::draw_z(Screen_information *screen)
-// {
-// 	size_t width = screen->get_width();
-// 	size_t height = screen->get_height();
-
-// 	for (unsigned x = 0; x < width; ++x)
-// 	{
-// 		for (unsigned y = 0; y < height; ++y)
-// 		{
-// 			if ((x - center_point.x) * (x - center_point.x) + (y - center_point.y) * (y - center_point.y) <= radius * radius)
-// 			{
-// 				double z = count_z_coordinate((double)(x - center_point.x), (double)(y - center_point.y)); //  + center_point.z
-// 				double propotion = z / radius;
-
-// 				screen->set_color(y, x, {255, (unsigned char)((double)255 * propotion), (unsigned char)((double)255 * propotion), (unsigned char)((double)255 * propotion) });
-// 			}
-// 			else
-// 			{
-// 				screen->set_color(y, x, {0, 0, 0, 0});
-// 			}
-// 		}
-// 	}
-// }
-
-// void Lightened_sphere::draw_lambert(Screen_information *screen)
-// {
-// 	size_t width = screen->get_width();
-// 	size_t height = screen->get_height();
-
-// 	for (unsigned x = 0; x < width; ++x)
-// 	{
-// 		for (unsigned y = 0; y < height; ++y)
-// 		{
-// 			if ((x - center_point.x) * (x - center_point.x) + (y - center_point.y) * (y - center_point.y) <= radius * radius)
-// 			{
-// 				double z = count_z_coordinate((double)(x - center_point.x), (double)(y - center_point.y)); // + center_point.z;
-// 				// double propotion = z / radius;
-
-// 				Point_3d sphere_center = { center_point.x, center_point.y, 0 };
-
-// 				Vector_3d radius_vector(sphere_center, {(double)x, (double)y, z});
-// 				radius_vector *= 2.0;
-// 				Vector_3d perpendicular_to_the_surface({(double)x, (double)y, z}, radius_vector.get_end_point());
-// 				Vector_3d light_vector({(double)x, (double)y, z}, lighting_point);
-
-// 				// скалярное произведение
-// 				double cos_angle = perpendicular_to_the_surface.cosine_of_angle_between(light_vector);
-// 				if (cos_angle < 0)
-// 					cos_angle = 0;
-
-// 				unsigned char grey_color = ((unsigned char)((double)255 * cos_angle) + EMBEDDING > 255 ? 255 : (unsigned char)((double)255 * cos_angle) + EMBEDDING);
-				
-// 				screen->set_color(y, x, {255, grey_color, grey_color, grey_color});
-// 			}
-// 			else
-// 			{
-// 				screen->set_color(y, x, {0, 0, 0, 0});
-// 			}
-// 		}
-// 	}
-// }
-
-// void Lightened_sphere::draw_lambert_and_fong(Screen_information *screen)
-// {
-// 	size_t width = screen->get_width();
-// 	size_t height = screen->get_height();
-
-// 	for (unsigned x = 0; x < width; ++x)
-// 	{
-// 		for (unsigned y = 0; y < height; ++y)
-// 		{
-// 			if ((x - center_point.x) * (x - center_point.x) + (y - center_point.y) * (y - center_point.y) <= radius * radius)
-// 			{
-// 				double z = count_z_coordinate((double)(x - center_point.x), (double)(y - center_point.y)); // + center_point.z;
-// 				// double propotion = z / radius;
-
-// 				sphere_center = { center_point.x, center_point.y, 0 };
-
-				
-
-
-// 				Vector_3d radius_vector(sphere_center, {(double)x, (double)y, z});
-// 				// printf("x=%lg, y=%lg, z=%lg\n", sphere_center.x, sphere_center.y, sphere_center.z);
-// 				// printf("before x=%lg, y=%lg, z=%lg\n", (double)x, (double)y, z);
-// 				radius_vector *= 2.0;
-// 				// printf("after x=%lg, y=%lg, z=%lg\n", radius_vector.get_end_point().x, radius_vector.get_end_point().y, radius_vector.get_end_point().z);
-// 				Vector_3d perpendicular_to_the_surface({(double)x, (double)y, z}, radius_vector.get_end_point());
-// 				Vector_3d light_vector({(double)x, (double)y, z}, lighting_point);
-
-				
-
-
-
-// 				// скалярное произведение
-// 				double cos_angle = perpendicular_to_the_surface.cosine_of_angle_between(light_vector);
-// 				// printf("%lg\n", cos_angle);
-// 				if (cos_angle < 0)
-// 					cos_angle = 0;
-				
-
-
-
-
-
-
-
-// 				Vector_3d reflected_vector = light_vector.reflect_vector_relative_vector(perpendicular_to_the_surface);
-// 				Vector_3d view_vector({(double)x, (double)y, z}, view_point);
-// 				double glare_angle_cos = reflected_vector.cosine_of_angle_between(view_vector);
-
-// 				unsigned char grey_color = ((unsigned char)((double)255 * cos_angle) + (unsigned char)((double)255 * glare_angle_cos) + EMBEDDING > 255 ? 255 : (unsigned char)((double)255 * cos_angle) + (unsigned char)((double)255 * glare_angle_cos) + EMBEDDING);
-// 				// grey_color = (grey_color + 255 * glare_angle_cos > 255 ? 0 : grey_color + 255 * glare_angle_cos);
-
-// 				screen->set_color(y, x, {255, grey_color, grey_color, grey_color});
-// 			}
-// 			else
-// 			{
-// 				screen->set_color(y, x, {0, 0, 0, 0});
-// 			}
-// 		}
-// 	}
-// }
-
+				screen->set_color(y, x, point_color);
+			}
+			else
+			{
+				screen->set_color(y, x, {0, 0, 0, 0});
+			}
+		}
+	}
+}

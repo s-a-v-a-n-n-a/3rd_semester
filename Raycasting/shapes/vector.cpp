@@ -44,20 +44,21 @@ const Vector_3d Vector_3d::normalize()
 	return Vector_3d(normalized_vector_begin_point, normalized_vector_end_point);		
 }
 
-const Vector_3d Vector_3d::to_mathematical() const // здесь нужно относительно кое-чего другого
+const Vector_3d Vector_3d::to_mathematical() const
 {
 	Point_3d radius_vector = end_point;
 	radius_vector -= begin_point;
 
 	return Vector_3d({0, 0, 0}, radius_vector);
-
-	// return Vector_3d(center, (end_point - begin_point) + center_point;
 }
 
 const double Vector_3d::scalar_multiplication(const Vector_3d &other) const
 {
 	Vector_3d this_mathematical(to_mathematical());
 	Vector_3d other_mathematical(other.to_mathematical());
+
+	// printf("%lg %lg %lg; %lg %lg %lg\n", this_mathematical.end_point.x, this_mathematical.end_point.y, this_mathematical.end_point.z, 
+	// 	                                 other_mathematical.end_point.x, other_mathematical.end_point.y, other_mathematical.end_point.z);
 
 	return this_mathematical.end_point.x * other_mathematical.end_point.x + 
 	       this_mathematical.end_point.y * other_mathematical.end_point.y +
@@ -79,6 +80,8 @@ const double Vector_3d::cosine_of_angle_between(const Vector_3d &other)
 	if (!this_length || !other_length)
 		return 0;
 
+	// printf("scalar %lg\n", scalar_multiplication(other));
+
 	return scalar_multiplication(other)/(this_length * other_length);
 }
 
@@ -95,14 +98,24 @@ Vector_3d Vector_3d::reflect_vector_relative_vector(Vector_3d &vector_0)
 {
 	double cos_angle = this->cosine_of_angle_between(vector_0);
 	if (cos_angle == 0)
+	{
 		return *this;
+	}
+
+	// printf("COSINE %lg\n", cos_angle);
 	
 	Vector_3d tmp_vector_0(vector_0);
-	tmp_vector_0.set_length(cos_angle / abs(cos_angle));
+	// printf("MMMMMMMMMMM %lg\n", cos_angle / fabs(cos_angle));
+	// if (cos_angle > 0)
+	// 	tmp_vector_0.set_length(1.0);
+	// else
+	// 	tmp_vector_0.set_length(-1.0);
+	tmp_vector_0.set_length(cos_angle / fabs(cos_angle));
 
 	Vector_3d tmp_this(*this);
 	tmp_this.set_length(1.0/cos_angle);
 
+	// printf("end x %lg\n", tmp_vector_0.end_point.x);
 	Point_3d change = tmp_vector_0.end_point;// - this->end_point;
 	change -= this->end_point;
 
@@ -116,6 +129,8 @@ Vector_3d Vector_3d::reflect_vector_relative_vector(Vector_3d &vector_0)
 
 /**
 Vector_w_arrow_3d functions:
+
+
 */
 Vector_w_arrow_3d::Vector_w_arrow_3d(Point_3d par_begin_point, Point_3d par_end_point) : Vector_3d(par_begin_point, par_end_point)
 {
