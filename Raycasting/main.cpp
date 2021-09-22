@@ -17,11 +17,13 @@ int main()
 
     Circle test({150, 150}, 200);
     // test.draw_shape(&screen);
-    Light_point light({0, 0, 300}, Color{255, 255, 255, 102});
+    Colored_point light(Radius_vector(150, 350, 500), Radius_vector(255, 255, 102));
 
     // Lightened_sphere test_sphere(test, {0, 0, 300}, {700, 700, 0});
-    Lightened_sphere test_sphere(test, {255, 255, 192, 203}, light, {700, 700, 0});
-    // test_sphere.draw_z(&screen);
+    
+    Lightened_sphere test_sphere(test, Radius_vector(255.0, 192.0, 203.0), light, Radius_vector(350, 350, 500));
+    
+    // test_sphere.draw_normal(&screen);
     // test_sphere.draw_lambert_and_fong(&screen);
     test_sphere.draw_lambert_and_fong_in_color(&screen);
 
@@ -38,6 +40,8 @@ int main()
 
         window.clear();
         
+        test_sphere.draw_lambert_and_fong_in_color(&screen);
+        test_sphere.move_light_in_circle();
         draw_shape_sfml(&window, screen);
 
         window.display();

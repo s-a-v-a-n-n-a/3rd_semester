@@ -20,6 +20,11 @@ Circle::Circle(const Circle &other)
 	radius = other.radius;
 }
 
+bool Circle::if_point_in_circle(double x, double y)
+{
+	return (x - center_point.x) * (x - center_point.x) + (y - center_point.y) * (y - center_point.y) <= radius * radius;
+}
+
 void Circle::draw_shape(Screen_information *screen)
 {
 	size_t width = screen->get_width();
@@ -31,11 +36,11 @@ void Circle::draw_shape(Screen_information *screen)
 		{
 			if ((x - center_point.x) * (x - center_point.x) + (y - center_point.y) * (y - center_point.y) < radius * radius)
 			{
-				screen->set_color(y, x, {255, 255, 255, 255});
+				screen->set_color(y, x, WHITE);
 			}
 			else
 			{
-				screen->set_color(y, x, {0, 0, 0, 0});
+				screen->set_color(y, x, BLACK);
 			}
 		}
 	}

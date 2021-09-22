@@ -105,7 +105,6 @@ Vector_3d Vector_3d::reflect_vector_relative_vector(Vector_3d &vector_0)
 	// printf("COSINE %lg\n", cos_angle);
 	
 	Vector_3d tmp_vector_0(vector_0);
-	// printf("MMMMMMMMMMM %lg\n", cos_angle / fabs(cos_angle));
 	// if (cos_angle > 0)
 	// 	tmp_vector_0.set_length(1.0);
 	// else

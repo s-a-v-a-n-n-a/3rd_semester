@@ -4,65 +4,66 @@
 #include <cmath>
 
 #include "circle.hpp"
-#include "vector.hpp"
-#include "../lighting/light_point.hpp"
+#include "../math_structures/math_functions.hpp"
+#include "../lighting/Colored_point.hpp"
 
-extern const unsigned char EMBEDDING;
+extern const Radius_vector AMBIENT;
+extern const double ROTATE_ANGLE_Y;
+extern const double ROTATE_ANGLE_Z;
 
 class Lightened_sphere : public Circle
 {
-	Point_3d sphere_center;
-	Color sphere_color;
-
-	Point_3d lighting_point;
-	Light_point light;
+	Radius_vector sphere_center;
+	Radius_vector sphere_color;
 	
-	Point_3d view_point;
+	double material_coefficient;
+	Radius_vector ambient;
+	
+	Colored_point common_lightning;
+	Colored_point light; 
+	
+	Radius_vector view_point;
 
-	Vector_3d count_normal_to_surface(double x, double y, double z);
-	double angle_for_raycasting(Vector_3d &normal, Vector_3d &light_vector);
-	double angle_for_glare(Vector_3d &normal, Vector_3d &light_vector, Vector_3d &view_vector);
-
-	struct Color_double
-	{
-		double a;
-		double r;
-		double g;
-		double b;
-	};
+	Radius_vector count_normal_to_surface(Radius_vector current_surface_point);
+	
+	double diffuse_angle(Radius_vector &normal, Radius_vector &light_vector);
+	double specular_angle(Radius_vector &normal, Radius_vector &light_vector, Radius_vector &view_vector);
 
 	// передавать расстояние до источника и делить сначала на него, а потом на его куб
-	Color result_color(double light_angle_cos, double glare_angle_cos)
-	{
-		Color_double sphere_color_double = { sphere_color.a / 255.0, sphere_color.r / 255.0, sphere_color.g / 255.0, sphere_color.b / 255.0 };
-		Color_double light_color_double = { light.light_color.a / 255.0, light.light_color.r / 255.0, light.light_color.g / 255.0, light.light_color.b / 255.0 };
-
-		// double a = (sphere_color_double.a * light_color_double.a * light_angle_cos + sphere_color_double.a * glare_angle_cos + EMBEDDING/255.0 > 1.0 ? 1.0 : sphere_color_double.a * light_color_double.a * light_angle_cos + sphere_color_double.a * glare_angle_cos + EMBEDDING/255.0);
-		double red_color   = sphere_color_double.r * light_color_double.r * light_angle_cos + sphere_color_double.r * glare_angle_cos + EMBEDDING / 255.0;
-		if (red_color > 1.0)
-			red_color = 1.0;
-
-		double green_color = sphere_color_double.g * light_color_double.g * light_angle_cos + sphere_color_double.g * glare_angle_cos + EMBEDDING / 255.0;
-		if (green_color > 1.0)
-			green_color = 1.0;
-
-		double blue_color  = sphere_color_double.b * light_color_double.b * light_angle_cos + sphere_color_double.b * glare_angle_cos + EMBEDDING / 255.0;
-		if (blue_color > 1.0)
-			blue_color = 1.0;
-
-		return Color{ 255, (unsigned char)(red_color * 255.0), (unsigned char)(green_color * 255.0), (unsigned char)(blue_color * 255.0) };
-	}
+	Radius_vector result_color(double diffuse_cos, double specular_cos);
 
 public:
-	Lightened_sphere(Circle other, Point_3d par_lighting_point, Point_3d par_view_point);
-	Lightened_sphere(Circle other, Color par_sphere_color, Light_point& par_light, Point_3d par_view_point);
+	Lightened_sphere(const Circle other, 
+		             const Radius_vector par_sphere_color, 
+		             const Colored_point &par_light, 
+		             const Radius_vector par_view_point);
+	Lightened_sphere(const Circle other, 
+		             const Radius_vector par_sphere_color, 
+		             const Colored_point &par_light, 
+		             const Colored_point &par_common_lightning,
+		             const Radius_vector par_view_point,
+		             const Radius_vector par_ambient,
+		             const double par_material_coefficient);
+
+	void set_light_position(const Radius_vector &par_position) { light.set_point(par_position); }
+
+	Radius_vector get_sphere_color()    { return sphere_color; }
+	Radius_vector get_sphere_position() { return sphere_center; }
+
+	void set_sphere_color(const Radius_vector &par_color) { sphere_color = par_color; }
+
+	void move_light_in_circle();
+
+	Radius_vector count_current_pixel(double x, double y);
+	Radius_vector count_pixel_color(Radius_vector current_pixel);
 
 	double count_z_coordinate    (double x, double y);
 	void   draw_z                (Screen_information *screen);
-	void   draw_lambert          (Screen_information *screen);
+	void   draw_normal           (Screen_information *screen);
 	void   draw_lambert_and_fong (Screen_information *screen);
 
 	void   draw_lambert_and_fong_in_color (Screen_information *screen);
 };
 
 #endif // LIGHTENED_CLASS
+

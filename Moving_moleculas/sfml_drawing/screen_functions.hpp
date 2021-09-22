@@ -13,6 +13,15 @@ typedef enum Screen_information_code_errors
     SCREEN_SEGMENT_FAULT
 } screen_code;
 
+enum class Wall_type
+{
+	NO,
+	LEFT,
+	UP,
+	RIGHT,
+	DOWN
+};
+
 extern const char *screen_state_text[];
 
 class Screen_information 
@@ -32,6 +41,8 @@ public:
 	size_t get_width();
 	size_t get_height();
 	
+	void reset();
+
 	friend void copy_color_from_sfml_color(Screen_information &screen, sf::Color color, size_t line, size_t column);
 	friend screen_code screen_load(Screen_information &screen, sf::Image* image);
 	friend void draw_shape_sfml(sf::RenderWindow *window, Screen_information &screen);

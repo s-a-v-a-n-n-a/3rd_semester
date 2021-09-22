@@ -11,7 +11,7 @@
 
 #include "shape_base.hpp"
 
-#include "simple_drawing.hpp"
+#include "../sfml_drawing/simple_drawing.hpp"
 
 extern const sf::Color DEFAULT_COLOR; 
 
