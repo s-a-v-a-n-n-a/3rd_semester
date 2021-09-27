@@ -1,18 +1,17 @@
 #ifndef MOLECULA_CLASS
 #define MOLECULA_CLASS
 
-#include "../sfml_drawing/screen_functions.hpp" // <not in project>
-#include "../math_structures/Radius_vector.hpp" // <not in project>
+#include "../sfml_drawing/screen_functions.hpp"
+#include "../math_structures/Radius_vector.hpp"
 #include "../Shape_base/Shape.hpp"
 
-class Molecula : public Shape // <no realization>
+class Molecula : public Shape
 {
 private:
 	double radius;
 
-	bool valid;
-
 public:
+	Molecula() = delete;
 	Molecula(const double par_radius, const char par_type, const Radius_vector &par_centre_position, const Radius_vector &par_velocity, const double par_weight, const Color par_color = WHITE);
 	Molecula(const Molecula &other) = delete;
 	// Molecula(Molecula &&other) = delete;
@@ -22,9 +21,8 @@ public:
 	void move(const Radius_vector &par_centre_position) override;
 
 	double get_radius() const { return radius; }
-	void set_radius(const double par_radius) { radius = par_radius; }
+	void set_radius(const double par_radius) { assert(par_radius >= 0); radius = par_radius; }
 
-	// double get_size() const override { return get_radius(); }
 	void draw(Screen_information *screen) override;
 };
 

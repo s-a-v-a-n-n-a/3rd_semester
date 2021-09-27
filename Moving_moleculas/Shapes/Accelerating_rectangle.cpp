@@ -7,11 +7,11 @@ Accelerating_rectangle::Accelerating_rectangle(const Radius_vector &par_accelera
 
 Radius_vector Accelerating_rectangle::count_move(const double delta_time)
 {
-	// Radius_vector result(get_centre_position() + get_velocity() * delta_time + acceleration * delta_time * delta_time / 2.0);
-	// set_velocity(acceleration * delta_time + get_velocity());
+	Radius_vector result(get_centre_position() + get_velocity() * delta_time + acceleration * delta_time * delta_time / 2.0);
+	set_velocity(acceleration * delta_time + get_velocity());
 
-	// return result;
-	return Radius_vector(get_centre_position() + get_velocity() * delta_time);
+	return result;
+	// return Radius_vector(get_centre_position() + get_velocity() * delta_time);
 }
 
 void Accelerating_rectangle::move(const Radius_vector &par_centre_position)

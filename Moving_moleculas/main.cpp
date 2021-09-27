@@ -4,7 +4,7 @@
 
 #include "sfml_drawing/screen_functions.hpp"
 #include "Shape_manager/Shape_manager.hpp"
-// #include "Molecula.hpp"
+
 #include "Shapes/Accelerating_rectangle.hpp"
 
 void draw_world();
@@ -34,8 +34,6 @@ void draw_world()
     world.add_shape(&c1);
     world.add_shape(&c2);
     world.add_shape(&c3);
-
-    // world.draw_everything(&screen);
 
     while (window.isOpen())
     {

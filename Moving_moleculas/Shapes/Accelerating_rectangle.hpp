@@ -6,7 +6,7 @@
 #include "../Shape_base/Shape.hpp"
 #include "Rectangle.hpp"
 
-class Accelerating_rectangle : public Rectangle // <no realization>
+class Accelerating_rectangle : public Rectangle 
 {
 private:
 	Radius_vector acceleration;

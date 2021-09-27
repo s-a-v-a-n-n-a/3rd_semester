@@ -2,7 +2,8 @@
 
 Molecula::Molecula(const double par_radius, const char par_type, const Radius_vector &par_centre_position, const Radius_vector &par_velocity, const double par_weight, const Color par_color) : Shape(par_type, par_centre_position, par_velocity, par_weight, par_color)
 {
-	valid = true;
+	assert(radius >= 0);
+
 	radius = par_radius;
 }
 
@@ -18,6 +19,8 @@ void Molecula::move(const Radius_vector &par_centre_position)
 
 void Molecula::draw(Screen_information *screen)
 {
+	assert(screen);
+
 	size_t width  = screen->get_width();
 	size_t height = screen->get_height();
 
