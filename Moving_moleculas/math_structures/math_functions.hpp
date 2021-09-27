@@ -1,7 +1,7 @@
 #ifndef MATH_FUNCTIONS
 #define MATH_FUNCTIONS
 
-const double EPSILON = 0.0000001;
+const double EPSILON = 0.000001;
 
 inline double cosine_scalar(double scalar, double length_1, double length_2)
 {

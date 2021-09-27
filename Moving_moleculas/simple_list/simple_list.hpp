@@ -48,7 +48,7 @@ public:
 	void add_to_end(list_type value)
 	{
 		if (length >= capacity - 1)
-		resize();
+			resize();
 
 		array[length++] = value;
 	}
