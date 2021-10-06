@@ -25,21 +25,20 @@ void Molecula::draw(Screen_information *screen)
 {
 	assert(screen);
 
-	// printf("molec\n");
+	// size_t width  = screen->get_width();
+	// size_t height = screen->get_height();
 
-	size_t width  = screen->get_width();
-	size_t height = screen->get_height();
-
-	for (unsigned x = 0; x < width; ++x)
-	{
-		for (unsigned y = 0; y < height; ++y)
-		{
-			double x0 = get_centre_position().get_x();
-			double y0 = get_centre_position().get_y();
-			if ((x - x0) * (x - x0) + (y - y0) * (y - y0) < radius * radius)
-			{
-				screen->set_color(y, x, get_color());
-			}
-		}
-	}
+	// for (unsigned x = 0; x < width; ++x)
+	// {
+	// 	for (unsigned y = 0; y < height; ++y)
+	// 	{
+	// 		double x0 = get_centre_position().get_x();
+	// 		double y0 = get_centre_position().get_y();
+	// 		if ((x - x0) * (x - x0) + (y - y0) * (y - y0) < radius * radius)
+	// 		{
+	// 			screen->set_color(y, x, get_color());
+	// 		}
+	// 	}
+	// }
+	screen->draw_circle(get_centre_position() - Radius_vector(radius, radius), get_color(), radius);
 }

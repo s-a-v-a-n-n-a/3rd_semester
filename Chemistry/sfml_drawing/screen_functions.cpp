@@ -8,47 +8,24 @@ const char *screen_state_text[]
     "SEGMENTATION FAULT\n"
 };
 
-// // !!!! запретить !!!!
-// Screen_information::Screen_information(const char *file_name)
-// {
-// 	sf::Image image;
-// 	image.loadFromFile(file_name);
-
-// 	sf::Vector2u size = image.getSize();
-// 	width = size.x;
-// 	height = size.y;
-
-// 	data = (Color*)calloc(width * height, sizeof(Color));
-// 	if (data == NULL)
-// 		return;
-
-// 	for (size_t i = 0; i < height; i++)
-// 		for (size_t j = 0; j < width; j++)
-// 		{
-// 			sf::Color color = image.getPixel(j, i);
-// 			copy_color_from_sfml_color(*this, color, i, j);
-// 		}
-// }
-
-Screen_information::Screen_information(size_t par_width, size_t par_height)
+Screen_information::Screen_information(size_t par_width, size_t par_height) 
+: window(sf::VideoMode(par_width, par_height), "It works"), event(), mouse_position(0.0, 0.0)
 {
 	width  = par_width;
 	height = par_height;
 
-	data = (Color*)calloc(width * height, sizeof(Color));
+	data = new Color[width * height];
 	
 	if (data == NULL)
 		return;
+
+	mouse_clicked = false;
 }
 
 Screen_information::~Screen_information()
 {
-	if (!data)
-		return;
-
-	free(data);
+	delete [] data;
 }
-
 
 screen_code Screen_information::set_color(size_t line, size_t column, Color color)
 {
@@ -70,13 +47,81 @@ size_t Screen_information::get_height()
 	return height;
 }
 
+void Screen_information::draw_circle(const Radius_vector &par_position, const Color &par_color, const double par_radius)
+{
+	sf::CircleShape circle(par_radius);
+
+	circle.setPosition(sf::Vector2f(par_position.get_x(), par_position.get_y()));
+
+	sf::Color color(par_color.r, par_color.g, par_color.b, par_color.a);
+	circle.setFillColor(color);
+
+	window.draw(circle);
+}
+
+void Screen_information::draw_rectangle(const Radius_vector &par_position, const Color &par_color, const double par_width, const double par_height)
+{
+	sf::RectangleShape rectangle(sf::Vector2f(par_width, par_height));
+
+	rectangle.setPosition(sf::Vector2f(par_position.get_x(), par_position.get_y()));
+
+	sf::Color color(par_color.r, par_color.g, par_color.b, par_color.a);
+	rectangle.setFillColor(color);
+
+	window.draw(rectangle);
+}
+
+void Screen_information::draw_point(const Radius_vector &par_point, const Color &par_color)
+{
+	sf::Color color(par_color.r, par_color.g, par_color.b, par_color.a);
+	sf::Vertex sfml_point(sf::Vector2f(par_point.get_x(), par_point.get_y()), color);
+
+	window.draw(&sfml_point, 1, sf::Points);
+}
+
+void Screen_information::draw_text(const char *par_text, const Radius_vector &par_position, const Color &par_color, const size_t par_text_size)
+{
+	sf::Font font = {};
+	if (!font.loadFromFile("graphical_attributes/arial.ttf"))
+	{
+	    printf("No fonts found\n");
+	}
+	else
+	{
+		sf::Color color(par_color.r, par_color.g, par_color.b, par_color.a);
+
+		sf::Text drawable_text = {};//(par_text, font, par_text_size);
+		drawable_text.setFont(font);
+		drawable_text.setString(par_text);
+		drawable_text.setCharacterSize(par_text_size);
+		drawable_text.setFillColor(color);
+		drawable_text.setPosition(par_position.get_x(), par_position.get_y());
+
+		window.draw(drawable_text);
+	}
+}
+
 void Screen_information::reset()
 {
-	for (size_t i = 0; i < height; i++)
-		for (size_t j = 0; j < width; j++)
-		{
-			data[i * width + j] = BLACK;
-		}
+	window.clear();
+}
+
+void Screen_information::sfml_update_mouse_state()
+{
+	sfml_update_mouse_position();
+	sfml_update_mouse_pressed_state();
+}
+
+void Screen_information::sfml_update_mouse_position()
+{
+	sf::Vector2i sfml_position(mouse.getPosition(window));
+
+	mouse_position = Radius_vector(sfml_position.x, sfml_position.y);
+}
+
+void Screen_information::sfml_update_mouse_pressed_state()
+{
+	mouse_clicked = mouse.isButtonPressed(mouse.Left);
 }
 
 void copy_color_from_sfml_color(Screen_information &screen, sf::Color color, size_t line, size_t column)

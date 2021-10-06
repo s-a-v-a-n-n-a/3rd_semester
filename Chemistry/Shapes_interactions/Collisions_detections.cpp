@@ -48,8 +48,6 @@ bool molecula_rectangle_collision_detection(const Shape *par_first, const Shape 
 
 bool molecula_molecula_collision_detection(const Shape *par_first, const Shape *par_second)
 {
-	// printf("2\n");
-
 	Molecula *first = (Molecula*)par_first;
 	Molecula *second = (Molecula*)par_second;
 
@@ -91,7 +89,6 @@ bool rectangle_rectangle_collision_detection(const Shape *par_first, const Shape
 	if (fabs(current_distance * collision_line.get_cos_angle(Radius_vector(1.0, 0.0))) <= (first_width + second_width)/2.0 && 
 		fabs(current_distance * collision_line.get_cos_angle(Radius_vector(0.0, 1.0))) <= (first_height + second_height)/2.0)
 	{
-		// printf("%lg, %lg\n", fabs(current_distance * collision_line.get_cos_angle(Radius_vector(1.0, 0.0))), fabs(current_distance * collision_line.get_cos_angle(Radius_vector(0.0, 1.0))));
 		return true;
 	}
 	

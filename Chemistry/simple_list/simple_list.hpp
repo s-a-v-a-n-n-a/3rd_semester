@@ -18,9 +18,21 @@ private:
 
 public:
 
+	List()
+	{
+		// array = (list_type*)calloc(LIST_SIZE, sizeof(list_type));
+		array = new list_type[LIST_SIZE];
+
+		if (array)
+		{
+			capacity = LIST_SIZE;
+			length = 0;
+		}
+	}
+
 	List(size_t par_capacity)
 	{
-		array = (list_type*)calloc(par_capacity, sizeof(list_type));
+		array = new list_type[par_capacity];
 
 		if (array)
 		{
@@ -31,7 +43,7 @@ public:
 
 	~List()
 	{
-		free(array);
+		delete [] array;
 	}
 
 	list_type *get_array() { return array; }
@@ -40,13 +52,17 @@ public:
 	void resize()
 	{
 		size_t new_capacity = capacity * 2;
-		list_type *other_array = (list_type*)realloc(this->get_array(), 2 * new_capacity * sizeof(list_type));
+		
+		list_type *other_array = new list_type[new_capacity];
+		for (size_t i = 0; i < length; ++i)
+			other_array[i] = array[i];
+		delete [] array;
 
 		array = other_array;
 		capacity = new_capacity;
 	}
 
-	void add_to_end(list_type value)
+	void add_to_end(const list_type value)
 	{
 		if (length >= capacity - 1)
 			resize();
@@ -54,8 +70,18 @@ public:
 		array[length++] = value;
 	}
 
+	void delete_from_end()
+	{
+		if (length <= 0)
+			return;
+
+		delete array[length];
+		length--;
+	}
+
 	void slow_delete(size_t index)
 	{
+		delete array[index];
 		for (size_t i = index + 1; i < length; ++i)
 		{
 			array[i - 1] = array[i];

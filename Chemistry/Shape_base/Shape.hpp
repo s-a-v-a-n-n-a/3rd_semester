@@ -7,10 +7,12 @@
 #include "../math_structures/Radius_vector.hpp"
 #include "../math_structures/math_functions.hpp"
 
+extern const double CRITICAL_ENERGY;
+
 class Shape
 {
 private:
-	const char type;
+	const size_t type;
 
 	Radius_vector centre_position;
 
@@ -23,12 +25,12 @@ private:
 	bool just_born;
 public:
 	Shape() = delete;
-	Shape(const char par_type);
-	Shape(const char par_type, const Radius_vector &par_centre_position, const Radius_vector &par_velocity, const double par_weight, const Color par_color = WHITE, 
+	Shape(const size_t par_type);
+	Shape(const size_t par_type, const Radius_vector &par_centre_position, const Radius_vector &par_velocity, const double par_weight, const Color par_color = WHITE, 
 		  const bool par_active = true, const bool par_just_born = false);
-	~Shape() = default;
+	virtual ~Shape() = default;
 
-	char get_type() const { return type; }
+	size_t get_type() const { return type; }
 	double get_weight() const { return weight; }
 	Radius_vector get_centre_position() const { return centre_position; }
 	Radius_vector get_velocity() const { return velocity; }
@@ -43,7 +45,8 @@ public:
 	void set_active(const bool par_active) { active = par_active; }
 	void set_just_born(const bool par_just_born) { just_born = par_just_born; }
 
-	// virtual double get_size() const { return 0.0; }
+	double count_energy() { return velocity.length() * velocity.length() * weight / 2.0; }
+
 	virtual void draw(Screen_information *screen) { ; }
 
 	virtual Radius_vector count_move(const double delta_time) { return Radius_vector(centre_position + velocity * delta_time); };
