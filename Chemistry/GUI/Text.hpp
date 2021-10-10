@@ -8,7 +8,17 @@
 class Text : public Visual_object
 {
 private:
-	// char *font_file; // "arial.ttf"
+	// List<Visual_object*> objects;
+
+	// Radius_vector position;
+	// Color color;
+
+	// size_t width;
+	// size_t height;
+
+	// bool active;
+
+	// char *font_file; 
 	bool was_drawn;
 	size_t font_size; 
 
@@ -24,7 +34,6 @@ public:
 
 		text = new char[strlen(par_text) + 1];
 		strcpy(text, par_text);
-		// set_text(par_text);
 
 		was_drawn = false;
 	}
@@ -40,16 +49,9 @@ public:
 	}
 
 	void set_font_size(const size_t par_font_size) { font_size = par_font_size; }
-	// void set_font_file(const char *par_font_file)  { font_file = par_font_file; }
 
 	void draw(Screen_information *screen) override
 	{
-		// ;
-		// if (!was_drawn)
-		// {
-		// 	was_drawn = true;
-		// 	screen->add_text(text, get_position(), font_size);
-		// }
 		screen->draw_text(text, get_position(), get_color(), font_size);
 	}
 };

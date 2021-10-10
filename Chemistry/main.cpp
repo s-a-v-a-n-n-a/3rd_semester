@@ -14,6 +14,8 @@
 #include "GUI/Visual_objects_manager.hpp"
 #include "GUI/Button.hpp"
 
+const size_t DEFAULT_SIZE = 1000;
+
 void draw_world();
 void generate_random_shapes(Shape_manager *world, const Radius_vector &left_high, const Radius_vector &right_low);
 
@@ -28,9 +30,9 @@ void draw_world()
 {
 	srand(time(0));
 
-    Screen_information screen(1000, 1000);
+    Screen_information screen(DEFAULT_SIZE, DEFAULT_SIZE);
 
-    Visual_objects_manager user_window(Radius_vector(0, 0), BLACK, 1000, 1000);
+    Visual_objects_manager user_window(Radius_vector(0, 0), BLACK, DEFAULT_SIZE, DEFAULT_SIZE);
     Shape_manager *world = user_window.get_manager();
 
     generate_random_shapes(world, world->get_position(), Radius_vector(world->get_width(), world->get_height()));
@@ -77,7 +79,7 @@ void generate_random_shapes(Shape_manager *world, const Radius_vector &left_high
     {
         size_t type = rand()%2;
 
-        int size = rand() % 50 + 1;
+        int size = 10;
         int x_dir = rand()%20 - 10;
         int y_dir = rand()%20 - 10;
 
@@ -86,12 +88,24 @@ void generate_random_shapes(Shape_manager *world, const Radius_vector &left_high
 
         if (type == (size_t)Shape_types::MOLECULA)
         {
-            Molecula *shape = new Molecula(size, (size_t)Shape_types::MOLECULA, Radius_vector(x_pos, y_pos), Radius_vector(x_dir, y_dir), 1.0);
+            // size = 10;
+
+            Molecula *shape = new Molecula((size_t)Shape_types::MOLECULA, Radius_vector(x_pos, y_pos), Radius_vector(x_dir, y_dir), 100.0 * M_PI);
+            int size = (int)shape->get_radius();
+            // int x_pos = rand()%((size_t)(right_low - left_high).get_x() - size * 2) + size + left_high.get_x();
+            // int y_pos = rand()%((size_t)(right_low - left_high).get_y() - size * 2) + size + left_high.get_y();
+
+            // printf("m hello\n");
             (*world).add_shape(shape);
         }
         else
         {
-            Rectangle *shape = new Rectangle(size * 2, size * 2, (size_t)Shape_types::RECTANGLE, Radius_vector(x_pos, y_pos), Radius_vector(x_dir, y_dir), 1.0);
+            Rectangle *shape = new Rectangle(1.0, (size_t)Shape_types::RECTANGLE, Radius_vector(x_pos, y_pos), Radius_vector(x_dir, y_dir), 100.0 * M_PI);
+            int size = (int)shape->get_width();
+            // int x_pos = rand()%((size_t)(right_low - left_high).get_x() - size * 2) + size + left_high.get_x();
+            // int y_pos = rand()%((size_t)(right_low - left_high).get_y() - size * 2) + size + left_high.get_y();
+
+            // printf("r hello\n");
             (*world).add_shape(shape);
         }
     }

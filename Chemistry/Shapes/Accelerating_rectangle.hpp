@@ -13,7 +13,7 @@ private:
 
 public:
 	Accelerating_rectangle(const Radius_vector &par_acceleration, 
-		                   const double par_width, const double par_height, 
+		                   const double scale, 
 		                   const char par_type, const Radius_vector &par_centre_position, const Radius_vector &par_velocity, const double par_weight, const Color par_color = WHITE,
 		                   const bool par_active = true, const bool par_just_born = false);
 	Accelerating_rectangle(const Accelerating_rectangle &other) = delete;

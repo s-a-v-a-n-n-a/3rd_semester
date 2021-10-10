@@ -31,6 +31,16 @@ extern const Color DEFAULT_RECTANGLE_COLOR;
 class Visual_objects_manager : public Visual_object
 {
 private:
+	// List<Visual_object*> objects;
+
+	// Radius_vector position;
+	// Color color;
+
+	// size_t width;
+	// size_t height;
+
+	// bool active;
+	
 	Shape_manager *manager;
 
 public:

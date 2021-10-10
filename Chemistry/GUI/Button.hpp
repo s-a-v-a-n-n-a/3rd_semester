@@ -12,6 +12,16 @@ const Color DEFAULT_TEXT_COLOR = WHITE;
 struct Button : public Visual_object
 {
 private:
+	// List<Visual_object*> objects;
+
+	// Radius_vector position;
+	// Color color;
+
+	// size_t width;
+	// size_t height;
+
+	// bool active;
+
 	Button_delegate *click;
 
 public:

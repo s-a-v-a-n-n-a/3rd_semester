@@ -2,6 +2,8 @@
 #define SHAPE_DELEGATES
 
 #include "Button_delegate.hpp"
+#include "../Shape_manager/Shape_manager.hpp"
+#include "Amounts_graph.hpp"
 
 class Add_molecula_delegate : public Button_delegate
 {
@@ -20,14 +22,19 @@ public:
 		size_t width = manager->get_width();
 		size_t height = manager->get_height();
 
-		int size  = rand()%50 + 1;
+		// int size  = 10;
         int x_dir = rand()%20 - 10;
         int y_dir = rand()%20 - 10;
 
-        int x_pos = rand()%(width - size * 2) + size + position.get_x();
-        int y_pos = rand()%(height - size * 2) + size + position.get_y(); 
+        // int x_pos = rand()%(width - size * 2) + size + position.get_x();
+        // int y_pos = rand()%(height - size * 2) + size + position.get_y(); 
 
-		Molecula *shape = new Molecula(size, (char)Shape_types::MOLECULA, Radius_vector(x_pos, y_pos), Radius_vector(x_dir, y_dir), 1.0, WHITE);
+		Molecula *shape = new Molecula((char)Shape_types::MOLECULA, Radius_vector(0.0, 0.0), Radius_vector(x_dir, y_dir), 100.0 * M_PI, WHITE);
+        int size = (int)shape->get_radius();
+		int x_pos = rand()%(width - size * 2) + size + position.get_x();
+        int y_pos = rand()%(height - size * 2) + size + position.get_y();
+        shape->set_centre_position(Radius_vector(x_pos, y_pos));
+
         manager->add_shape(shape);
 	}
 };
@@ -49,15 +56,49 @@ public:
 		size_t width = manager->get_width();
 		size_t height = manager->get_height();
 
-		int size  = rand()%50 + 1;
+		// int size  = rand()%50 + 1;
         int x_dir = rand()%20 - 10;
         int y_dir = rand()%20 - 10;
         
-        int x_pos = rand()%(width - size * 2) + size + position.get_x();
-        int y_pos = rand()%(height - size * 2) + size + position.get_y();
+        // int x_pos = rand()%(width - size * 2) + size + position.get_x();
+        // int y_pos = rand()%(height - size * 2) + size + position.get_y();
 
-		Rectangle *shape = new Rectangle(size * 2, size * 2, (char)Shape_types::RECTANGLE, Radius_vector(x_pos, y_pos), Radius_vector(x_dir, y_dir), 1.0, WHITE);
+		Rectangle *shape = new Rectangle(1.0, (char)Shape_types::RECTANGLE, Radius_vector(0.0, 0.0), Radius_vector(x_dir, y_dir), 100.0 * M_PI, WHITE);
+		int size = (int)shape->get_width();
+		int x_pos = rand()%(width - size * 2) + size + position.get_x();
+        int y_pos = rand()%(height - size * 2) + size + position.get_y();
+        shape->set_centre_position(Radius_vector(x_pos, y_pos));
+        
         manager->add_shape(shape);
+	}
+};
+
+class Change_scale : public Button_delegate
+{
+private:
+	Amounts_graph *graph;
+
+public:
+	Change_scale(Amounts_graph *par_graph)
+	{
+		graph = par_graph;
+	}
+
+	void click_reaction() override
+	{
+		size_t shapes_amount = graph->get_manager()->get_shapes()->get_length();
+		size_t **shapes_amounts = graph->get_shapes_amounts();
+
+		size_t amounts_graph_width = graph->get_width();
+		
+		for (size_t i = 0; i < shape_types_amount; ++i)
+		{
+			for (size_t j = 0; j < amounts_graph_width; ++j)
+			{
+				if (shapes_amounts[i][j] > amounts_graph_width)
+					graph->set_scale(amounts_graph_width / shapes_amounts[i][j]);
+			}
+		}
 	}
 };
 

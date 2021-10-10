@@ -15,14 +15,13 @@ void molecula_molecula_collision_reaction(List<Shape*> *engine, const Shape *par
 		return;
 
 	double rectangle_weight = first->get_weight() + second->get_weight();
-	double rectangle_size   = (first->get_radius() + second->get_radius()) * 2.0;
 
 	Radius_vector first_velocity  = first->get_velocity();
 	Radius_vector second_velocity = second->get_velocity();
 	double doubled_kinetic_energy = first->get_weight() * first_velocity.length() * first_velocity.length() + 
 									second->get_weight() * second_velocity.length() * second_velocity.length(); 
 	
-	Radius_vector rectangle_velocity((first->get_velocity() * first->get_weight() + second->get_velocity() * second->get_weight())/(first->get_weight() + second->get_weight()));
+	Radius_vector rectangle_velocity((first->get_velocity() * first->get_weight() + second->get_velocity() * second->get_weight())/rectangle_weight);
 	rectangle_velocity.normalization();
 	rectangle_velocity *= sqrt(doubled_kinetic_energy / rectangle_weight);
 
@@ -34,7 +33,8 @@ void molecula_molecula_collision_reaction(List<Shape*> *engine, const Shape *par
 	
 	Radius_vector rectangle_centre_position((first->get_centre_position() + second->get_centre_position()) / 2.0);
 	
-	Rectangle *molecules_sum = new Rectangle(rectangle_size, rectangle_size, (char)(Shape_types::RECTANGLE), rectangle_centre_position, rectangle_velocity, rectangle_weight, rectangle_color, false, true);
+	Rectangle *molecules_sum = new Rectangle(1.0, (char)(Shape_types::RECTANGLE), rectangle_centre_position, rectangle_velocity, rectangle_weight, rectangle_color, false, true);
+	
 	engine->add_to_end(molecules_sum);
 
 	first->set_active(false);
@@ -60,26 +60,27 @@ void molecula_rectangle_collision_reaction(List<Shape*> *engine, const Shape *pa
 	if (!first->get_active() || !second->get_active())
 		return;
 
-	Radius_vector first_velocity = first->get_velocity();
+	double rectangle_weight = second->get_weight() + first->get_weight();
+
+	Radius_vector first_velocity  = first->get_velocity();
 	Radius_vector second_velocity = second->get_velocity();
 	double doubled_kinetic_energy = first->get_weight() * first_velocity.length() * first_velocity.length() + 
 							 		second->get_weight() * second_velocity.length() * second_velocity.length(); 
 
-	Radius_vector rectangle_velocity((first->get_velocity() * first->get_weight() + second->get_velocity() * second->get_weight())/(first->get_weight() + second->get_weight()));
+	Radius_vector rectangle_velocity((first->get_velocity() * first->get_weight() + 
+		                              second->get_velocity() * second->get_weight())/rectangle_weight);
 	rectangle_velocity.normalization();
-	rectangle_velocity *= sqrt(doubled_kinetic_energy / (first->get_weight() + second->get_weight()));
+	rectangle_velocity *= sqrt(doubled_kinetic_energy / rectangle_weight);
 
 	second->set_velocity(rectangle_velocity);
-	
-	double rectangle_size = first->get_radius() * 2.0 + second->get_width();
-	second->set_width(rectangle_size);
-	second->set_height(rectangle_size);
 
-	second->set_weight(second->get_weight() + first->get_weight());
+	second->set_weight(rectangle_weight);
 
 	Color second_color = second->get_color();
 	Color first_color = first->get_color();
 
+	size_t first_radius = (size_t)(first->get_radius());
+	// printf("what %u, %lg\n", first_radius, first->get_radius());
 	if (second_color.get_g() - first_color.get_g()/(unsigned char)first->get_radius() >= 0)
 		second_color.set_g(second_color.get_g() - first_color.get_g()/(unsigned char)first->get_radius());
 	else
@@ -96,6 +97,8 @@ void molecula_rectangle_collision_reaction(List<Shape*> *engine, const Shape *pa
 
 void rectangle_rectangle_collision_reaction(List<Shape*> *engine, const Shape *par_first, const Shape *par_second)
 {
+	// printf("rr\n");
+
 	Rectangle *first = (Rectangle*)par_first;
 	Rectangle *second = (Rectangle*)par_second;
 
@@ -103,18 +106,18 @@ void rectangle_rectangle_collision_reaction(List<Shape*> *engine, const Shape *p
 		return;
 
 	Radius_vector centre_position((first->get_centre_position() + second->get_centre_position())/2.0);	
-	size_t moleculas_amount = size_t(first->get_weight() + second->get_weight());
+	size_t moleculas_amount = size_t((first->get_weight() + second->get_weight()) / 100.0 / M_PI);
 
-	double moleculas_circle_radius = 2.0 * moleculas_amount / M_PI / 2.0 * (rand()%50 + 1);
+	double moleculas_circle_radius = moleculas_amount * 20.0 / M_PI;
 	double angle = 2.0 * M_PI / moleculas_amount;
 
 	Radius_vector point(centre_position.get_x(), centre_position.get_y() - moleculas_circle_radius);
 	
-	Radius_vector first_velocity = first->get_velocity();
+	Radius_vector first_velocity  = first->get_velocity();
 	Radius_vector second_velocity = second->get_velocity();
 	double doubled_kinetic_energy = first->get_weight() * first_velocity.length() * first_velocity.length() + 
 							 		second->get_weight() * second_velocity.length() * second_velocity.length();
-	double molecule_velocity_module = sqrt(doubled_kinetic_energy / moleculas_amount);
+	double molecule_velocity_module = sqrt(doubled_kinetic_energy / moleculas_amount / 100.0 / M_PI);
 
 	for (size_t i = 0; i < moleculas_amount; ++i)
 	{
@@ -122,7 +125,7 @@ void rectangle_rectangle_collision_reaction(List<Shape*> *engine, const Shape *p
 		molecula_velocity.normalization();
 		molecula_velocity *= molecule_velocity_module;
 
-		Molecula *molecules_sum = new Molecula(10.0, (char)(Shape_types::MOLECULA), point, molecula_velocity, 1.0, WHITE, false, true);
+		Molecula *molecules_sum = new Molecula((char)(Shape_types::MOLECULA), point, molecula_velocity, 100.0 * M_PI, WHITE, false, true);
 		engine->add_to_end(molecules_sum);
 
 		point.rotate_point(centre_position, angle);

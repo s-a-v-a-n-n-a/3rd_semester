@@ -25,35 +25,61 @@ const Color DEFAULT_RECTANGLE_COLOR = FUCHSIA;
 Visual_objects_manager::Visual_objects_manager(const Radius_vector &par_position, const Color &par_color, const size_t par_width, const size_t par_height)
 : Visual_object(par_position, par_color, par_width, par_height)
 {
-	// size_t manager_width = par_width < DEFAULT_SHAPE_MANAGER_WIDTH? par_width : DEFAULT_SHAPE_MANAGER_WIDTH;
-	// size_t manager_height = par_width < DEFAULT_SHAPE_MANAGER_HEIGHT? par_height : DEFAULT_SHAPE_MANAGER_HEIGHT;
-	manager = new Shape_manager(DEFAULT_SHAPE_MANAGER_POS, BLACK, DEFAULT_SHAPE_MANAGER_WIDTH, DEFAULT_SHAPE_MANAGER_HEIGHT);
+	// create Shape manager
+	// ------------------------------------------------------------------------------
+	size_t manager_width = par_width < DEFAULT_SHAPE_MANAGER_WIDTH? par_width / 2 : DEFAULT_SHAPE_MANAGER_WIDTH;
+	size_t manager_height = par_width < DEFAULT_SHAPE_MANAGER_HEIGHT? par_height / 2 : DEFAULT_SHAPE_MANAGER_HEIGHT;
+	manager = new Shape_manager(DEFAULT_SHAPE_MANAGER_POS, BLACK, manager_width, manager_height);
    
+    // create 2 buttons
+    // ------------------------------------------------------------------------------
+	size_t button_width = par_width / 2 < DEFAULT_BUTTON_WIDTH? par_width / 2 : DEFAULT_BUTTON_WIDTH;
+    size_t button_height = par_height / 2 < DEFAULT_BUTTON_HEIGHT? par_height / 2 : DEFAULT_BUTTON_HEIGHT;
+
     Add_molecula_delegate *molecula_delegate = new Add_molecula_delegate(manager);
     Button *add_molecula = new Button(molecula_delegate, 
     								  DEFAULT_ADD_MOLECULA_TEXT, 
-    								  Radius_vector(DEFAULT_SHAPE_MANAGER_POS + Radius_vector(DEFAULT_SHAPE_MANAGER_WIDTH, 0.0)), 
+    								  Radius_vector(Radius_vector(par_width, 0) - Radius_vector(button_width, 0.0)), 
     								  DEFAULT_MOLECULA_COLOR, 
-    								  DEFAULT_BUTTON_WIDTH, 
-    								  DEFAULT_BUTTON_HEIGHT);
+    								  button_width, 
+    								  button_height);
 
     Add_rectangle_delegate *rectangle_delegate = new Add_rectangle_delegate(manager);
     Button *add_rectangle = new Button(rectangle_delegate, 
     								   DEFAULT_ADD_RECTANGLE_TEXT, 
-    								   Radius_vector(DEFAULT_SHAPE_MANAGER_POS + Radius_vector(DEFAULT_SHAPE_MANAGER_WIDTH, 
-    								   DEFAULT_BUTTON_HEIGHT * 2)), 
+    								   Radius_vector(Radius_vector(par_width, 0) - Radius_vector(button_width, -2.0 * button_height)), 
     								   DEFAULT_RECTANGLE_COLOR, 
-    								   DEFAULT_BUTTON_WIDTH, 
-    								   DEFAULT_BUTTON_HEIGHT);
+    								   button_width, 
+    								   button_height);
     
-    Amounts_graph *graph = new Amounts_graph(manager, Radius_vector(DEFAULT_SHAPE_MANAGER_POS + Radius_vector(0, DEFAULT_SHAPE_MANAGER_HEIGHT)), BLACK, DEFAULT_AMOUNTS_GRAPH_WIDTH, DEFAULT_AMOUNTS_GRAPH_HEIGHT);
+    // create amounts graph
+    // ------------------------------------------------------------------------------
+    size_t graph_width = par_width;
+    size_t graph_height = par_height < DEFAULT_AMOUNTS_GRAPH_HEIGHT? par_height / 2 : DEFAULT_AMOUNTS_GRAPH_HEIGHT;
+
+    Amounts_graph *graph = new Amounts_graph(manager, Radius_vector(Radius_vector(0, par_height) - Radius_vector(0, graph_height)), BLACK, graph_width, graph_height);
     graph->set_shape_color(Shape_types::MOLECULA, DEFAULT_MOLECULA_COLOR);
     graph->set_shape_color(Shape_types::RECTANGLE, DEFAULT_RECTANGLE_COLOR);
+
+    // create another button (the one that checks architecture)
+    // -----------------------------------------------------------------------------
+    Change_scale *change_scale = new Change_scale(graph);
+    Button *change_scale_button = new Button(change_scale, 
+    								  "change graph scale", 
+    								  Radius_vector(Radius_vector(par_width, 0) - Radius_vector(button_width, -3.0 * button_height)), 
+    								  RED, // ???????????????????????????????? 
+    								  button_width, 
+    								  button_height);
     
+    
+    // add all objects
+    // ------------------------------------------------------------------------------
     add_visual_object(manager);
     add_visual_object(add_molecula);
     add_visual_object(add_rectangle);
     add_visual_object(graph);
+
+    add_visual_object(change_scale_button);
 }
 
 Visual_objects_manager::~Visual_objects_manager()

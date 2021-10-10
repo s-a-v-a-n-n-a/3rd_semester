@@ -5,6 +5,7 @@
 #include "../math_structures/Radius_vector.hpp"
 #include "../Shape_base/Shape.hpp"
 
+// убрать задание размера
 class Molecula : public Shape
 {
 private:
@@ -12,8 +13,7 @@ private:
 
 public:
 	Molecula() = delete;
-	Molecula(const double par_radius, 
-		     const char par_type, const Radius_vector &par_centre_position, const Radius_vector &par_velocity, const double par_weight, const Color par_color = WHITE,
+	Molecula(const char par_type, const Radius_vector &par_centre_position, const Radius_vector &par_velocity, const double par_weight, const Color par_color = WHITE,
 		     const bool par_active = true, const bool par_just_born = false);
 	Molecula(const Molecula &other) = delete;
 	// Molecula(Molecula &&other) = delete;
@@ -22,8 +22,10 @@ public:
 	Radius_vector count_move(double delta_time) override;
 	void move(const Radius_vector &par_centre_position) override;
 
+	void set_weight(const double par_weight) override;
+
 	double get_radius() const { return radius; }
-	void set_radius(const double par_radius) { assert(par_radius >= 0); radius = par_radius; }
+	// void set_radius(const double par_radius) { assert(par_radius >= 0); radius = par_radius; }
 
 	void draw(Screen_information *screen) override;
 };

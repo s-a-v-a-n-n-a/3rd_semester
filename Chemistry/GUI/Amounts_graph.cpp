@@ -5,6 +5,8 @@ Amounts_graph::Amounts_graph(Shape_manager *par_manager, const Radius_vector &pa
 {
 	manager = par_manager;
 
+	scale = 1.0;
+
 	index_to_begin = 0;	
 
 	for (size_t i = 0; i < shape_types_amount; ++i)
@@ -45,7 +47,7 @@ void Amounts_graph::draw(Screen_information *screen)
 			size_t point = shapes_amounts[i][j % get_width()];
 
 			// screen->set_color(y_offset + get_height() - point, x_offset + k, shapes_colors[i]);
-			screen->draw_point(Radius_vector(x_offset + k, y_offset + get_height() - point), shapes_colors[i]);
+			screen->draw_point(Radius_vector((x_offset + k) * scale, (y_offset + get_height() - point) * scale), shapes_colors[i]);
 		}
 	}
 }

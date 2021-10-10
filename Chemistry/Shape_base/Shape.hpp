@@ -38,7 +38,7 @@ public:
 	bool get_active() const { return active; }
 	bool get_just_born() const { return just_born; }
 
-	void set_weight(const double par_weight) { assert(par_weight); weight = par_weight; }
+	virtual void set_weight(const double par_weight) { assert(par_weight); weight = par_weight; }
 	void set_centre_position(const Radius_vector &par_centre_position) { centre_position = par_centre_position; }
 	void set_velocity(const Radius_vector &par_velocity) { velocity = par_velocity; }
 	void set_color(const Color par_color) { color = par_color; }
