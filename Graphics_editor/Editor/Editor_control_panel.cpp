@@ -1,57 +1,64 @@
 #include "Editor_control_panel.hpp"
 
-Editor_control_panel::Editor_control_panel(const Radius_vector &par_position, Color par_color, double par_width, double par_height)
-: Visual_object(par_position, par_color, par_width, par_height)
+Editor_control_panel::Editor_control_panel(const size_t par_type, const Radius_vector &par_position, Color par_color, double par_width, double par_height)
+: Visual_object(par_type, par_position, par_color, par_width, par_height)
 {
-	size_t button_width = 0;
     size_t button_height = par_height;
 
     size_t current_button_offset = 0;
 
+    current_end_position = par_position;
+
 	// create File button
 	// ------------------------------------------------------------------
-    // Roll_up_delegate * = new Roll_up_delegate(whose);
-    button_width = strlen(" File ") * par_height / 3;
+ //    Roll_up_delegate *canvas_roll_up = new Roll_up_delegate(canvas);
+ //    button_width = strlen(" Canvas ") * par_height / 3;
 
-    Button *file_button = new Button(Radius_vector(Radius_vector(0.0, 0.0)), 
-								  WHITE, 
-								  button_width, 
-								  button_height,
-								  NULL, 
-								  "File");
+ //    Button *canvas_button = new Button(Vidget_type::BUTTON,
+ //    								Radius_vector(Radius_vector(0.0, 0.0)), 
+	// 							  	WHITE, 
+	// 							  	button_width, 
+	// 							  	button_height,
+	// 							  	canvas_roll_up, 
+	// 							  	"Canvas");
 
-    current_button_offset += button_width;
-    // create new button
-    // ------------------------------------------------------------------
-    button_width = strlen(" New ") * par_height / 3;
+ //    current_button_offset += button_width;
 
-    Create_canvas *canvas_creator = new Create_canvas(Radius_vector(0.0, 0.0), Radius_vector(0.0, 0.0));
-    Button *new_button = new Button(Radius_vector(Radius_vector(0.0, 0.0) + Radius_vector(current_button_offset, 0.0)), 
-								  WHITE, 
-								  button_width, 
-								  button_height,
-								  canvas_creator, 
-								  "New");
 
-	current_button_offset += button_width;
 
-	// create Help button
-	// ------------------------------------------------------------------
-	// Roll_up_delegate * = new Roll_up_delegate(whose);
-    button_width = strlen(" Help ") * par_height / 3;
+ //    // create new button
+ //    // ------------------------------------------------------------------
+ //    button_width = strlen(" New ") * par_height / 3;
 
-    Button *help_button = new Button(par_position + Radius_vector(current_button_offset, 0.0), 
-								  WHITE, 
-								  button_width, 
-								  button_height,
-								  NULL, 
-								  "Help");
+ //    Create_canvas *canvas_creator = new Create_canvas(parent->get_pencil(), canvas, par_position + Radius_vector(800.0, 800.0), Radius_vector(500.0, 500.0));
+ //    Button *new_button = new Button(Vidget_type::BUTTON,
+ //    								Radius_vector(Radius_vector(0.0, 0.0) + Radius_vector(current_button_offset, 0.0)), 
+	// 							  	WHITE, 
+	// 							  	button_width, 
+	// 							  	button_height,
+	// 							  	canvas_creator, 
+	// 							  	"New");
 
-    add_visual_object(file_button);
-    add_visual_object(new_button);
-    add_visual_object(help_button);
+	// current_button_offset += button_width;
 
-    set_active(help_button);
+	// // create Help button
+	// // ------------------------------------------------------------------
+	// // Roll_up_delegate * = new Roll_up_delegate(whose);
+ //    button_width = strlen(" Help ") * par_height / 3;
+
+ //    Button *help_button = new Button(Vidget_type::BUTTON,
+ //    								par_position + Radius_vector(current_button_offset, 0.0), 
+	// 							  	WHITE, 
+	// 							  	button_width, 
+	// 							  	button_height,
+	// 							  	NULL, 
+	// 							  	"Help");
+
+    // add_visual_object(canvas_button);
+    // add_visual_object(new_button);
+    // add_visual_object(help_button);
+
+    // set_active(help_button);
 }
 
 Editor_control_panel::~Editor_control_panel()
@@ -65,40 +72,19 @@ Editor_control_panel::~Editor_control_panel()
 	}
 }
 
-// void Editor_control_panel::draw(Screen_information *screen)
-// {
-// 	Visual_object::draw(screen);
+void Editor_control_panel::add_button(Button_delegate *par_delegate, const char *par_text)
+{
+	// size_t button_width = 80;
 
-// 	Visual_object **objects = get_objects()->get_array();
-// 	size_t objects_amount = get_objects()->get_length();
+	Button *new_button = new Button((size_t)Vidget_type::BUTTON,
+    								current_end_position, 
+    								WHITE, 
+								  	strlen(par_text) * 10, 
+								  	DEFAULT_BUTTON_HEIGHT,
+								  	par_delegate, 
+								  	par_text);
 
-// 	for (size_t i = 0; i < objects_amount; ++i)
-// 	{
-// 		objects[i]->draw(screen);
-// 	}
-// }
+	current_end_position += Radius_vector(strlen(par_text) * 10, 0.0);
 
-// bool Editor_control_panel::on_mouse(const double par_x, const double par_y)
-// {
-// 	size_t objects_amount = get_objects()->get_length();
-
-// 	if (point_inside(par_x, par_y))
-// 	{
-// 		for (size_t i = objects_amount; i >= 0; --i)
-// 		{
-// 			if ((get_objects()->get_array()[i])->on_mouse(par_x, par_y)) // ??????
-// 			{
-// 				set_active(get_objects()->get_array()[i]);
-				
-// 				// slow_delete
-// 				slow_delete_visual_object(i);
-// 				// push
-// 				add_visual_object(get_active());
-				
-// 				return true;
-// 			}
-// 		}
-// 	}
-
-// 	return false;
-// }
+	add_visual_object(new_button);
+}

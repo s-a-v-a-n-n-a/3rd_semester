@@ -92,6 +92,19 @@ public:
 
 		length--;
 	}
+
+	void extract(size_t index)
+	{
+		if (index >= length)
+			return;
+
+		for (size_t i = index + 1; i < length; ++i)
+		{
+			array[i - 1] = array[i];
+		}
+
+		length--;
+	}
 };
 
 #endif // SIMPLE_LIST

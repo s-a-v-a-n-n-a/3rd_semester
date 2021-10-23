@@ -35,6 +35,27 @@ struct Color
 
 		return false;
 	}
+
+	const Color operator*=(const double value)
+	{
+		r = double(r) * value;
+		g = double(g) * value;
+		b = double(b) * value;
+
+		return *this;
+	}
+
+	const Color operator/=(const double value)
+	{
+		if (value == 0)
+			return *this;
+
+		r = double(r) / value;
+		g = double(g) / value;
+		b = double(b) / value;
+
+		return *this;
+	}
 };
 
 const Color BLACK  = { 255, 0, 0, 0 };
@@ -46,5 +67,7 @@ const Color YELLOW = { 255, 255, 255, 0 };
 const Color PURPLE = { 255, 128, 0, 128 };
 const Color FUCHSIA = { 255, 255, 0, 255 };
 const Color MEDIUM_PURPLE = { 255, 147, 112, 219 };
+const Color DARK_GREY = {255, 32, 32, 32};
+const Color GREY = {255, 182, 182, 182};
 
 #endif // COLORS_USED

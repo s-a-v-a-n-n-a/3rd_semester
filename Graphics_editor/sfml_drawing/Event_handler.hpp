@@ -9,7 +9,26 @@ enum class Sfml_events
 	WINDOW_CLOSED,
 	MOUSE_CLICKED,
 	MOUSE_RELEASED,
-	MOUSE_MOVED
+	MOUSE_MOVED,
+	KEY_U,
+	KEY_R,
+	KEY_G,
+	KEY_B
+};
+
+enum class Mouse_state
+{
+	RELEASED,
+	CLICKED,
+	MOVED
+};
+
+enum class Key_state
+{
+	KEY_U,
+	KEY_R,
+	KEY_G,
+	KEY_B
 };
 
 class Event_handler
@@ -37,6 +56,31 @@ public:
 	        if (event.type == sf::Event::MouseMoved)
 	        {
 	        	return Sfml_events::MOUSE_MOVED;
+	        }
+
+	        if (event.type == sf::Event::KeyPressed)
+	        {
+	        	switch(event.key.code)
+	        	{
+	        	case sf::Keyboard::U:
+	        		return Sfml_events::KEY_U;
+	        		break;
+
+	        	case sf::Keyboard::R:
+	        		return Sfml_events::KEY_R;
+	        		break;
+
+	        	case sf::Keyboard::G:
+	        		return Sfml_events::KEY_G;
+	        		break;
+
+	        	case sf::Keyboard::B:
+	        		return Sfml_events::KEY_B;
+	        		break;
+
+	        	default:
+	        		break;
+	        	}
 	        }
 	    }
 

@@ -1,53 +1,32 @@
 #include "Window_control_panel.hpp"
 
-Window_control_panel::Window_control_panel(Visual_object *whose, const Radius_vector &par_position, const Color &par_color, const size_t par_width, const size_t par_height)
-: Visual_object(par_position, par_color, par_width, par_height)
+Window_control_panel::Window_control_panel(const size_t par_type, const Radius_vector &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Visual_object *whose)
+: Visual_object(par_type, par_position, par_color, par_width, par_height)
 {
 	// create roll up button 
 	// ATTENTION
 	// MAGIC
 	// ------------------------------------------------------------------------
+	Button_manager *panel = new Button_manager((size_t)Vidget_type::BUTTON_MANAGER, par_position, BLUE, par_width, DEFAULT_BUTTON_HEIGHT);
+
 	size_t button_width = par_width / 5;
     size_t button_height = par_height;
 
     Roll_up_delegate *rolling_up = new Roll_up_delegate(whose);
-    Button *roll_up = new Button(par_position, 
-								  WHITE, 
-								  button_width, 
-								  button_height,
-								  rolling_up, 
-								  "-");
-	// -------------------------------------------------------------------------
-	// create close button
-	// ATTENTION
-	// MAGIC
-	// ------------------------------------------------------------------------
-	Close_delegate *closing = new Close_delegate(whose);
-    Button *close = new Button(Radius_vector(get_position() + Radius_vector(par_width, 0.0) - Radius_vector(button_width, 0.0)), 
-							  WHITE, 
-							  button_width, 
-							  button_height,
-							  closing, 
-							  "X");
-	// -------------------------------------------------------------------------
-	// create dnd button
-	// ATTENTION
-	// MAGIC
-	// ------------------------------------------------------------------------
-	// Roll_up_delegate *drag_and_drop = new DND_delegate(whose);
-    Button *dnd = new Button(Radius_vector(par_position + Radius_vector(button_width, 0.0)), 
-							  BLUE, 
-							  button_width * 3, 
-							  button_height,
-							  NULL, // drag_and_drop 
-							  "");
-	// -------------------------------------------------------------------------
+    panel->add_button(rolling_up, "-", WHITE, button_width);
+    
+    Drag_and_drop_delegate *drag_and_drop = new Drag_and_drop_delegate(whose);
+	panel->add_button(drag_and_drop, " ", GREY, button_width * 3);
+    
+    Close_delegate *closing = new Close_delegate(whose);
+	panel->add_button(closing, "X", WHITE, button_width);
 
-	add_visual_object(roll_up);
-	add_visual_object(dnd);
-	add_visual_object(close);
+	// add_visual_object(roll_up);
+	// add_visual_object(dnd);
+	// add_visual_object(close);
+	add_visual_object(panel);
 
-	set_active(close);
+	// set_active(close);
 }
 
 Window_control_panel::~Window_control_panel()

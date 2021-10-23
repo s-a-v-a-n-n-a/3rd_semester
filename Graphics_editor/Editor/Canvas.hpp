@@ -1,5 +1,5 @@
-#ifndef CANVAS
-#define CANVAS
+#ifndef CANVAS_H
+#define CANVAS_H
 
 #include "../GUI/Visual_object_base.hpp"
 #include "Pencil.hpp"
@@ -19,20 +19,7 @@ private:
 public:
 	Canvas() = delete;
 	// + храним информацию о главном
-	Canvas(Pencil *par_pencil, const Radius_vector &par_position, const Color &par_color, const size_t par_width, const size_t par_height)
-	: Visual_object(par_position, par_color, par_width, par_height)
-	{
-		pencil = par_pencil;
-
-		// current_background_color = WHITE;
-		current_drawing_color = BLACK;
-
-		drawing = new Color[par_width * par_height];
-		for (size_t i = 0; i < par_width * par_height; ++i)
-			drawing[i] = WHITE;
-
-		drawing_state = false;
-	}
+	Canvas(const size_t par_type, const Radius_vector &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil);
 
 	~Canvas()
 	{
@@ -41,10 +28,11 @@ public:
 
 	void draw(Screen_information *screen) override;
 	bool point_inside (const size_t par_x, const size_t par_y) override;
-	bool on_mouse  (const bool clicked, const size_t par_x, const size_t par_y) override; // const Mouse_event par_event, 
+	bool on_mouse  (const Mouse_state state, const size_t par_x, const size_t par_y) override; // const Mouse_event par_event, 
+	// bool on_key_pressed(const unsigned key_mask) override;
 
 	// надо как-то получить цвет карандаша
 	void tick(Screen_information *screen, const double delta_time) override { ; }
 };
 
-#endif // CANVAS
+#endif // CANVAS_H

@@ -82,7 +82,7 @@ void Screen_information::draw_point(const Radius_vector &par_point, const Color 
 void Screen_information::draw_text(const char *par_text, const Radius_vector &par_position, const Color &par_color, const size_t par_text_size)
 {
 	sf::Font font = {};
-	if (!font.loadFromFile("graphical_attributes/arial.ttf"))
+	if (!font.loadFromFile("graphical_attributes/OpenGostTypeA-Regular.ttf"))
 	{
 	    printf("No fonts found\n");
 	}
@@ -95,7 +95,8 @@ void Screen_information::draw_text(const char *par_text, const Radius_vector &pa
 		drawable_text.setString(par_text);
 		drawable_text.setCharacterSize(par_text_size);
 		drawable_text.setFillColor(color);
-		drawable_text.setPosition(par_position.get_x(), par_position.get_y());
+		
+		drawable_text.setPosition(par_position.get_x() - drawable_text.getGlobalBounds().width/2, par_position.get_y() - drawable_text.getGlobalBounds().height/2);
 
 		window.draw(drawable_text);
 	}

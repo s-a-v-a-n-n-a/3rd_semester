@@ -8,6 +8,7 @@
 #include "Text.hpp"
 
 const Color DEFAULT_TEXT_COLOR = BLACK;
+extern const size_t DEFAULT_BUTTON_HEIGHT;
 
 struct Button : public Visual_object
 {
@@ -27,12 +28,14 @@ private:
 
 public:
 	Button() = delete;
-	Button(const Radius_vector &par_position, Color par_color, double par_width, double par_height,
+	Button(const size_t par_type, const Radius_vector &par_position, Color par_color, double par_width, double par_height,
 		   Button_delegate *par_click, const char *par_text);
 	~Button();
 
+	void set_delegate(Button_delegate *par_click) { click = par_click; }
+
 	void draw(Screen_information *screen) override;
-	bool on_mouse(const bool clicked, const size_t par_x, const size_t par_y) override; // const Mouse_event par_event, 
+	bool on_mouse(const Mouse_state state, const size_t par_x, const size_t par_y) override; // const Mouse_event par_event, 
 	void tick(Screen_information *screen, const double delta_time) override { ; }
 };
 
