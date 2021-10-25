@@ -9,7 +9,7 @@ const char *screen_state_text[]
 };
 
 Screen_information::Screen_information(size_t par_width, size_t par_height) 
-: window(sf::VideoMode(par_width, par_height), "It works"), event(), mouse_position(0.0, 0.0)
+: window(sf::VideoMode(par_width, par_height), "It works"), event(), mouse_position(0.0, 0.0), textures()
 {
 	width  = par_width;
 	height = par_height;
@@ -47,19 +47,21 @@ size_t Screen_information::get_height()
 	return height;
 }
 
-void Screen_information::draw_circle(const Radius_vector &par_position, const Color &par_color, const double par_radius)
+void Screen_information::draw_circle(const Vector_ll &par_position, const Color &par_color, const double par_radius, const Color &par_fill_color)
 {
 	sf::CircleShape circle(par_radius);
 
 	circle.setPosition(sf::Vector2f(par_position.get_x(), par_position.get_y()));
 
 	sf::Color color(par_color.r, par_color.g, par_color.b, par_color.a);
-	circle.setFillColor(color);
+	sf::Color fill_color(par_fill_color.r, par_fill_color.g, par_fill_color.b, par_fill_color.a);
+	circle.setOutlineColor(color);
+	circle.setFillColor(fill_color);
 
 	window.draw(circle);
 }
 
-void Screen_information::draw_rectangle(const Radius_vector &par_position, const Color &par_color, const double par_width, const double par_height)
+void Screen_information::draw_rectangle(const Vector_ll &par_position, const Color &par_color, const double par_width, const double par_height)
 {
 	sf::RectangleShape rectangle(sf::Vector2f(par_width, par_height));
 
@@ -71,7 +73,7 @@ void Screen_information::draw_rectangle(const Radius_vector &par_position, const
 	window.draw(rectangle);
 }
 
-void Screen_information::draw_point(const Radius_vector &par_point, const Color &par_color)
+void Screen_information::draw_point(const Vector_ll &par_point, const Color &par_color)
 {
 	sf::Color color(par_color.r, par_color.g, par_color.b, par_color.a);
 	sf::Vertex sfml_point(sf::Vector2f(par_point.get_x(), par_point.get_y()), color);
@@ -79,10 +81,10 @@ void Screen_information::draw_point(const Radius_vector &par_point, const Color 
 	window.draw(&sfml_point, 1, sf::Points);
 }
 
-void Screen_information::draw_text(const char *par_text, const Radius_vector &par_position, const Color &par_color, const size_t par_text_size)
+void Screen_information::draw_text(const char *par_text, const Vector_ll &par_position, const Color &par_color, const size_t par_text_size)
 {
 	sf::Font font = {};
-	if (!font.loadFromFile("graphical_attributes/OpenGostTypeA-Regular.ttf"))
+	if (!font.loadFromFile("graphical_attributes/Fonts/OpenGostTypeA-Regular.ttf"))
 	{
 	    printf("No fonts found\n");
 	}
@@ -102,7 +104,7 @@ void Screen_information::draw_text(const char *par_text, const Radius_vector &pa
 	}
 }
 
-void Screen_information::draw_image(const Color *array, const Radius_vector &position, const size_t width, const size_t height)
+void Screen_information::draw_image(const Color *array, const Vector_ll &position, const size_t width, const size_t height)
 {
 	sf::Sprite sprite;
 	sf::Texture texture;
@@ -117,6 +119,28 @@ void Screen_information::draw_image(const Color *array, const Radius_vector &pos
 
 	texture.update(image);
 	
+	sprite.setPosition(position.get_x(), position.get_y());
+
+	window.draw(sprite);
+}
+
+void Screen_information::draw_texture(const Vector_ll &position, const char *texture_name)
+{
+	sf::Sprite sprite;
+	sf::Texture *texture = textures.get_texture(texture_name);
+
+	sprite.setTexture(*texture);
+
+	sprite.setPosition(position.get_x(), position.get_y());
+
+	window.draw(sprite);
+}
+
+void Screen_information::draw_texture(const Vector_ll &position, sf::Texture *texture)
+{
+	sf::Sprite sprite;
+	sprite.setTexture(*texture);
+
 	sprite.setPosition(position.get_x(), position.get_y());
 
 	window.draw(sprite);
@@ -137,7 +161,7 @@ void Screen_information::sfml_update_mouse_position()
 {
 	sf::Vector2i sfml_position(mouse.getPosition(window));
 
-	mouse_position = Radius_vector(sfml_position.x, sfml_position.y);
+	mouse_position = Vector_ll(sfml_position.x, sfml_position.y);
 }
 
 void Screen_information::sfml_update_mouse_pressed_state()
@@ -205,4 +229,14 @@ void draw_shape_sfml(sf::RenderWindow *window, Screen_information &screen)
 	texture.update(image);
 
 	window->draw(sprite);
+}
+
+Vector_ll get_image_size(const char *filename)
+{
+	sf::Image image;
+	image.loadFromFile(filename);
+
+	sf::Vector2u size = image.getSize();
+	
+	return Vector_ll(size.x, size.y);
 }

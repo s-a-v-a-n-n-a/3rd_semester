@@ -1,7 +1,7 @@
 CFLAGS = -g -masm=intel -no-pie -march=native -O2 -std=c++11
 
-link: screen_functions.o radius_vector.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o tools_vidget.o button_manager.o main.o
-	g++ screen_functions.o radius_vector.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o tools_vidget.o button_manager.o main.o -o main -lsfml-graphics -lsfml-window -lsfml-system
+link: screen_functions.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o tools_vidget.o button_manager.o texture_names.o main.o
+	g++ screen_functions.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o tools_vidget.o button_manager.o texture_names.o main.o -o main -lsfml-graphics -lsfml-window -lsfml-system
 
 main.o : main.cpp
 	g++ $(CFLAGS) -c -o main.o main.cpp
@@ -10,13 +10,16 @@ main.o : main.cpp
 # -----------------------------------------------------------------------------------
 screen_functions.o: sfml_drawing/screen_functions.cpp
 	g++ $(CFLAGS) -c -o screen_functions.o sfml_drawing/screen_functions.cpp
+
+texture_names.o: sfml_drawing/Texture_names.cpp
+	g++ $(CFLAGS) -c -o texture_names.o sfml_drawing/Texture_names.cpp
 # -----------------------------------------------------------------------------------
 
 
 # math
 # -----------------------------------------------------------------------------------
-radius_vector.o: math_structures/Radius_vector.cpp
-	g++ $(CFLAGS) -c -o radius_vector.o math_structures/Radius_vector.cpp
+# Vector_ll.o: math_structures/Vector_ll.cpp
+# 	g++ $(CFLAGS) -c -o Vector_ll.o math_structures/Vector_ll.cpp
 # -----------------------------------------------------------------------------------
 
 

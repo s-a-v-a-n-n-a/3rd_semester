@@ -12,7 +12,7 @@ void Canvases_list::add_canvas(Canvas_manager *to_add)
 
     Canvas_keeper *keep = new Canvas_keeper(to_add);
     Button *keeper = new Button(Vidget_type::BUTTON,
-    							get_position() + Radius_vector(get_objects()->get_length() * 250, 0.0), 
+    							get_position() + Vector_ll(get_objects()->get_length() * 250, 0.0), 
 								WHITE, 
 								button_width, 
 								button_height,
@@ -20,7 +20,7 @@ void Canvases_list::add_canvas(Canvas_manager *to_add)
 								"Canvas");
 
     Button *closing = new Button(Vidget_type::BUTTON,
-    							get_position() + Radius_vector(get_objects()->get_length() * 250 + 150, 0.0),
+    							get_position() + Vector_ll(get_objects()->get_length() * 250 + 150, 0.0),
     							WHITE,
     							100,
     							button_height,
@@ -47,7 +47,7 @@ void Canvases_list::delete_canvas(Canvas_manager *to_delete)
 	
 	for (size_t i = index; i < objects_amount; ++i)
 	{
-		objects_array[i]->set_position(objects_array[i]->get_position() - Radius_vector(250.0, 0.0));
+		objects_array[i]->set_position(objects_array[i]->get_position() - Vector_ll(250.0, 0.0));
 	}
 }
 

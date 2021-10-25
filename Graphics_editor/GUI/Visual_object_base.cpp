@@ -2,12 +2,13 @@
 
 // const size_t VIDGETS_AMOUNT = 9;
 
-Visual_object::Visual_object(const size_t par_type, const Radius_vector &par_position, const Color &par_color, const size_t par_width, const size_t par_height)
-: objects(), type(par_type)
+Visual_object::Visual_object(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height)
+: objects(), type(par_type), position(0, 0), color(WHITE), width(0), height(0)
 {
 	stable_position = par_position;
 	position = par_position;
 	color    = par_color;
+	texture  = NULL;
 
 	width  = par_width;
 	height = par_height;
@@ -20,6 +21,24 @@ Visual_object::Visual_object(const size_t par_type, const Radius_vector &par_pos
 
 	// for (size_t i = 0; i < VIDGETS_AMOUNT; ++i)
 	// 	type_amount = 0;
+}
+
+Visual_object::Visual_object(const size_t par_type, const Vector_ll &par_position, Texture *par_texture)
+: objects(), type(par_type), position(0, 0), color(WHITE), width(0), height(0)
+{
+	stable_position = par_position;
+	position = par_position;
+	color    = WHITE;
+	texture  = par_texture;
+
+	width  = texture->get_width();
+	height = texture->get_height();
+
+	current_active = NULL;
+	active         = false;
+	visible        = true;
+	reactive       = true;
+	alive          = true;
 }
 
 void Visual_object::add_visual_object(Visual_object *par_object) 
@@ -59,9 +78,9 @@ long long Visual_object::very_slow_delete_visual_object(Visual_object *par_objec
 	return -1;
 }
 
-void Visual_object::set_position(const Radius_vector &par_position)
+void Visual_object::set_position(const Vector_ll &par_position)
 {
-	Radius_vector offset = par_position - get_position();
+	Vector_ll offset = par_position - get_position();
 	position = par_position;
 
 	Visual_object **objects_array = objects.get_array();
@@ -77,7 +96,14 @@ void Visual_object::draw(Screen_information *screen)
 {
 	assert(screen);
 
-	screen->draw_rectangle(position, get_color(), width, height);
+	if (texture)
+	{
+		screen->draw_texture(position, texture->get_texture()); // пока нету такой функции
+	}
+	else
+	{
+		screen->draw_rectangle(position, get_color(), width, height);
+	}
 
 	if (get_reactive())
 	{
@@ -86,24 +112,8 @@ void Visual_object::draw(Screen_information *screen)
 
 		for (size_t i = 0; i < objects_amount; ++i)
 		{
-			// printf("%d\n", objects_array[i]->get_visible());
-
 			if (objects_array[i]->get_visible())
 			{
-				// if (current_active == objects_array[i])
-				// {
-				// 	Color current_color = objects_array[i]->get_color();
-				// 	// current_color.set_a(MAX_COLOR_VALUE);
-
-				// 	objects_array[i]->set_color(current_color);
-				// }
-				// else
-				// {
-				// 	Color current_color = objects_array[i]->get_color();
-				// 	// current_color.set_a(MAX_COLOR_VALUE * 9 / 10);
-
-				// 	objects_array[i]->set_color(current_color);
-				// }
 				objects_array[i]->draw(screen);
 			}
 		}
@@ -119,7 +129,7 @@ bool Visual_object::point_inside(const size_t par_x, const size_t par_y)
 	return false;
 }
 
-bool Visual_object::on_mouse(const Mouse_state state, const size_t par_x, const size_t par_y) // const Mouse_event par_event, 
+bool Visual_object::on_mouse_click(const bool state, const size_t par_x, const size_t par_y) // const Mouse_event par_event, 
 {
 	if (point_inside(par_x, par_y))
 	{
@@ -128,7 +138,33 @@ bool Visual_object::on_mouse(const Mouse_state state, const size_t par_x, const 
 		
 		for (long long i = (long long)objects_amount - 1; i >= 0; --i)
 		{
-			if ((get_objects()->get_array()[i])->on_mouse(state, par_x, par_y))//(((get_objects()->get_array()[i])->get_reactive() || state == Mouse_state::MOVED) && (get_objects()->get_array()[i])->on_mouse(state, par_x, par_y)) // ??????
+			if ((get_objects()->get_array()[i])->on_mouse_click(state, par_x, par_y))//(((get_objects()->get_array()[i])->get_reactive() || state == Mouse_state::MOVED) && (get_objects()->get_array()[i])->on_mouse(state, par_x, par_y)) // ??????
+			{
+				set_active(get_objects()->get_array()[i]);
+				
+				// slow_delete
+				objects.extract(i);
+				// push
+				add_visual_object(get_active());
+				
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool Visual_object::on_mouse_move(const Vector_ll from, const Vector_ll to)
+{
+	if (point_inside(from.get_x(), from.get_y()) || point_inside(to.get_x(), to.get_y()))
+	{
+		// set_active_state(true);
+		size_t objects_amount = objects.get_length();
+		
+		for (long long i = (long long)objects_amount - 1; i >= 0; --i)
+		{
+			if ((get_objects()->get_array()[i])->on_mouse_move(from, to))//(((get_objects()->get_array()[i])->get_reactive() || state == Mouse_state::MOVED) && (get_objects()->get_array()[i])->on_mouse(state, par_x, par_y)) // ??????
 			{
 				set_active(get_objects()->get_array()[i]);
 				

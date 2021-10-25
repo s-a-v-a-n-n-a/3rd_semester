@@ -5,6 +5,7 @@
 
 #include "Window_control_panel.hpp"
 #include "Palette.hpp"
+#include "Thickness_palette.hpp"
 #include "Pencil.hpp"
 
 class Tools_vidget : public Visual_object
@@ -12,7 +13,8 @@ class Tools_vidget : public Visual_object
 private:
 
 public:
-	Tools_vidget(const size_t par_type, const Radius_vector &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil);
+	Tools_vidget(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil);
+	Tools_vidget(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, Pencil *par_pencil);
 	~Tools_vidget() = default;
 };
 

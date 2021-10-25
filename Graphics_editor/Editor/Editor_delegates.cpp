@@ -17,15 +17,25 @@ bool Create_canvas::on_mouse_click(const size_t par_x, const size_t par_y)
 	return true;
 }
 
+Interactive_create_canvas::Interactive_create_canvas(Canvas_manager_manager *par_manager, Visual_object *par_to_interact)
+: Create_canvas(par_manager), Interactive(par_to_interact)
+{
+	;
+}
+
+bool Interactive_create_canvas::on_mouse_move(const Vector_ll from, const Vector_ll to) 
+{
+	return Interactive::on_mouse_move(from, to);
+}
+
 Canvas_keeper::Canvas_keeper(Visual_object *par_to_keep)
 {
-	printf("created\n");
-
 	to_keep = par_to_keep;
 }
 
 bool Canvas_keeper::on_mouse_click(const size_t par_x, const size_t par_y)
 {
+	to_keep->set_active_state(true);
 	to_keep->set_visible(true);
 	to_keep->set_reactive(true);
 

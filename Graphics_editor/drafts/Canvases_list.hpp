@@ -15,7 +15,7 @@
 // 	Canvas_manager *to_manage;
 
 // public:
-// 	Canvas_tab(const Radius_vector &par_position, Color par_color, double par_width, double par_height);
+// 	Canvas_tab(const Vector_ll &par_position, Color par_color, double par_width, double par_height);
 // 	~Canvases_list();
 // };
 
@@ -25,7 +25,7 @@ private:
 	List<Canvas_manager*> current_canvases;
 
 public:
-	Canvases_list(const size_t par_type, const Radius_vector &par_position, Color par_color, double par_width, double par_height)
+	Canvases_list(const size_t par_type, const Vector_ll &par_position, Color par_color, double par_width, double par_height)
 	: Visual_object(par_type, par_position, par_color, par_width, par_height)
 	{
 		set_active(NULL);

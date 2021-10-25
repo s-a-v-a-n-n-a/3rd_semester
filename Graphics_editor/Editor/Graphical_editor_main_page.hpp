@@ -7,7 +7,7 @@
 
 #include "Vidget_types.hpp"
 
-#include "Editor_control_panel.hpp"
+// #include "Editor_control_panel.hpp"
 #include "Editor_delegates.hpp"
 #include "Graphical_delegates.hpp"
 
@@ -27,7 +27,8 @@ private:
 	Pencil pencil;
 
 public:
-	Graphical_editor_main_page(const size_t par_type, const Radius_vector &par_position, const Color &par_color, const size_t par_width, const size_t par_height);
+	Graphical_editor_main_page(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height);
+	Graphical_editor_main_page(const size_t par_type, const Vector_ll &par_position, Texture *texture);
 	~Graphical_editor_main_page();
 
 	Color get_pencil_color() { return pencil.get_color(); }

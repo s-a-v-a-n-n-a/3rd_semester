@@ -18,7 +18,7 @@ int main()
 
 Graphical_editor_main_page *create_editor()
 {
-	Graphical_editor_main_page *editor = new Graphical_editor_main_page((size_t)Vidget_type::EDITOR, Radius_vector(0, 0), DARK_GREY, DEFAULT_SIZE, DEFAULT_SIZE);
+	Graphical_editor_main_page *editor = new Graphical_editor_main_page((size_t)Vidget_type::EDITOR, Vector_ll(0, 0), DARK_GREY, DEFAULT_SIZE, DEFAULT_SIZE);
 
 	return editor;
 }
@@ -28,6 +28,7 @@ void delete_editor(Graphical_editor_main_page *editor)
 	delete editor;
 }
 
+Vector_ll click_place(0, 0);
 void draw_editor(Graphical_editor_main_page *editor)
 {
 	Screen_information screen(DEFAULT_SIZE, DEFAULT_SIZE);
@@ -49,25 +50,27 @@ void draw_editor(Graphical_editor_main_page *editor)
 
         case Sfml_events::MOUSE_CLICKED:
         {
-            Radius_vector click_place(screen.get_mouse_position());
-            editor->on_mouse(Mouse_state::CLICKED, click_place.get_x(), click_place.get_y());
+            click_place = screen.get_mouse_position();
+            editor->on_mouse_click(true, click_place.get_x(), click_place.get_y());
 
             break;
         }
 
         case Sfml_events::MOUSE_RELEASED:
         {
-            Radius_vector click_place(screen.get_mouse_position());
+            click_place = screen.get_mouse_position();
 
-            editor->on_mouse(Mouse_state::RELEASED, click_place.get_x(), click_place.get_y());
+            editor->on_mouse_click(false, click_place.get_x(), click_place.get_y());
 
             break;
         }
 
         case Sfml_events::MOUSE_MOVED:
         {
-            Radius_vector click_place(screen.get_mouse_position());
-            editor->on_mouse(Mouse_state::MOVED, click_place.get_x(), click_place.get_y());
+            Vector_ll move_place(screen.get_mouse_position());
+            // assert(click_place.get_x() != move_place.get_x() && click_place.get_y() != move_place.get_y());
+            editor->on_mouse_move(click_place, move_place);
+            click_place = move_place;
 
             break;
         }
@@ -102,7 +105,7 @@ void draw_editor(Graphical_editor_main_page *editor)
         }
 
         // // user_window.tick(&screen, 0.05);
-        editor->tick(&screen, 0.05);
+        editor->tick(&screen, 0.005);
         editor->draw(&screen);
         
         screen.sfml_update_mouse_state();

@@ -5,12 +5,17 @@
 #include <cstring>
 #include <cstdio>
 
+#include "Texture_names.hpp"
+
 #include "Event_handler.hpp"
+#include "Texture.hpp"
 
 #include "colors.hpp"
 #include "../math_structures/Radius_vector.hpp"
 
 #include "../simple_list/simple_list.hpp"
+
+// #define Vector_ll Vector_ll<unsigned>
 
 typedef enum Screen_information_code_errors 
 { 
@@ -34,7 +39,7 @@ extern const char *screen_state_text[];
 class Screen_information 
 {
 private:
-	Radius_vector mouse_position;
+	Vector_ll mouse_position;
 	bool mouse_clicked;
 
 	Color *data;
@@ -48,7 +53,7 @@ public:
 	sf::Event event; 
 	sf::Mouse mouse;
 
-
+	Texture_manager textures;
 
 	Screen_information(size_t par_width, size_t par_height);
 	~Screen_information();
@@ -60,7 +65,7 @@ public:
 	size_t get_width();
 	size_t get_height();
 	bool          get_mouse_pressed_state() { return mouse_clicked; }
-	Radius_vector get_mouse_position() const { return mouse_position; }
+	Vector_ll get_mouse_position() const { return mouse_position; }
 	// ---------------------------------------------------------------------
 
 	// setters 
@@ -70,11 +75,13 @@ public:
 	
 	// drawings
 	// ---------------------------------------------------------------------
-	void draw_circle(const Radius_vector &par_position, const Color &par_color, const double par_radius);
-	void draw_rectangle(const Radius_vector &par_position, const Color &par_color, const double par_width, const double par_height);
-	void draw_point(const Radius_vector &point, const Color &par_color);
-	void draw_text(const char *par_text, const Radius_vector &par_position, const Color &par_color, const size_t text_size);
-	void draw_image(const Color *array, const Radius_vector &position, const size_t width, const size_t height);
+	void draw_circle(const Vector_ll &par_position, const Color &par_color, const double par_radius, const Color &par_fill_color = TRANSPARENT);
+	void draw_rectangle(const Vector_ll &par_position, const Color &par_color, const double par_width, const double par_height);
+	void draw_point(const Vector_ll &point, const Color &par_color);
+	void draw_text(const char *par_text, const Vector_ll &par_position, const Color &par_color, const size_t text_size);
+	void draw_image(const Color *array, const Vector_ll &position, const size_t width, const size_t height);
+	void draw_texture(const Vector_ll &position, const char *texture_name);
+	void draw_texture(const Vector_ll &position, sf::Texture *texture);
 	// ---------------------------------------------------------------------
 	
 	void reset();
@@ -89,5 +96,7 @@ public:
 	friend screen_code screen_load(Screen_information &screen, sf::Image* image);
 	friend void draw_shape_sfml(sf::RenderWindow *window, Screen_information &screen);
 };
+
+Vector_ll get_image_size(const char *filename);
 
 #endif // SCREEN_INFORMATION

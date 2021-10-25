@@ -7,9 +7,12 @@
 
 #include "../simple_list/simple_list.hpp"
 #include "../sfml_drawing/screen_functions.hpp"
+#include "../sfml_drawing/Texture.hpp"
 #include "../math_structures/Radius_vector.hpp"
 
 #include "../Editor/Vidget_types.hpp"
+
+// #define Vector_ll Vector_ll<size_t>
 
 class Visual_object
 {
@@ -19,8 +22,9 @@ private:
 	List<Visual_object*> objects;
 	Visual_object *current_active;
 
-	Radius_vector stable_position;
-	Radius_vector position;
+	Vector_ll stable_position;
+	Texture *texture;
+	Vector_ll position;
 	Color color;
 
 	size_t width;
@@ -33,8 +37,12 @@ private:
 
 public:
 	Visual_object() = delete;
-	Visual_object(const size_t par_type, const Radius_vector &par_position, const Color &par_color, const size_t par_width, const size_t par_height);
-	virtual ~Visual_object() = default;
+	Visual_object(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height);
+	Visual_object(const size_t par_type, const Vector_ll &par_position, Texture *par_texture);
+	virtual ~Visual_object()
+	{
+		delete texture;
+	}
 
 	virtual void add_visual_object(Visual_object *par_object);
 	virtual void slow_delete_visual_object(size_t index);
@@ -43,14 +51,15 @@ public:
 	virtual void draw(Screen_information *screen);
 
 	virtual bool point_inside (const size_t par_x, const size_t par_y);
-	virtual bool on_mouse  (const Mouse_state state, const size_t par_x, const size_t par_y); //const Mouse_event par_event,
+	virtual bool on_mouse_click  (const bool state, const size_t par_x, const size_t par_y); //const Mouse_event par_event,
+	virtual bool on_mouse_move	(const Vector_ll from, const Vector_ll to);
 	virtual bool on_key_pressed(const unsigned key_mask); 
 	// virtual bool on_key_press(const Key_event par_event);
 
 	virtual void tick(Screen_information *screen, const double delta_time);
 
 	List<Visual_object*>   *get_objects()        		{ return &objects; }
-	Radius_vector  			get_position() 		const 	{ return position; }
+	Vector_ll  			get_position() 		const 	{ return position; }
 	Color         		 	get_color()    		const 	{ return color; }
 	size_t         			get_width()    		const 	{ return width; }
 	size_t         			get_height()   		const 	{ return height; }
@@ -60,8 +69,9 @@ public:
 	bool				    get_reactive()  	const 	{ return reactive; }
 	bool				    get_alive()  		const 	{ return alive; }
 	size_t					get_type()			const	{ return type; }
+	Texture 				*get_texture()				{ return texture; }
 
-	virtual void set_position 		(const Radius_vector &par_position);
+	virtual void set_position 		(const Vector_ll &par_position);
 	virtual void set_color    		(const Color &par_color)            { color = par_color; }
 	virtual void set_width    		(const size_t par_width)            { width = par_width; }
 	virtual void set_height   		(const size_t par_height)           { height = par_height; }

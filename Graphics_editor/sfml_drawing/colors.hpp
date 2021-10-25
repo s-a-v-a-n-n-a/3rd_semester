@@ -56,6 +56,11 @@ struct Color
 
 		return *this;
 	}
+
+	// friend Color operator+(const Color &left, const Color &right)
+	// {
+	// 	Color color_sum = {}MAX_COLOR_VALUE, left.get_r() + right.get_r(), left.get_g() + right.get_g(), left.get_b() + right.get_b());
+	// }
 };
 
 const Color BLACK  = { 255, 0, 0, 0 };
@@ -66,8 +71,11 @@ const Color BLUE   = { 255, 0, 0, 255 };
 const Color YELLOW = { 255, 255, 255, 0 };
 const Color PURPLE = { 255, 128, 0, 128 };
 const Color FUCHSIA = { 255, 255, 0, 255 };
+const Color CYAN = { 255, 0, 255, 255 };
 const Color MEDIUM_PURPLE = { 255, 147, 112, 219 };
-const Color DARK_GREY = {255, 32, 32, 32};
-const Color GREY = {255, 182, 182, 182};
+const Color DARK_GREY = { 255, 32, 32, 32};
+const Color MEDIUM_GREY = { 255, 100, 100, 100 };
+const Color GREY = { 255, 182, 182, 182};
+const Color TRANSPARENT = {0, 0, 0, 0};
 
 #endif // COLORS_USED

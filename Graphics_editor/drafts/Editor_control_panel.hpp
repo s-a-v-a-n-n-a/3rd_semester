@@ -15,10 +15,10 @@ class Editor_control_panel : public Visual_object
 {
 private:
 	// Graphical_editor_main_page *parent;
-	Radius_vector current_end_position;
+	Vector_ll current_end_position;
 
 public:
-	Editor_control_panel(const size_t par_type, const Radius_vector &par_position, Color par_color, double par_width, double par_height);
+	Editor_control_panel(const size_t par_type, const Vector_ll &par_position, Color par_color, double par_width, double par_height);
 	~Editor_control_panel();
 
 	void add_button(Button_delegate *par_delegate, const char *par_text);
