@@ -14,6 +14,7 @@
 // #include "Canvases_list.hpp"
 #include "Canvas_manager_manager.hpp"
 #include "Tools_vidget.hpp"
+#include "Brush_size_manager.hpp"
 
 #include "Pencil.hpp"
 

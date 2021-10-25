@@ -30,10 +30,10 @@ Tools_vidget::Tools_vidget(const size_t par_type, const Vector_ll &par_position,
 																this);
 
 	Palette *palette = new Palette((size_t)Vidget_type::PALETTE, par_position + Vector_ll(0, DEFAULT_BUTTON_HEIGHT), WHITE, 300, 300, par_pencil);
-	Thickness_palette *thick_palette = new Thickness_palette((size_t)Vidget_type::PALETTE, par_position + Vector_ll(10, DEFAULT_BUTTON_HEIGHT + 350), TRANSPARENT, 300, 40, par_pencil);
+	// Thickness_palette *thick_palette = new Thickness_palette((size_t)Vidget_type::PALETTE, par_position + Vector_ll(10, DEFAULT_BUTTON_HEIGHT + 350), TRANSPARENT, 300, 40, par_pencil);
 
 	add_visual_object(control);
 	add_visual_object(palette);
-	add_visual_object(thick_palette);
+	// add_visual_object(thick_palette);
 }
 

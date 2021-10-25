@@ -32,10 +32,11 @@ public:
 		{
 			for (int j = 0; j < MAX_COLOR_VALUE; ++j)
 			{
-				color_array[i * MAX_COLOR_VALUE + j] = {MAX_COLOR_VALUE, 
+				color_array[i * MAX_COLOR_VALUE + j] = { 
 										  (unsigned char)(((MAX_COLOR_VALUE - red_component) * (MAX_COLOR_VALUE - j) / MAX_COLOR_VALUE + red_component) * (MAX_COLOR_VALUE - i) / MAX_COLOR_VALUE),
 										  (unsigned char)(((MAX_COLOR_VALUE - green_component) * (MAX_COLOR_VALUE - j) / MAX_COLOR_VALUE + green_component) * (MAX_COLOR_VALUE - i) / MAX_COLOR_VALUE), 
-										  (unsigned char)(((MAX_COLOR_VALUE - blue_component) * (MAX_COLOR_VALUE - j) / MAX_COLOR_VALUE + blue_component) * (MAX_COLOR_VALUE - i) / MAX_COLOR_VALUE)};
+										  (unsigned char)(((MAX_COLOR_VALUE - blue_component) * (MAX_COLOR_VALUE - j) / MAX_COLOR_VALUE + blue_component) * (MAX_COLOR_VALUE - i) / MAX_COLOR_VALUE),
+										  MAX_COLOR_VALUE};
 			}
 		}
 	}

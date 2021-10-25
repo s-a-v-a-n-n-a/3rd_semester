@@ -91,6 +91,7 @@ public:
 	void sfml_update_mouse_pressed_state();
 
 	void image_load(sf::Image *image, const Color *to_draw, const size_t width, const size_t height);
+	void texture_load(sf::Texture *texture, const Color *to_draw, const size_t width, const size_t height);
 
 	friend void copy_color_from_sfml_color(Screen_information &screen, sf::Color color, size_t line, size_t column);
 	friend screen_code screen_load(Screen_information &screen, sf::Image* image);

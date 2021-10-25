@@ -1,4 +1,4 @@
-CFLAGS = -g -masm=intel -no-pie -march=native -O2 -std=c++11
+CFLAGS = -g -masm=intel -no-pie -march=native -O3 -std=c++11
 
 link: screen_functions.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o tools_vidget.o button_manager.o texture_names.o main.o
 	g++ screen_functions.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o tools_vidget.o button_manager.o texture_names.o main.o -o main -lsfml-graphics -lsfml-window -lsfml-system

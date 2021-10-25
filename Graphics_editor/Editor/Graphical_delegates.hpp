@@ -269,7 +269,24 @@ public:
 		{
 			last_position = to;
 
-			to_change_place->set_position(to_change_place->get_position() + last_position - first_position);
+			Vector_ll new_position = to_change_place->get_position() + last_position - first_position;
+			bool bad_position = false;
+
+			if (new_position.get_x() < 0)
+			{
+				new_position.set_x(0);
+				bad_position = true;
+			}
+			if (new_position.get_y() < 0)
+			{
+				new_position.set_y(0);
+				bad_position = true;
+			}
+
+			if (bad_position)
+				on_mouse_release();
+
+			to_change_place->set_position(new_position);
 			first_position = last_position;
 		}
 

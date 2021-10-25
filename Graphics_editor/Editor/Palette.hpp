@@ -37,9 +37,10 @@ public:
 
 	    
 		Full_texture *texture = new Full_texture(GRADIENT_BAR_TEXTURE);
-		Color_picker *picker = new Color_picker((size_t)Vidget_type::COLOR_PICKER, par_position + Vector_ll(10, (offset + 10 + texture->get_height())), BLACK, MAX_COLOR_VALUE, MAX_COLOR_VALUE, par_pencil);
+		size_t size = par_width < (par_height - DEFAULT_BUTTON_HEIGHT) ? par_width : (par_height - DEFAULT_BUTTON_HEIGHT);
+
+		Color_picker *picker = new Color_picker((size_t)Vidget_type::COLOR_PICKER, par_position + Vector_ll(10, (offset + 10 + texture->get_height())), TRANSPARENT, size, size, par_pencil);
 	    Gradient_bar *gradient = new Gradient_bar((size_t)Vidget_type::GRADIENT_BAR, par_position + Vector_ll(10, offset + 10), texture, par_pencil, picker);
-	    
 
 	   	add_visual_object(panel);
 	   	add_visual_object(gradient);

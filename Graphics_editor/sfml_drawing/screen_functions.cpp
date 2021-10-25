@@ -112,12 +112,12 @@ void Screen_information::draw_image(const Color *array, const Vector_ll &positio
 
 	sprite.setTexture(texture);
 
-	sf::Image image;
-	image.create(width, height, sf::Color::Black);
+	// sf::Image image;
+	// image.create(width, height, sf::Color::Black);
 
-	image_load(&image, array, width, height);
+	texture_load(&texture, array, width, height);
 
-	texture.update(image);
+	// texture.update(image);
 	
 	sprite.setPosition(position.get_x(), position.get_y());
 
@@ -211,6 +211,15 @@ void Screen_information::image_load(sf::Image *image, const Color *to_draw, cons
 			image->setPixel(j, i, color);
 		}
 	}
+}
+
+void Screen_information::texture_load(sf::Texture *texture, const Color *to_draw, const size_t width, const size_t height)
+{
+	sf::Vector2u texture_size = (*texture).getSize();
+	if (texture_size.x < width || texture_size.y < height)
+		return;
+
+	texture->update((sf::Uint8*)to_draw, width, height, 0, 0);
 }
 
 void draw_shape_sfml(sf::RenderWindow *window, Screen_information &screen)

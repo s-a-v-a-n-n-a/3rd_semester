@@ -43,7 +43,6 @@ void draw_editor(Graphical_editor_main_page *editor)
         switch (result)
         {
         case Sfml_events::WINDOW_CLOSED:
-            // printf("oh hello\n");
             screen.window.close();
             open = false;
             break;
@@ -104,7 +103,6 @@ void draw_editor(Graphical_editor_main_page *editor)
             break;
         }
 
-        // // user_window.tick(&screen, 0.05);
         editor->tick(&screen, 0.005);
         editor->draw(&screen);
         

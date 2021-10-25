@@ -5,10 +5,10 @@ const unsigned char MAX_COLOR_VALUE = 255;
 
 struct Color 
 {
-	unsigned char a;
 	unsigned char r;
 	unsigned char g;
 	unsigned char b;
+	unsigned char a;
 
 	unsigned char get_a() const { return a; }
 	unsigned char get_r() const { return r; }
@@ -63,19 +63,19 @@ struct Color
 	// }
 };
 
-const Color BLACK  = { 255, 0, 0, 0 };
+const Color BLACK  = { 0, 0, 0, 255 };
 const Color WHITE  = { 255, 255, 255, 255 };
-const Color RED    = { 255, 255, 0, 0 };
-const Color GREEN  = { 255, 0, 255, 0 };
-const Color BLUE   = { 255, 0, 0, 255 };
-const Color YELLOW = { 255, 255, 255, 0 };
-const Color PURPLE = { 255, 128, 0, 128 };
-const Color FUCHSIA = { 255, 255, 0, 255 };
-const Color CYAN = { 255, 0, 255, 255 };
-const Color MEDIUM_PURPLE = { 255, 147, 112, 219 };
-const Color DARK_GREY = { 255, 32, 32, 32};
-const Color MEDIUM_GREY = { 255, 100, 100, 100 };
-const Color GREY = { 255, 182, 182, 182};
+const Color RED    = { 255, 0, 0, 255 };
+const Color GREEN  = { 0, 255, 0, 255 };
+const Color BLUE   = { 0, 0, 255, 255 };
+const Color YELLOW = { 255, 255, 0, 255 };
+const Color PURPLE = { 128, 0, 128, 255 };
+const Color FUCHSIA = { 255, 0, 255, 255 };
+const Color CYAN = { 0, 255, 255, 255 };
+const Color MEDIUM_PURPLE = { 147, 112, 219, 255 };
+const Color DARK_GREY = { 32, 32, 32, 255 };
+const Color MEDIUM_GREY = { 100, 100, 100, 255 };
+const Color GREY = { 182, 182, 182, 255 };
 const Color TRANSPARENT = {0, 0, 0, 0};
 
 #endif // COLORS_USED
