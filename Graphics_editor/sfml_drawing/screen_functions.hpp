@@ -9,6 +9,7 @@
 
 #include "Event_handler.hpp"
 #include "Texture.hpp"
+#include "Text.hpp"
 
 #include "colors.hpp"
 #include "../math_structures/Radius_vector.hpp"
@@ -64,7 +65,7 @@ public:
 	// ---------------------------------------------------------------------
 	size_t get_width();
 	size_t get_height();
-	bool          get_mouse_pressed_state() { return mouse_clicked; }
+	bool      get_mouse_pressed_state() { return mouse_clicked; }
 	Vector_ll get_mouse_position() const { return mouse_position; }
 	// ---------------------------------------------------------------------
 
@@ -81,7 +82,7 @@ public:
 	void draw_text(const char *par_text, const Vector_ll &par_position, const Color &par_color, const size_t text_size);
 	void draw_image(const Color *array, const Vector_ll &position, const size_t width, const size_t height);
 	void draw_texture(const Vector_ll &position, const char *texture_name);
-	void draw_texture(const Vector_ll &position, sf::Texture *texture);
+	void draw_texture(const Vector_ll &position, sf::Texture *texture, const size_t width, const size_t height, const double transperancy = 1);
 	// ---------------------------------------------------------------------
 	
 	void reset();

@@ -12,13 +12,12 @@
 
 #include "../Editor/Vidget_types.hpp"
 
-// #define Vector_ll Vector_ll<size_t>
-
 class Visual_object
 {
 private:
 	const size_t type;
 
+	// Visual_object *parent;
 	List<Visual_object*> objects;
 	Visual_object *current_active;
 
@@ -38,7 +37,7 @@ private:
 public:
 	Visual_object() = delete;
 	Visual_object(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height);
-	Visual_object(const size_t par_type, const Vector_ll &par_position, Texture *par_texture);
+	Visual_object(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width = 0, const size_t par_height = 0);
 	virtual ~Visual_object()
 	{
 		delete texture;
@@ -59,7 +58,7 @@ public:
 	virtual void tick(Screen_information *screen, const double delta_time);
 
 	List<Visual_object*>   *get_objects()        		{ return &objects; }
-	Vector_ll  			get_position() 		const 	{ return position; }
+	Vector_ll  				get_position() 		const 	{ return position; }
 	Color         		 	get_color()    		const 	{ return color; }
 	size_t         			get_width()    		const 	{ return width; }
 	size_t         			get_height()   		const 	{ return height; }
@@ -69,7 +68,7 @@ public:
 	bool				    get_reactive()  	const 	{ return reactive; }
 	bool				    get_alive()  		const 	{ return alive; }
 	size_t					get_type()			const	{ return type; }
-	Texture 				*get_texture()				{ return texture; }
+	Texture 			   *get_texture()				{ return texture; }
 
 	virtual void set_position 		(const Vector_ll &par_position);
 	virtual void set_color    		(const Color &par_color)            { color = par_color; }
@@ -80,6 +79,7 @@ public:
 	virtual void set_visible		(const bool par_visible)			{ visible = par_visible; }
 	virtual void set_reactive		(const bool par_reactive)			{ reactive = par_reactive; }
 	virtual void set_alive			(const bool par_alive)				{ alive = par_alive; }
+	virtual void set_texture 		(Texture *par_texture)				{ texture = par_texture; }
 };
 
 #endif // VISUAL_OBJECT_BASE

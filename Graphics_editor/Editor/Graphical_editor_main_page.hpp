@@ -18,6 +18,8 @@
 
 #include "Pencil.hpp"
 
+#include "Test.hpp"
+
 class Editor_control_panel;
 class Palette;
 class Canvas_manager_manager;
@@ -29,7 +31,7 @@ private:
 
 public:
 	Graphical_editor_main_page(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height);
-	Graphical_editor_main_page(const size_t par_type, const Vector_ll &par_position, Texture *texture);
+	Graphical_editor_main_page(const size_t par_type, const Vector_ll &par_position, Texture *texture, const size_t par_width = 0, const size_t par_height = 0);
 	~Graphical_editor_main_page();
 
 	Color get_pencil_color() { return pencil.get_color(); }

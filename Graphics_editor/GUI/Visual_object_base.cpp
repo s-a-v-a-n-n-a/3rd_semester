@@ -23,16 +23,24 @@ Visual_object::Visual_object(const size_t par_type, const Vector_ll &par_positio
 	// 	type_amount = 0;
 }
 
-Visual_object::Visual_object(const size_t par_type, const Vector_ll &par_position, Texture *par_texture)
+Visual_object::Visual_object(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height)
 : objects(), type(par_type), position(0, 0), color(WHITE), width(0), height(0)
 {
 	stable_position = par_position;
 	position = par_position;
-	color    = WHITE;
+	color    = TRANSPARENT;
 	texture  = par_texture;
 
-	width  = texture->get_width();
-	height = texture->get_height();
+	if (par_width && par_height)
+	{
+		width = par_width;
+		height = par_height;
+	}
+	else
+	{
+		width = texture->get_width();
+		height = texture->get_height();
+	}
 
 	current_active = NULL;
 	active         = false;
@@ -44,24 +52,15 @@ Visual_object::Visual_object(const size_t par_type, const Vector_ll &par_positio
 void Visual_object::add_visual_object(Visual_object *par_object) 
 { 
 	objects.add_to_end(par_object); 
-
-	// type_amount[(size_t)par_object->get_type]++;
 }
 
 void Visual_object::slow_delete_visual_object(size_t index) 
-{ /*delete (objects.get_array())[index];*/ 
-	// Vidget_type deleting_type = objects.get_array()[index]->get_type();
-
-	// что, если там лежал ноль
-	// type_amount[deleting_type]--;
-
+{ 
 	objects.slow_delete(index); 
 }
 
 long long Visual_object::very_slow_delete_visual_object(Visual_object *par_object)
 {
-	// type_amount[par_object->get_type()]--;
-
 	Visual_object **objects_array = objects.get_array();
 	size_t objects_amount = objects.get_length();
 
@@ -98,15 +97,15 @@ void Visual_object::draw(Screen_information *screen)
 
 	if (texture)
 	{
-		screen->draw_texture(position, texture->get_texture()); // пока нету такой функции
+		screen->draw_texture(position, texture->get_texture(), get_width(), get_height()); // пока нету такой функции
 	}
 	else
 	{
 		screen->draw_rectangle(position, get_color(), width, height);
 	}
 
-	if (get_reactive())
-	{
+	// if (get_reactive())
+	// {
 		Visual_object **objects_array = objects.get_array();
 		size_t objects_amount = objects.get_length();
 
@@ -117,7 +116,7 @@ void Visual_object::draw(Screen_information *screen)
 				objects_array[i]->draw(screen);
 			}
 		}
-	}
+	// }
 }
 
 bool Visual_object::point_inside(const size_t par_x, const size_t par_y)
@@ -133,7 +132,6 @@ bool Visual_object::on_mouse_click(const bool state, const size_t par_x, const s
 {
 	if (point_inside(par_x, par_y))
 	{
-		// set_active_state(true);
 		size_t objects_amount = objects.get_length();
 		
 		for (long long i = (long long)objects_amount - 1; i >= 0; --i)
@@ -141,6 +139,7 @@ bool Visual_object::on_mouse_click(const bool state, const size_t par_x, const s
 			if ((get_objects()->get_array()[i])->on_mouse_click(state, par_x, par_y))//(((get_objects()->get_array()[i])->get_reactive() || state == Mouse_state::MOVED) && (get_objects()->get_array()[i])->on_mouse(state, par_x, par_y)) // ??????
 			{
 				set_active(get_objects()->get_array()[i]);
+				(get_objects()->get_array()[i])->set_active_state(true);
 				
 				// slow_delete
 				objects.extract(i);
@@ -149,6 +148,8 @@ bool Visual_object::on_mouse_click(const bool state, const size_t par_x, const s
 				
 				return true;
 			}
+
+			set_active_state(false);
 		}
 	}
 
@@ -157,9 +158,8 @@ bool Visual_object::on_mouse_click(const bool state, const size_t par_x, const s
 
 bool Visual_object::on_mouse_move(const Vector_ll from, const Vector_ll to)
 {
-	if (point_inside(from.get_x(), from.get_y()) || point_inside(to.get_x(), to.get_y()))
+	if (get_reactive() && (point_inside(from.get_x(), from.get_y()) || point_inside(to.get_x(), to.get_y())))
 	{
-		// set_active_state(true);
 		size_t objects_amount = objects.get_length();
 		
 		for (long long i = (long long)objects_amount - 1; i >= 0; --i)
@@ -167,6 +167,7 @@ bool Visual_object::on_mouse_move(const Vector_ll from, const Vector_ll to)
 			if ((get_objects()->get_array()[i])->on_mouse_move(from, to))//(((get_objects()->get_array()[i])->get_reactive() || state == Mouse_state::MOVED) && (get_objects()->get_array()[i])->on_mouse(state, par_x, par_y)) // ??????
 			{
 				set_active(get_objects()->get_array()[i]);
+				(get_objects()->get_array()[i])->set_active_state(true);
 				
 				// slow_delete
 				objects.extract(i);
@@ -183,7 +184,6 @@ bool Visual_object::on_mouse_move(const Vector_ll from, const Vector_ll to)
 
 bool Visual_object::on_key_pressed(const unsigned key_mask)
 {
-	// set_active_state(true);
 	size_t objects_amount = objects.get_length();
 	
 	for (long long i = (long long)objects_amount - 1; i >= 0; --i)
@@ -213,7 +213,6 @@ void Visual_object::tick(Screen_information *screen, const double delta_time)
 
 	for (size_t i = 0; i < objects_amount; ++i)
 	{
-		// printf("%d\n", objects_array[i]->get_visible());
 		if (!objects_array[i]->get_alive())
 		{
 			slow_delete_visual_object(i);

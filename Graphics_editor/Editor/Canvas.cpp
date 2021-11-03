@@ -14,6 +14,23 @@ Canvas::Canvas(const size_t par_type, const Vector_ll &par_position, const Color
 	drawing_state = false;
 }
 
+Canvas::Canvas(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Pencil *par_pencil)
+: Visual_object(par_type, par_position, par_texture, par_width, par_height)
+{
+	size_t new_width = par_texture->get_width();
+	size_t new_height = par_texture->get_height();
+
+	pencil = par_pencil;
+
+	current_drawing_color = BLACK;
+
+	drawing = new Color[par_width * par_height];
+	for (size_t i = 0; i < par_width * par_height; ++i)
+		drawing[i] = WHITE;
+
+	drawing_state = false;
+}
+
 void Canvas::draw_point(const size_t par_x, const size_t par_y)
 {
 	size_t width = get_width();
@@ -33,20 +50,22 @@ void Canvas::draw_point(const size_t par_x, const size_t par_y)
 	for (size_t i = begin_y; i < end_y; ++i)
 		for (size_t j = begin_x; j < end_x; ++j)
 			drawing[i * width + j] = current_drawing_color;
+
+	get_texture()->set_texture(drawing, get_width(), get_height());
 }
 
 void Canvas::draw(Screen_information *screen)
 {
 	Visual_object::draw(screen);
 
-	size_t width = get_width();
-	size_t height = get_height();
+	// size_t width = get_width();
+	// size_t height = get_height();
 
-	Color current_color = get_color();
+	// Color current_color = get_color();
 
-	Vector_ll position(get_position());
+	// Vector_ll position(get_position());
 
-	screen->draw_image(drawing, get_position(), width, height);
+	// screen->draw_image(drawing, get_position(), width, height);
 }
 
 bool Canvas::point_inside (const size_t par_x, const size_t par_y)

@@ -1,13 +1,12 @@
 #include "Button.hpp"
 
-const size_t DEFAULT_BUTTON_HEIGHT = 70;
+const size_t DEFAULT_BUTTON_HEIGHT = 50;
+const size_t INCREASED_BUTTON_HEIGHT = 70;
 
 Button::Button(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Button_delegate *par_click, const char *par_text)
 : Visual_object(par_type, par_position, par_color, par_width, par_height) // const char *par_text = NULL
 {
-	size_t offset = par_width / (2 + strlen(par_text) / 3);
-	while (offset * 2 > par_height && offset > 1)
-		offset--;
+	size_t offset = par_height / 2;
 	Text *text = new Text((size_t)Vidget_type::TEXT, 
 							par_text, 
 							offset, 
@@ -18,12 +17,10 @@ Button::Button(const size_t par_type, const Vector_ll &par_position, const Color
 	click = par_click;
 }
 
-Button::Button(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, Button_delegate *par_click, const char *par_text)
-: Visual_object(par_type, par_position, par_texture) // const char *par_text = NULL
+Button::Button(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Button_delegate *par_click, const char *par_text)
+: Visual_object(par_type, par_position, par_texture, par_width, par_height) // const char *par_text = NULL
 {
-	size_t offset = get_width() / (2 + strlen(par_text) / 3);
-	while (offset * 3 > get_height() && offset > 1)
-		offset--;
+	size_t offset = get_height() / 2;
 	Text *text = new Text((size_t)Vidget_type::TEXT, 
 							par_text, 
 							offset, 
@@ -51,7 +48,7 @@ void Button::draw(Screen_information *screen)
 {
 	if(get_texture())
 	{
-		screen->draw_texture(get_position(), get_texture()->get_texture());
+		screen->draw_texture(get_position(), get_texture()->get_texture(), get_width(), get_height());
 	}
 	else	
 	{
@@ -103,4 +100,6 @@ bool Button::on_mouse_move(const Vector_ll from, const Vector_ll to)
 	{
 		return false;
 	}
+
+	// return click->on_mouse_move(from, to);
 }

@@ -8,8 +8,9 @@
 
 #include "../math_structures/Radius_vector.hpp"
 #include "../simple_list/simple_list.hpp"
+#include "colors.hpp"
 
-#define Shelled_texture sf::Texture
+#define Shelled_texture sf::Texture // sf::RenderTexture
 
 class Texture
 {
@@ -41,13 +42,20 @@ public:
 	long long get_width() const { return size.get_x(); }
 	long long get_height() const { return size.get_y(); }
 
+	virtual void set_size(const Vector_ll par_size) 
+	{ 
+		size = par_size;
+	}
+
 	char *get_name() { return texture_name; }
 	virtual Shelled_texture *get_texture() { return NULL; }
+	virtual void set_texture(Color *array, const size_t width, const size_t height) { ; }
 };
 
 class Full_texture : public Texture
 {
 private:
+	// const Shelled_texture *texture;
 	Shelled_texture texture;
 
 public:
@@ -56,28 +64,18 @@ public:
 		texture.loadFromFile(par_texture_name);
 	}
 
+	virtual void set_size(const Vector_ll par_size) 
+	{ 
+		Texture::set_size(par_size);
+
+		// texture.setSize(sf::Vector2u(get_width(), get_height()));
+	}
+
 	~Full_texture() = default;
 
 	Shelled_texture *get_texture() override { return &texture; }
+	void set_texture(Color *array, const size_t width, const size_t height) override { texture.update((sf::Uint8*)array, width, height, 0, 0); }
 };
-
-// class Animating_texture : public Full_texture
-// {
-// private:
-// 	List<Full_texture*> textures;
-
-// public:
-// 	Animating_texture() : textures() { ; }
-// 	~Animating_texture() = default;
-
-// 	Shelled_texture *add_texture(const char *texture_name)
-// 	{
-// 		Full_texture *texture = new Full_texture(texture_name);
-// 		textures.add_to_end(texture);
-
-// 		return texture->get_texture();
-// 	}
-// };
 
 class Texture_manager
 {

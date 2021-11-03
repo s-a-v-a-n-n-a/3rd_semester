@@ -2,6 +2,8 @@
 #define GRAPHICAL_DELEGATES
 
 #include "../GUI/Button_delegate.hpp"
+#include "Animating_texture.hpp"
+#include "Animations.hpp"
 
 #include "Pencil.hpp"
 // #include "Canvas_manager.hpp"
@@ -126,6 +128,87 @@ public:
 
 		return true;
 	}
+
+	Visual_object *get_roll_up() { return to_roll_up; }
+};
+
+class Animating_roll_up_delegate : public Roll_up_delegate
+{
+private:
+	// Visual_object *to_roll_up;
+	Visual_object *to_interact;
+
+	Animation *move_in;
+	long long move_in_index;
+
+	Animation *move_out;
+	long long move_out_index;
+
+public:
+	Animating_roll_up_delegate(Visual_object *par_to_roll_up, Visual_object *par_to_interact)
+	: Roll_up_delegate(par_to_roll_up), move_in(nullptr), move_out(nullptr), move_in_index(-1), move_out_index(-1)
+	{
+		to_interact = par_to_interact;
+	}
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override
+	{
+		Roll_up_delegate::on_mouse_click(par_x, par_y);
+
+		if (move_in)
+		{
+			Animation_manager::get_instance()->slow_delete_animation(move_in_index);
+			move_in = nullptr;
+			move_in_index = -1;
+		}
+
+		if (move_out)
+		{
+			Animation_manager::get_instance()->slow_delete_animation(move_out_index);
+			move_out = nullptr;
+			move_out_index = -1;
+		}
+
+		return true;
+	}
+
+	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override
+	{
+		if (to_interact->point_inside(to.get_x(), to.get_y()))
+		{
+			if (!move_in)
+			{
+				if (move_out)
+				{
+					Animation_manager::get_instance()->slow_delete_animation(move_out_index);
+					move_out = nullptr;
+					move_out_index = -1;
+				}
+
+				move_in = new Animation((Animating_texture*)to_interact->get_texture(), to_interact, ((Animating_texture*)(to_interact->get_texture()))->get_default_texture(), ((Animating_texture*)(to_interact->get_texture()))->get_move_texture(), 0.01);
+				move_in_index = Animation_manager::get_instance()->add_animation(move_in);
+			}
+		}
+		else if(!to_interact->point_inside(to.get_x(), to.get_y()))
+		{
+			if (!move_out)
+			{
+				if (move_in)
+				{
+					Animation_manager::get_instance()->slow_delete_animation(move_in_index);
+					move_in = nullptr;
+					move_in_index = -1;
+				}
+				
+				move_out = new Animation((Animating_texture*)to_interact->get_texture(), to_interact, ((Animating_texture*)(to_interact->get_texture()))->get_move_texture(), ((Animating_texture*)(to_interact->get_texture()))->get_default_texture(), 0.01);
+				move_out_index = Animation_manager::get_instance()->add_animation(move_out);
+			}
+		}
+
+		// to_interact->set_color(changing_color);
+
+		return true;
+	}
 };
 
 class Close_delegate : public Button_delegate
@@ -247,7 +330,7 @@ public:
 
 		first_position = Vector_ll(par_x, par_y);
 
-		to_change_place->set_reactive(false);
+		// to_change_place->set_reactive(false);
 
 		return true;
 	}
@@ -258,7 +341,7 @@ public:
 
 		first_position = last_position;
 
-		to_change_place->set_reactive(true);
+		// to_change_place->set_reactive(true);
 
 		return true;
 	}

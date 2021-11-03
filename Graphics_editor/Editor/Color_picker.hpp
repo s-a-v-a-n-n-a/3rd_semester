@@ -8,6 +8,8 @@ class Color_picker : public Visual_object
 private:
 	Pencil *pencil;
 
+	Button *picker;
+
 	Color color_array[MAX_COLOR_VALUE * MAX_COLOR_VALUE];
 	Color main_color;
 
@@ -18,6 +20,17 @@ public:
 	: Visual_object(par_type, par_position, par_color, par_width, par_height), pencil(par_pencil), main_color(RED), current_position(0, 0)
 	{
 		set_main_color(RED);
+
+		Full_texture *circle = new Full_texture(PICKING_CIRCLE_TEXTURE);
+		
+		size_t circle_width = circle->get_width();
+		size_t circle_height = circle->get_height();
+
+		picker = new Button((size_t)Vidget_type::BUTTON, par_position + Vector_ll(circle_width, circle_height), circle, circle_width, circle_height, nullptr, "");
+		Drag_and_drop_delegate *dnd = new Drag_and_drop_delegate(picker);
+		picker->set_delegate(dnd);
+
+		add_visual_object(picker);
 	}
 
 	void set_main_color(const Color &par_main)
@@ -48,27 +61,43 @@ public:
 
 	bool on_mouse_click(const bool state, const size_t par_x, const size_t par_y) override
 	{
-		if (point_inside(par_x, par_y) && state)
+		if (point_inside(par_x, par_y))
 		{
-			current_position = Vector_ll(par_x, par_y) - get_position();
-			set_pencil_color();
+			if (state)
+			{
+				Vector_ll last_position = current_position;
+				current_position = Vector_ll(par_x, par_y) - get_position();
+				
+				picker->set_position(picker->get_position() + current_position - last_position);
+				picker->on_mouse_click(state, par_x, par_y);
+				
+				set_pencil_color();
 
-			return true;
+				return true;
+			}
+			else
+				picker->on_mouse_click(state, par_x, par_y);
 		}
 
 		return false;
 	}
 
+	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override
+	{
+		// printf("move picker\n");
+
+		return picker->on_mouse_move(from, to);
+	}
+
 	void draw(Screen_information *screen) override
 	{
-		size_t width = MAX_COLOR_VALUE;
-		size_t height = MAX_COLOR_VALUE;
-
 		Vector_ll position(get_position());
 
-		screen->draw_image(color_array, get_position(), width, height);
+		screen->draw_image(color_array, get_position(), get_width(), get_height());
 		
-		screen->draw_texture(position + current_position, PICKING_CIRCLE_TEXTURE);
+		Full_texture *circle = new Full_texture(PICKING_CIRCLE_TEXTURE);
+		screen->draw_texture(position + current_position - Vector_ll(circle->get_width()/2, circle->get_height()/2), PICKING_CIRCLE_TEXTURE);
+		delete circle;
 	}
 };
 

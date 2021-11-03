@@ -19,8 +19,8 @@ private:
 	size_t current_position;
 
 public:
-	Gradient_bar(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, Pencil *par_pencil, Color_picker *par_to_control)
-	: Visual_object(par_type, par_position, par_texture), pencil(par_pencil), current_position(0), to_control(par_to_control)
+	Gradient_bar(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Pencil *par_pencil, Color_picker *par_to_control)
+	: Visual_object(par_type, par_position, par_texture, par_width, par_height), pencil(par_pencil), current_position(0), to_control(par_to_control)
 	{
 		;
 	}
@@ -77,7 +77,7 @@ public:
 
 		Vector_ll position(get_position());
 
-		screen->draw_rectangle(position + Vector_ll(current_position, 0), BLACK, 5, BAR_DEFAULT_WIDTH);
+		screen->draw_rectangle(position + Vector_ll(current_position, 0), BLACK, 5, get_height());
 	}
 
 };

@@ -15,7 +15,7 @@ public:
 	~Button_manager();
 
 	Button *add_button(Button_delegate *par_delegate, const char *par_text, const Color par_color, const size_t par_width, const size_t par_height = DEFAULT_BUTTON_HEIGHT);
-	Button *add_button(Button_delegate *par_delegate, const char *par_text, Texture *par_texture);
+	Button *add_button(Button_delegate *par_delegate, const char *par_text, Texture *par_texture, const size_t par_width = 0, const size_t par_height = 0);
 
 	// void draw(Screen_information *screen) override;
 };

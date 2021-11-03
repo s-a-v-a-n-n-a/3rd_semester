@@ -84,7 +84,7 @@ public:
 		if (index >= length)
 			return;
 
-		delete array[index];
+		// delete array[index];
 		for (size_t i = index + 1; i < length; ++i)
 		{
 			array[i - 1] = array[i];

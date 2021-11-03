@@ -5,36 +5,48 @@ Canvas_manager::Canvas_manager(const size_t par_type, const Vector_ll &par_posit
 {
 	// create Canvas
 	// ------------------------------------------------------------------------------
+	Full_texture *canvas_texture = new Full_texture(CANVAS_TEXTURE);
 	Canvas *canvas = new Canvas((size_t)Vidget_type::CANVAS, 
-								par_position + Vector_ll(0.0, DEFAULT_BUTTON_HEIGHT), 
-								WHITE, 
+								par_position + Vector_ll(0.0, 70), 
+								canvas_texture, 
 								par_width, 
-								par_height - DEFAULT_BUTTON_HEIGHT, 
+								par_height - 70, 
 								par_pencil);
 
 	// создаёт кнопку управления
 	// ------------------------------------------------------------------------------
-	Full_texture *tab_texture = new Full_texture(TAB_TEXTURE);
+	Animating_texture *tab_texture = new Animating_texture(TAB_TEXTURE);
+	tab_texture->set_inactive_texture(TAB_INACTIVE_TEXTURE);
 	tab = new Tab((size_t)Vidget_type::TAB,
 				  par_position + Vector_ll(predecessors_amount * DEFAULT_TAB_WIDTH, 0.0),
 				  tab_texture,
+				  tab_texture->get_width(),
+				  tab_texture->get_height(),
 				  this);
+	tab->set_active_state(true);
 	
 
 	add_visual_object(canvas);
 	add_visual_object(tab);
 }
 
-Canvas_manager::Canvas_manager(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, Pencil *par_pencil, const size_t predecessors_amount)
-: Visual_object(par_type, par_position, par_texture)
+Canvas_manager::Canvas_manager(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Pencil *par_pencil, const size_t predecessors_amount)
+: Visual_object(par_type, par_position, par_texture, par_width, par_height)
 {
 	// create Canvas
 	// ------------------------------------------------------------------------------
+	// Canvas *canvas = new Canvas((size_t)Vidget_type::CANVAS, 
+	// 							par_position + Vector_ll(0.0, DEFAULT_BUTTON_HEIGHT), 
+	// 							WHITE, 
+	// 							get_width(), 
+	// 							get_height() - DEFAULT_BUTTON_HEIGHT, 
+	// 							par_pencil);
+	Full_texture *canvas_texture = new Full_texture(CANVAS_TEXTURE);
 	Canvas *canvas = new Canvas((size_t)Vidget_type::CANVAS, 
 								par_position + Vector_ll(0.0, DEFAULT_BUTTON_HEIGHT), 
-								WHITE, 
-								get_width(), 
-								get_height() - DEFAULT_BUTTON_HEIGHT, 
+								canvas_texture, 
+								par_width, 
+								par_height - DEFAULT_BUTTON_HEIGHT, 
 								par_pencil);
 
 	// создаёт кнопку управления
@@ -49,6 +61,8 @@ Canvas_manager::Canvas_manager(const size_t par_type, const Vector_ll &par_posit
 	tab = new Tab((size_t)Vidget_type::TAB,
 				  par_position + Vector_ll(predecessors_amount * DEFAULT_TAB_WIDTH, 0.0),
 				  tab_texture,
+				  tab_texture->get_width(),
+				  tab_texture->get_height(),
 				  this);
 
 	add_visual_object(canvas);

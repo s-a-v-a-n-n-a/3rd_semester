@@ -98,7 +98,7 @@ void Screen_information::draw_text(const char *par_text, const Vector_ll &par_po
 		drawable_text.setCharacterSize(par_text_size);
 		drawable_text.setFillColor(color);
 		
-		drawable_text.setPosition(par_position.get_x() - drawable_text.getGlobalBounds().width/2, par_position.get_y() - drawable_text.getGlobalBounds().height/2);
+		drawable_text.setPosition(par_position.get_x() - drawable_text.getGlobalBounds().width / 2, par_position.get_y() - (drawable_text.getGlobalBounds().height));
 
 		window.draw(drawable_text);
 	}
@@ -106,22 +106,12 @@ void Screen_information::draw_text(const char *par_text, const Vector_ll &par_po
 
 void Screen_information::draw_image(const Color *array, const Vector_ll &position, const size_t width, const size_t height)
 {
-	sf::Sprite sprite;
 	sf::Texture texture;
 	texture.create(width, height);
 
-	sprite.setTexture(texture);
-
-	// sf::Image image;
-	// image.create(width, height, sf::Color::Black);
-
 	texture_load(&texture, array, width, height);
 
-	// texture.update(image);
-	
-	sprite.setPosition(position.get_x(), position.get_y());
-
-	window.draw(sprite);
+	draw_texture(position, &texture, width, height);
 }
 
 void Screen_information::draw_texture(const Vector_ll &position, const char *texture_name)
@@ -136,12 +126,30 @@ void Screen_information::draw_texture(const Vector_ll &position, const char *tex
 	window.draw(sprite);
 }
 
-void Screen_information::draw_texture(const Vector_ll &position, sf::Texture *texture)
+void Screen_information::draw_texture(const Vector_ll &position, sf::Texture *texture, const size_t width, const size_t height, const double transperancy)
 {
 	sf::Sprite sprite;
-	sprite.setTexture(*texture);
+
+	size_t texture_width = texture->getSize().x;
+	size_t texture_height = texture->getSize().y;
 
 	sprite.setPosition(position.get_x(), position.get_y());
+
+	double scale_x = (double)width / (double)texture_width;
+	double scale_y = (double)height / (double)texture_height;
+
+	if (scale_x > 1 || scale_y > 1)
+	{
+		texture->setSmooth(true);
+	}
+
+	sprite.setTexture(*texture);
+	sprite.setScale(scale_x, scale_y);
+
+	double max_color = (double)MAX_COLOR_VALUE;
+	max_color *= transperancy;
+	// printf("brightness %lg\n", max_color);
+	sprite.setColor(sf::Color(255, 255, 255, (unsigned char)max_color));
 
 	window.draw(sprite);
 }

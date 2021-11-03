@@ -9,6 +9,7 @@
 
 const Color DEFAULT_TEXT_COLOR = BLACK;
 extern const size_t DEFAULT_BUTTON_HEIGHT;
+extern const size_t INCREASED_BUTTON_HEIGHT;
 
 struct Button : public Visual_object
 {
@@ -29,7 +30,7 @@ private:
 public:
 	Button() = delete;
 	Button(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Button_delegate *par_click, const char *par_text);
-	Button(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, Button_delegate *par_click, const char *par_text);
+	Button(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Button_delegate *par_click, const char *par_text);
 	~Button();
 
 	void set_delegate(Button_delegate *par_click) { click = par_click; }

@@ -1,7 +1,7 @@
 CFLAGS = -g -masm=intel -no-pie -march=native -O3 -std=c++11
 
-link: screen_functions.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o tools_vidget.o button_manager.o texture_names.o main.o
-	g++ screen_functions.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o tools_vidget.o button_manager.o texture_names.o main.o -o main -lsfml-graphics -lsfml-window -lsfml-system
+link: screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o tools_vidget.o button_manager.o texture_names.o animations.o main.o
+	g++ screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o tools_vidget.o button_manager.o texture_names.o animations.o main.o -o main -lsfml-graphics -lsfml-window -lsfml-system
 
 main.o : main.cpp
 	g++ $(CFLAGS) -c -o main.o main.cpp
@@ -13,6 +13,9 @@ screen_functions.o: sfml_drawing/screen_functions.cpp
 
 texture_names.o: sfml_drawing/Texture_names.cpp
 	g++ $(CFLAGS) -c -o texture_names.o sfml_drawing/Texture_names.cpp
+
+sfml_text.o: sfml_drawing/Text.cpp
+	g++ $(CFLAGS) -c -o sfml_text.o sfml_drawing/Text.cpp
 # -----------------------------------------------------------------------------------
 
 
@@ -40,6 +43,8 @@ button_manager.o: GUI/Button_manager.cpp
 # -----------------------------------------------------------------------------------
 # Editor/%.o: Editor/%.cpp
 # 	g++ $(CFLAGS) -c -o canvas Editor/Canvas.cpp
+animations.o: Editor/Animations.cpp
+	g++ $(CFLAGS) -c -o animations.o Editor/Animations.cpp
 
 canvas.o: Editor/Canvas.cpp
 	g++ $(CFLAGS) -c -o canvas.o Editor/Canvas.cpp

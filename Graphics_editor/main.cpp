@@ -67,7 +67,6 @@ void draw_editor(Graphical_editor_main_page *editor)
         case Sfml_events::MOUSE_MOVED:
         {
             Vector_ll move_place(screen.get_mouse_position());
-            // assert(click_place.get_x() != move_place.get_x() && click_place.get_y() != move_place.get_y());
             editor->on_mouse_move(click_place, move_place);
             click_place = move_place;
 
@@ -103,8 +102,10 @@ void draw_editor(Graphical_editor_main_page *editor)
             break;
         }
 
+        Animation_manager::get_instance()->tick(0.005);
         editor->tick(&screen, 0.005);
         editor->draw(&screen);
+        Animation_manager::get_instance()->draw(&screen);
         
         screen.sfml_update_mouse_state();
 

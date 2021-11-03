@@ -14,7 +14,7 @@ private:
 
 public:
 	Tools_vidget(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil);
-	Tools_vidget(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, Pencil *par_pencil);
+	Tools_vidget(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Pencil *par_pencil);
 	~Tools_vidget() = default;
 };
 
