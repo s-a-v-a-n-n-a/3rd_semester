@@ -39,6 +39,8 @@ void Canvas::draw_point(const size_t par_x, const size_t par_y)
 	size_t position_x = get_position().get_x();
 	size_t position_y = get_position().get_y();
 
+	// size_t y_coord = position_y + get_height() - (par_y - position_y);
+
 	size_t pencil_size = pencil->get_size() / 2;
 
 	size_t begin_x = par_x - position_x > pencil_size ? par_x - position_x - pencil_size : par_x - position_x;

@@ -20,19 +20,19 @@ public:
 
 	    size_t offset = 0;
 	    Change_thickness *change_thickness_1 = new Change_thickness(par_pencil, 1);
-    	Full_texture *texture = new Full_texture(TEXT_TEXTURE);
+    	Full_texture *texture = new Full_texture(TEXT_TEXTURE, DEFAULT_BUTTON_HEIGHT, DEFAULT_BUTTON_HEIGHT);
     	// offset += texture->get_width();
 
-    	panel->add_button(change_thickness_1, "1", texture);
+    	panel->add_button(change_thickness_1, "1", texture, par_width/4, par_width/4);
 
     	Change_thickness *change_thickness_5 = new Change_thickness(par_pencil, 5);
-    	panel->add_button(change_thickness_5, "5", texture);
+    	panel->add_button(change_thickness_5, "5", texture, par_width/4, par_width/4);
 
     	Change_thickness *change_thickness_10 = new Change_thickness(par_pencil, 10);
-    	panel->add_button(change_thickness_10, "10", texture);
+    	panel->add_button(change_thickness_10, "10", texture, par_width/4, par_width/4);
 
     	Change_thickness *change_thickness_20 = new Change_thickness(par_pencil, 20);
-    	panel->add_button(change_thickness_20, "20", texture);
+    	panel->add_button(change_thickness_20, "20", texture, par_width/4, par_width/4);
 		
 		add_visual_object(panel);
 	}

@@ -28,6 +28,25 @@ bool Interactive_create_canvas::on_mouse_move(const Vector_ll from, const Vector
 	return Interactive::on_mouse_move(from, to);
 }
 
+
+Animating_create_canvas::Animating_create_canvas(Canvas_manager_manager *par_manager, Visual_object *par_to_animate)
+: Create_canvas(par_manager), Animating(par_to_animate)
+{
+	;
+}
+
+bool Animating_create_canvas::on_mouse_click(const size_t par_x, const size_t par_y)
+{
+	Create_canvas::on_mouse_click(par_x, par_y);
+	return Animating::on_mouse_click(par_x, par_y);
+}
+
+bool Animating_create_canvas::on_mouse_move(const Vector_ll from, const Vector_ll to)
+{
+	return Animating::on_mouse_move(from, to);
+}
+
+
 Canvas_keeper::Canvas_keeper(Visual_object *par_to_keep)
 {
 	to_keep = par_to_keep;

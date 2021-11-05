@@ -21,7 +21,7 @@ public:
 	{
 		set_main_color(RED);
 
-		Full_texture *circle = new Full_texture(PICKING_CIRCLE_TEXTURE);
+		Full_texture *circle = new Full_texture(PICKING_CIRCLE_TEXTURE, 18, 18);
 		
 		size_t circle_width = circle->get_width();
 		size_t circle_height = circle->get_height();
@@ -85,6 +85,7 @@ public:
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override
 	{
 		// printf("move picker\n");
+		// picker->set_position(picker->get_position() + to - last);
 
 		return picker->on_mouse_move(from, to);
 	}
@@ -95,7 +96,7 @@ public:
 
 		screen->draw_image(color_array, get_position(), get_width(), get_height());
 		
-		Full_texture *circle = new Full_texture(PICKING_CIRCLE_TEXTURE);
+		Full_texture *circle = new Full_texture(PICKING_CIRCLE_TEXTURE, 18, 18);
 		screen->draw_texture(position + current_position - Vector_ll(circle->get_width()/2, circle->get_height()/2), PICKING_CIRCLE_TEXTURE);
 		delete circle;
 	}

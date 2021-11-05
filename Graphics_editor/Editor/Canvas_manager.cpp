@@ -5,17 +5,17 @@ Canvas_manager::Canvas_manager(const size_t par_type, const Vector_ll &par_posit
 {
 	// create Canvas
 	// ------------------------------------------------------------------------------
-	Full_texture *canvas_texture = new Full_texture(CANVAS_TEXTURE);
+	Full_texture *canvas_texture = new Full_texture(CANVAS_TEXTURE, par_width, (size_t)(par_height - INCREASED_BUTTON_HEIGHT));
 	Canvas *canvas = new Canvas((size_t)Vidget_type::CANVAS, 
-								par_position + Vector_ll(0.0, 70), 
+								par_position + Vector_ll(0.0, INCREASED_BUTTON_HEIGHT), 
 								canvas_texture, 
 								par_width, 
-								par_height - 70, 
+								par_height - INCREASED_BUTTON_HEIGHT, 
 								par_pencil);
 
 	// создаёт кнопку управления
 	// ------------------------------------------------------------------------------
-	Animating_texture *tab_texture = new Animating_texture(TAB_TEXTURE);
+	Animating_texture *tab_texture = new Animating_texture(TAB_TEXTURE, (size_t)280, INCREASED_BUTTON_HEIGHT);
 	tab_texture->set_inactive_texture(TAB_INACTIVE_TEXTURE);
 	tab = new Tab((size_t)Vidget_type::TAB,
 				  par_position + Vector_ll(predecessors_amount * DEFAULT_TAB_WIDTH, 0.0),
@@ -41,7 +41,7 @@ Canvas_manager::Canvas_manager(const size_t par_type, const Vector_ll &par_posit
 	// 							get_width(), 
 	// 							get_height() - DEFAULT_BUTTON_HEIGHT, 
 	// 							par_pencil);
-	Full_texture *canvas_texture = new Full_texture(CANVAS_TEXTURE);
+	Full_texture *canvas_texture = new Full_texture(CANVAS_TEXTURE, par_width, par_height - INCREASED_BUTTON_HEIGHT);
 	Canvas *canvas = new Canvas((size_t)Vidget_type::CANVAS, 
 								par_position + Vector_ll(0.0, DEFAULT_BUTTON_HEIGHT), 
 								canvas_texture, 
@@ -57,7 +57,7 @@ Canvas_manager::Canvas_manager(const size_t par_type, const Vector_ll &par_posit
 	// 			  DEFAULT_TAB_WIDTH,
 	// 			  DEFAULT_BUTTON_HEIGHT,
 	// 			  this);
-	Full_texture *tab_texture = new Full_texture(TAB_TEXTURE);
+	Full_texture *tab_texture = new Full_texture(TAB_TEXTURE, (size_t)280, INCREASED_BUTTON_HEIGHT);
 	tab = new Tab((size_t)Vidget_type::TAB,
 				  par_position + Vector_ll(predecessors_amount * DEFAULT_TAB_WIDTH, 0.0),
 				  tab_texture,

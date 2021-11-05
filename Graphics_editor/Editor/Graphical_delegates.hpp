@@ -2,7 +2,7 @@
 #define GRAPHICAL_DELEGATES
 
 #include "../GUI/Button_delegate.hpp"
-#include "Animating_texture.hpp"
+#include "../sfml_drawing/Animating_texture.hpp"
 #include "Animations.hpp"
 
 #include "Pencil.hpp"
@@ -49,7 +49,86 @@ public:
 	}
 };
 
-class Restore_delegate : public Button_delegate
+class Animating : virtual public Button_delegate
+{
+private:
+	Visual_object *to_animate;
+
+	Animation *move_in;
+	long long move_in_index;
+
+	Animation *move_out;
+	long long move_out_index;
+
+public:
+	Animating(Visual_object *par_to_animate) 
+	: to_animate(nullptr), move_in(nullptr), move_out(nullptr), move_in_index(-1), move_out_index(-1)
+	{
+		to_animate = par_to_animate;
+	}
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override
+	{
+		if (move_in)
+		{
+			Animation_manager::get_instance()->slow_delete_animation(move_in);
+			move_in = nullptr;
+			move_in_index = -1;
+		}
+
+		if (move_out)
+		{
+			Animation_manager::get_instance()->slow_delete_animation(move_out);
+			move_out = nullptr;
+			move_out_index = -1;
+		}
+
+		return true;
+	}
+
+	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override
+	{
+		if (to_animate->point_inside(to.get_x(), to.get_y()))
+		{
+			if (!move_in)
+			{
+				if (move_out)
+				{
+					Animation_manager::get_instance()->slow_delete_animation(move_out);
+					move_out = nullptr;
+					move_out_index = -1;
+				}
+
+				move_in = new Animation((Animating_texture*)to_animate->get_texture(), to_animate, ((Animating_texture*)(to_animate->get_texture()))->get_default_texture(), ((Animating_texture*)(to_animate->get_texture()))->get_move_texture(), 0.01);
+				move_in_index = Animation_manager::get_instance()->add_animation(move_in);
+			}
+		}
+		else if(!to_animate->point_inside(to.get_x(), to.get_y()))
+		{
+			if (!move_out)
+			{
+				if (move_in)
+				{
+					Animation_manager::get_instance()->slow_delete_animation(move_in);
+					move_in = nullptr;
+					move_in_index = -1;
+				}
+				
+				move_out = new Animation((Animating_texture*)to_animate->get_texture(), to_animate, ((Animating_texture*)(to_animate->get_texture()))->get_move_texture(), ((Animating_texture*)(to_animate->get_texture()))->get_default_texture(), 0.01);
+				move_out_index = Animation_manager::get_instance()->add_animation(move_out);
+			}
+		}
+
+		return true;
+	}
+
+	void set_animating(Visual_object *par_to_animate)
+	{
+		to_animate = par_to_animate;
+	}
+};
+
+class Restore_delegate : virtual public Button_delegate
 {
 private:
 	Visual_object *to_restore;
@@ -70,6 +149,27 @@ public:
 	}
 };
 
+class Animating_restore_delegate : public Restore_delegate, public Animating
+{
+public:
+	Animating_restore_delegate(Visual_object *par_to_restore, Visual_object *par_to_interact)
+	: Restore_delegate(par_to_restore), Animating(par_to_interact)
+	{
+		;
+	}
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override
+	{
+		Restore_delegate::on_mouse_click(par_x, par_y);
+		return Animating::on_mouse_click(par_x, par_y);
+	}
+
+	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override
+	{
+		return Animating::on_mouse_move(from, to);
+	}
+};
+
 class Restore_interactive_delegate : public Restore_delegate, public Interactive
 {
 public:
@@ -83,33 +183,9 @@ public:
 	{
 		return Interactive::on_mouse_move(from, to);
 	}
-
-	// bool on_mouse_move(const Vector_ll from, const Vector_ll to) override
-	// {
-	// 	Color changing_color = to_interact->get_color();
-	// 	int new_a = (int)MAX_COLOR_VALUE;
-		
-	// 	if (to_interact->point_inside(to.get_x(), to.get_y()))
-	// 	{
-	// 		changing_color.set_a(new_a * 3 / 4);
-	// 	}
-	// 	else if(!to_interact->point_inside(to.get_x(), to.get_y()) && to_interact->point_inside(from.get_x(), from.get_y()))
-	// 	{
-	// 		changing_color.set_a(new_a);
-	// 	}
-
-	// 	to_interact->set_color(changing_color);
-
-	// 	return true;
-	// }
-
-	// void set_interactive(Visual_object *par_to_interact)
-	// {
-	// 	to_interact = par_to_interact;
-	// }
 };
 
-class Roll_up_delegate : public Button_delegate
+class Roll_up_delegate : virtual public Button_delegate
 {
 private: 
 	Visual_object *to_roll_up;
@@ -132,82 +208,24 @@ public:
 	Visual_object *get_roll_up() { return to_roll_up; }
 };
 
-class Animating_roll_up_delegate : public Roll_up_delegate
+class Animating_roll_up_delegate : public Roll_up_delegate, public Animating
 {
-private:
-	// Visual_object *to_roll_up;
-	Visual_object *to_interact;
-
-	Animation *move_in;
-	long long move_in_index;
-
-	Animation *move_out;
-	long long move_out_index;
-
 public:
 	Animating_roll_up_delegate(Visual_object *par_to_roll_up, Visual_object *par_to_interact)
-	: Roll_up_delegate(par_to_roll_up), move_in(nullptr), move_out(nullptr), move_in_index(-1), move_out_index(-1)
+	: Roll_up_delegate(par_to_roll_up), Animating(par_to_interact)
 	{
-		to_interact = par_to_interact;
+		;
 	}
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override
 	{
 		Roll_up_delegate::on_mouse_click(par_x, par_y);
-
-		if (move_in)
-		{
-			Animation_manager::get_instance()->slow_delete_animation(move_in_index);
-			move_in = nullptr;
-			move_in_index = -1;
-		}
-
-		if (move_out)
-		{
-			Animation_manager::get_instance()->slow_delete_animation(move_out_index);
-			move_out = nullptr;
-			move_out_index = -1;
-		}
-
-		return true;
+		return Animating::on_mouse_click(par_x, par_y);
 	}
 
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override
 	{
-		if (to_interact->point_inside(to.get_x(), to.get_y()))
-		{
-			if (!move_in)
-			{
-				if (move_out)
-				{
-					Animation_manager::get_instance()->slow_delete_animation(move_out_index);
-					move_out = nullptr;
-					move_out_index = -1;
-				}
-
-				move_in = new Animation((Animating_texture*)to_interact->get_texture(), to_interact, ((Animating_texture*)(to_interact->get_texture()))->get_default_texture(), ((Animating_texture*)(to_interact->get_texture()))->get_move_texture(), 0.01);
-				move_in_index = Animation_manager::get_instance()->add_animation(move_in);
-			}
-		}
-		else if(!to_interact->point_inside(to.get_x(), to.get_y()))
-		{
-			if (!move_out)
-			{
-				if (move_in)
-				{
-					Animation_manager::get_instance()->slow_delete_animation(move_in_index);
-					move_in = nullptr;
-					move_in_index = -1;
-				}
-				
-				move_out = new Animation((Animating_texture*)to_interact->get_texture(), to_interact, ((Animating_texture*)(to_interact->get_texture()))->get_move_texture(), ((Animating_texture*)(to_interact->get_texture()))->get_default_texture(), 0.01);
-				move_out_index = Animation_manager::get_instance()->add_animation(move_out);
-			}
-		}
-
-		// to_interact->set_color(changing_color);
-
-		return true;
+		return Animating::on_mouse_move(from, to);
 	}
 };
 

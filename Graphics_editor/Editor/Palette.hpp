@@ -34,7 +34,7 @@ public:
 	    // }
 
 	    
-		Full_texture *texture = new Full_texture(GRADIENT_BAR_TEXTURE);
+		Full_texture *texture = new Full_texture(GRADIENT_BAR_TEXTURE, MAX_COLOR_VALUE, 20);
 		size_t size = par_width < (par_height - DEFAULT_BUTTON_HEIGHT) ? par_width : (par_height - DEFAULT_BUTTON_HEIGHT);
 
 		Color_picker *picker = new Color_picker((size_t)Vidget_type::COLOR_PICKER, par_position + Vector_ll(10, (offset + 10 + texture->get_height())), TRANSPARENT, MAX_COLOR_VALUE, MAX_COLOR_VALUE, par_pencil);

@@ -98,6 +98,21 @@ void Visual_object::draw(Screen_information *screen)
 	if (texture)
 	{
 		screen->draw_texture(position, texture->get_texture(), get_width(), get_height()); // пока нету такой функции
+
+		// sf::Sprite sprite;
+
+		// size_t texture_width = texture->getSize().x;
+		// size_t texture_height = texture->getSize().y;
+
+		// sprite.setPosition(position.get_x(), position.get_y());
+
+		// double scale_x = (double)width / (double)texture_width;
+		// double scale_y = (double)height / (double)texture_height;
+
+		// sprite.setTexture(*texture);
+		// sprite.setScale(scale_x, scale_y);
+
+		// window.draw(sprite);
 	}
 	else
 	{

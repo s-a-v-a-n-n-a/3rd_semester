@@ -5,7 +5,7 @@
 #include "../sfml_drawing/Texture.hpp"
 #include "../GUI/Visual_object_base.hpp"
 
-#include "Animating_texture.hpp"
+#include "../sfml_drawing/Animating_texture.hpp"
 
 class Animation_manager; 
 
@@ -26,7 +26,7 @@ private:
 
 public:
 	Animation(Animating_texture *par_to_store, Visual_object *par_changable, Full_texture *par_from, Full_texture *par_to, const double par_delta_time);
-	~Animation();
+	~Animation() = default;
 
 	void set_alive(const bool par_alive) { alive = par_alive; }
 	bool get_alive() const { return alive; }
@@ -35,7 +35,6 @@ public:
 	Animating_texture *get_to_store() { return to_store; }
 
 	void tick(const double time);
-	void draw(Screen_information *screen);
 };
 
 class Animation_manager_destroyer
@@ -57,17 +56,17 @@ private:
 
 protected:
 	Animation_manager();
-	~Animation_manager() = default;
+	~Animation_manager();
 	friend class Animation_manager_destroyer;
 
 public:
 	static Animation_manager *get_instance();
 
 	long long add_animation(Animation *par_animation);
-	void slow_delete_animation(size_t index);
+	void slow_delete_animation(Animation *to_delete);
 
 	void tick(const double time);
-	void draw(Screen_information *screen);
+	// void draw(Screen_information *screen);
 };
 
 #endif // ANIMATIONS_AND_MANAGER_H

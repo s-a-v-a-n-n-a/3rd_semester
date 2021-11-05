@@ -9,7 +9,7 @@ const char *screen_state_text[]
 };
 
 Screen_information::Screen_information(size_t par_width, size_t par_height) 
-: window(sf::VideoMode(par_width, par_height), "It works"), event(), mouse_position(0.0, 0.0), textures()
+: window(sf::VideoMode(par_width, par_height), "It works"), event(), mouse_position(0.0, 0.0)//, textures()
 {
 	width  = par_width;
 	height = par_height;
@@ -117,18 +117,22 @@ void Screen_information::draw_image(const Color *array, const Vector_ll &positio
 void Screen_information::draw_texture(const Vector_ll &position, const char *texture_name)
 {
 	sf::Sprite sprite;
-	sf::Texture *texture = textures.get_texture(texture_name);
+	sf::Texture texture;
+	texture.loadFromFile(texture_name);
 
-	sprite.setTexture(*texture);
+	sprite.setTexture(texture);
 
 	sprite.setPosition(position.get_x(), position.get_y());
 
 	window.draw(sprite);
 }
 
-void Screen_information::draw_texture(const Vector_ll &position, sf::Texture *texture, const size_t width, const size_t height, const double transperancy)
+void Screen_information::draw_texture(const Vector_ll &position, const sf::Texture *texture, const size_t width, const size_t height, const double transperancy)
 {
 	sf::Sprite sprite;
+
+	// sf::RenderTexture render_texture;
+	// render_texture.create(get_width(), get_height());
 
 	size_t texture_width = texture->getSize().x;
 	size_t texture_height = texture->getSize().y;
@@ -138,18 +142,20 @@ void Screen_information::draw_texture(const Vector_ll &position, sf::Texture *te
 	double scale_x = (double)width / (double)texture_width;
 	double scale_y = (double)height / (double)texture_height;
 
-	if (scale_x > 1 || scale_y > 1)
-	{
-		texture->setSmooth(true);
-	}
+	// render_texture.draw(texture);
+	// if (scale_x > 1 || scale_y > 1)
+	// {
+	// 	render_texture.setSmooth(true);
+	// }
+
 
 	sprite.setTexture(*texture);
 	sprite.setScale(scale_x, scale_y);
 
-	double max_color = (double)MAX_COLOR_VALUE;
-	max_color *= transperancy;
-	// printf("brightness %lg\n", max_color);
-	sprite.setColor(sf::Color(255, 255, 255, (unsigned char)max_color));
+	// double max_color = (double)MAX_COLOR_VALUE;
+	// max_color *= transperancy;
+	// // printf("brightness %lg\n", max_color);
+	// sprite.setColor(sf::Color(255, 255, 255, (unsigned char)max_color));
 
 	window.draw(sprite);
 }

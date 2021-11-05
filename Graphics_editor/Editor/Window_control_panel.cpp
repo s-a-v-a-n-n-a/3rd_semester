@@ -9,8 +9,8 @@ Window_control_panel::Window_control_panel(const size_t par_type, const Vector_l
 	// ------------------------------------------------------------------------
 	Button_manager *panel = new Button_manager((size_t)Vidget_type::BUTTON_MANAGER, par_position, WHITE, par_width, DEFAULT_BUTTON_HEIGHT);
 
-	Full_texture *roll_up_texture = new Full_texture(ROLL_UP_TEXTURE);
-	Animating_texture *close_texture = new Animating_texture(CLOSE_TEXTURE);
+	// Full_texture *roll_up_texture = new Full_texture(ROLL_UP_TEXTURE);
+	Animating_texture *close_texture = new Animating_texture(CLOSE_TEXTURE, par_height, par_height);
 	close_texture->set_move_texture(CLOSE_MOVE_TEXTURE);
 
 	Drag_and_drop_delegate *drag_and_drop = new Drag_and_drop_delegate(whose);
@@ -39,8 +39,8 @@ Window_control_panel::Window_control_panel(const size_t par_type, const Vector_l
 
 	Button_manager *panel = new Button_manager((size_t)Vidget_type::BUTTON_MANAGER, par_position, TRANSPARENT, par_width, DEFAULT_BUTTON_HEIGHT);
 
-	Full_texture *roll_up_texture = new Full_texture(ROLL_UP_TEXTURE);
-	Animating_texture *close_texture = new Animating_texture(CLOSE_TEXTURE);
+	// Full_texture *roll_up_texture = new Full_texture(ROLL_UP_TEXTURE);
+	Animating_texture *close_texture = new Animating_texture(CLOSE_TEXTURE, par_height, par_height);
 	close_texture->set_move_texture(CLOSE_MOVE_TEXTURE);
 
 	Drag_and_drop_delegate *drag_and_drop = new Drag_and_drop_delegate(whose);

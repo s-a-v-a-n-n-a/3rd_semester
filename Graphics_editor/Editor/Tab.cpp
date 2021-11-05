@@ -52,7 +52,7 @@ Tab::Tab(const size_t par_type, const Vector_ll &par_position, Texture *par_text
                                 " Canvas ");
 
 
-    Full_texture *texture = new Full_texture(CLOSE_TEXTURE);
+    Full_texture *texture = new Full_texture(CLOSE_TEXTURE, INCREASED_BUTTON_HEIGHT, INCREASED_BUTTON_HEIGHT);
     Button *closing = new Button((size_t)Vidget_type::BUTTON,
                                 par_position + Vector_ll(get_width(), 0) - Vector_ll(80, 0), // get_position() + Vector_ll(get_objects()->get_length() * 250 + 150, 0.0),
                                 texture,

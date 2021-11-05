@@ -2,13 +2,13 @@
 #define CANVAS_MANAGER_SINGLE
 
 #include "../GUI/Visual_object_base.hpp"
+#include "../sfml_drawing/Animating_texture.hpp"
 
 #include "Window_control_panel.hpp"
 #include "Pencil.hpp"
 #include "Canvas.hpp"
 #include "Tab.hpp"
 
-#include "Animating_texture.hpp"
 
 class Canvas_manager : public Visual_object
 {

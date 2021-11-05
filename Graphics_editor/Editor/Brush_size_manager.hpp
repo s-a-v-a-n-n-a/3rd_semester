@@ -19,7 +19,7 @@ public:
 	Brush_size_manager(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Pencil *par_pencil)
 	: Visual_object(par_type, par_position, par_texture, par_width, par_height)
 	{
-		Full_texture *header = new Full_texture(WINDOW_HEADER);
+		Full_texture *header = new Full_texture(WINDOW_HEADER, par_width, DEFAULT_BUTTON_HEIGHT);
 		Window_control_panel *control = new Window_control_panel((size_t)Vidget_type::WINDOW_CONTROL_PANEL, 
 																par_position, 
 																header, 

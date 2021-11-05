@@ -15,6 +15,9 @@ const char TAB_INACTIVE_TEXTURE[] = "graphical_attributes/Textures/Tab_inactive_
 const char WINDOW_HEADER[] = "graphical_attributes/Textures/Window_header.png";
 const char WINDOW_BACKGROUND[] = "graphical_attributes/Textures/Window_background.png";
 
+const char SIMPLE_BUTTON[] = "graphical_attributes/Textures/Simple_button_texture.png";
+const char SIMPLE_BUTTON_MOVE[] = "graphical_attributes/Textures/Simple_button_move_texture.png";
+
 const char GRADIENT_BAR_TEXTURE[] = "graphical_attributes/Textures/Gradient_bar.png";
 const char PICKING_CIRCLE_TEXTURE[] = "graphical_attributes/Textures/circle.png";
 const char TOOLS_BACKGROUND_TEXTURE[] = "graphical_attributes/Textures/Tools_background.png";
@@ -22,6 +25,7 @@ const char BRUSHES_BACKGROUND_TEXTURE[] = "graphical_attributes/Textures/Brush_s
 const char WINDOW_CONTROL_TEXTURE[] = "graphical_attributes/Textures/Window_control.png";
 const char TEXT_TEXTURE[] = "graphical_attributes/Textures/Text_button.png";
 const char CANVAS_TEXTURE[] = "graphical_attributes/Textures/Canvas.png";
+
 extern const char *COLORED_BUTTONS[];
 
 #endif // TEXTURE_NAMES_H

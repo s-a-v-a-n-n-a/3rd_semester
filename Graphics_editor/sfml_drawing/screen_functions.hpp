@@ -54,7 +54,7 @@ public:
 	sf::Event event; 
 	sf::Mouse mouse;
 
-	Texture_manager textures;
+	// Texture_manager textures;
 
 	Screen_information(size_t par_width, size_t par_height);
 	~Screen_information();
@@ -82,7 +82,7 @@ public:
 	void draw_text(const char *par_text, const Vector_ll &par_position, const Color &par_color, const size_t text_size);
 	void draw_image(const Color *array, const Vector_ll &position, const size_t width, const size_t height);
 	void draw_texture(const Vector_ll &position, const char *texture_name);
-	void draw_texture(const Vector_ll &position, sf::Texture *texture, const size_t width, const size_t height, const double transperancy = 1);
+	void draw_texture(const Vector_ll &position, const sf::Texture *texture, const size_t width, const size_t height, const double transperancy = 1.0);
 	// ---------------------------------------------------------------------
 	
 	void reset();

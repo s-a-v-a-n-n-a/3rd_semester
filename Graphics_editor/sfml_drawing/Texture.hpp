@@ -41,6 +41,7 @@ public:
 
 	long long get_width() const { return size.get_x(); }
 	long long get_height() const { return size.get_y(); }
+	Vector_ll get_size() const { return size; }
 
 	virtual void set_size(const Vector_ll par_size) 
 	{ 
@@ -48,66 +49,117 @@ public:
 	}
 
 	char *get_name() { return texture_name; }
-	virtual Shelled_texture *get_texture() { return NULL; }
+	virtual const Shelled_texture *get_texture() { return NULL; }
 	virtual void set_texture(Color *array, const size_t width, const size_t height) { ; }
 };
 
 class Full_texture : public Texture
 {
 private:
-	// const Shelled_texture *texture;
-	Shelled_texture texture;
+	sf::RenderTexture texture;
+	Shelled_texture tmp_texture; 
 
 public:
-	Full_texture(const char *par_texture_name) : Texture(par_texture_name)
+	Full_texture(const char *par_texture_name, const size_t width, const size_t height) : Texture(par_texture_name)
 	{
-		texture.loadFromFile(par_texture_name);
+		tmp_texture.loadFromFile(par_texture_name);
+		
+		sf::Sprite sprite;
+		sprite.setTexture(tmp_texture);
+
+		double scale_x = (double)width / (double)get_width();
+		double scale_y = (double)height / (double)get_height();
+
+		set_size(Vector_ll(width, height));
+		// render_texture.draw(texture);
+		if (scale_x > 1 || scale_y > 1)
+		{
+			tmp_texture.setSmooth(true);
+		}
+
+		sprite.setTexture(tmp_texture);
+		sprite.setScale(scale_x, scale_y);
+
+		texture.create(width, height);
+		texture.clear(sf::Color(255, 255, 255, 0));
+		texture.draw(sprite);
+		texture.display();
 	}
 
-	virtual void set_size(const Vector_ll par_size) 
-	{ 
-		Texture::set_size(par_size);
+	// virtual void set_size(const Vector_ll par_size) 
+	// { 
+	// 	Texture::set_size(par_size);
 
-		// texture.setSize(sf::Vector2u(get_width(), get_height()));
-	}
+	// 	// texture.setSize(sf::Vector2u(get_width(), get_height()));
+	// }
 
 	~Full_texture() = default;
 
-	Shelled_texture *get_texture() override { return &texture; }
-	void set_texture(Color *array, const size_t width, const size_t height) override { texture.update((sf::Uint8*)array, width, height, 0, 0); }
-};
-
-class Texture_manager
-{
-private: 
-	// List<Texture*> textures_definitions;
-	List<Full_texture*> textures;
-
-public:
-	Texture_manager() : textures() { ; }
-	~Texture_manager() = default;
-
-	Shelled_texture *add_texture(const char *texture_name)
-	{
-		Full_texture *texture = new Full_texture(texture_name);
-		textures.add_to_end(texture);
-
-		return texture->get_texture();
+	const Shelled_texture *get_texture()
+	{ 
+		return &(texture.getTexture()); 
 	}
 
-	Shelled_texture *get_texture(const char *texture_name)
-	{
-		Full_texture **textures_array = textures.get_array();
-		size_t textures_amount = textures.get_length();
+	sf::RenderTexture *get_current_texture() 
+	{ 
+		return &texture;
+		// current_texture = par_texture; 
+	}
 
-		for (size_t i = 0; i < textures_amount; ++i)
-		{
-			if (!strcmp(textures_array[i]->get_name(), texture_name))
-				return textures_array[i]->get_texture();
-		}
+	// Shelled_texture *getTexture()
+	// {
 
-		return add_texture(texture_name);
+	// }
+	void set_texture(const sf::Texture *par_texture) 
+	{ 
+		sf::Sprite sprite;
+		sprite.setTexture(*par_texture);
+
+		texture.draw(sprite);
+	}
+	void set_texture(Color *array, const size_t width, const size_t height) override 
+	{ 
+		tmp_texture.update((sf::Uint8*)array, width, height, 0, 0); 
+		
+		sf::Sprite sprite;
+		sprite.setTexture(tmp_texture);
+
+		texture.draw(sprite);
+		texture.display();
 	}
 };
+
+// class Texture_manager
+// {
+// private: 
+// 	// List<Texture*> textures_definitions;
+// 	List<Full_texture*> textures;
+
+// public:
+// 	Texture_manager() : textures() { ; }
+// 	~Texture_manager() = default;
+
+// 	Shelled_texture *add_texture(const char *texture_name)
+// 	{
+// 		Full_texture *texture = new Full_texture(texture_name);
+// 		textures.add_to_end(texture);
+
+// 		return texture->get_texture();
+// 	}
+
+// 	Shelled_texture *get_texture(const char *texture_name)
+// 	{
+// 		Full_texture **textures_array = textures.get_array();
+// 		size_t textures_amount = textures.get_length();
+
+// 		for (size_t i = 0; i < textures_amount; ++i)
+// 		{
+// 			if (!strcmp(textures_array[i]->get_name(), texture_name))
+// 				return textures_array[i]->get_texture();
+// 		}
+
+// 		return add_texture(texture_name);
+// 	}
+// };
 
 #endif // TEXTURE_H
