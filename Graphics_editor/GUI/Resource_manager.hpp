@@ -1,9 +1,11 @@
 #ifndef RESOURCE_MANAGER_H
 #define RESOURCE_MANAGER_H
 
-#include "Texture.h"
-#include "Animating_texture.h"
+#include "../sfml_drawing/Texture.hpp"
+#include "../sfml_drawing/Animating_texture.hpp"
 #include "../simple_list/simple_list.hpp" 
+
+class Resources;
 
 class Resources_destroyer
 {
@@ -33,4 +35,4 @@ public:
 	Full_texture *create_texture(const char *texture_name, const size_t texture_width, const size_t texture_height);
 	Animating_texture *create_texture(const char *texture_name, const size_t texture_width, const size_t texture_height, const char *move_texture_name, const char *inactive_texture_name);
 };
-#endif RESOURCE_MANAGER_H
+#endif // RESOURCE_MANAGER_H

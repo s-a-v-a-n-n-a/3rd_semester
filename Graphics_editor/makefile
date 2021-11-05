@@ -1,7 +1,7 @@
 CFLAGS = -g -masm=intel -no-pie -march=native -O3 -std=c++11
 
-link: screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o tools_vidget.o button_manager.o texture_names.o animations.o main.o
-	g++ screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o tools_vidget.o button_manager.o texture_names.o animations.o main.o -o main -lsfml-graphics -lsfml-window -lsfml-system
+link: screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o tools_vidget.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o main.o
+	g++ screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o tools_vidget.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o main.o -o main -lsfml-graphics -lsfml-window -lsfml-system
 
 main.o : main.cpp
 	g++ $(CFLAGS) -c -o main.o main.cpp
@@ -35,7 +35,13 @@ button.o: GUI/Button.cpp
 	g++ $(CFLAGS) -c -o button.o GUI/Button.cpp
 
 button_manager.o: GUI/Button_manager.cpp
-	g++ $(CFLAGS) -c -o button_manager.o  GUI/Button_manager.cpp
+	g++ $(CFLAGS) -c -o button_manager.o GUI/Button_manager.cpp
+
+resource_manager.o: GUI/Resource_manager.cpp
+	g++ $(CFLAGS) -c -o resource_manager.o GUI/Resource_manager.cpp
+
+animations.o: GUI/Animations.cpp
+	g++ $(CFLAGS) -c -o animations.o GUI/Animations.cpp
 # -----------------------------------------------------------------------------------
 
 
@@ -43,9 +49,6 @@ button_manager.o: GUI/Button_manager.cpp
 # -----------------------------------------------------------------------------------
 # Editor/%.o: Editor/%.cpp
 # 	g++ $(CFLAGS) -c -o canvas Editor/Canvas.cpp
-animations.o: Editor/Animations.cpp
-	g++ $(CFLAGS) -c -o animations.o Editor/Animations.cpp
-
 canvas.o: Editor/Canvas.cpp
 	g++ $(CFLAGS) -c -o canvas.o Editor/Canvas.cpp
 
@@ -57,6 +60,9 @@ tab.o: Editor/Tab.cpp
 
 editor_delegate.o: Editor/Editor_delegates.cpp
 	g++ $(CFLAGS) -c -o editor_delegate.o Editor/Editor_delegates.cpp
+
+graphical_delegate.o: Editor/Graphical_delegates.cpp
+	g++ $(CFLAGS) -c -o graphical_delegate.o Editor/Graphical_delegates.cpp
 
 tools_vidget.o: Editor/Tools_vidget.cpp
 	g++ $(CFLAGS) -c -o tools_vidget.o Editor/Tools_vidget.cpp

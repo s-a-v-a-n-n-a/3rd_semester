@@ -17,7 +17,7 @@ private:
 
 public:
 	Color_picker(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil)
-	: Visual_object(par_type, par_position, par_color, par_width, par_height), pencil(par_pencil), main_color(RED), current_position(0, 0)
+	: Visual_object(par_type, par_position, par_color, par_width, par_height), pencil(par_pencil), main_color(RED), current_position(0, par_height)
 	{
 		set_main_color(RED);
 

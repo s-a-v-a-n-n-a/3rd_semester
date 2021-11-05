@@ -1,9 +1,9 @@
-#include "Resources_manager.hpp"
+#include "Resource_manager.hpp"
 
-Resources * Resources::Resources = nullptr;
+Resources * Resources::resources = nullptr;
 Resources_destroyer Resources::destroyer;
 
-Resources::Resources() : textures() { ; 
+Resources::Resources() : textures() { ; }
 Resources::~Resources()
 {
 	long long textures_amount = (long long)textures.get_length();
@@ -14,7 +14,7 @@ Resources::~Resources()
 	}
 }
 
-Full_texture *create_texture(const char *texture_name, const size_t texture_width, const size_t texture_height)
+Full_texture *Resources::create_texture(const char *texture_name, const size_t texture_width, const size_t texture_height)
 {
 	Full_texture *new_texture = new Full_texture(texture_name, texture_width, texture_height);
 
@@ -23,7 +23,7 @@ Full_texture *create_texture(const char *texture_name, const size_t texture_widt
 	return new_texture;
 }
 
-Animating_texture *create_texture(const char *texture_name, const size_t texture_width, const size_t texture_height, const char *move_texture_name, const char *inactive_texture_name)
+Animating_texture *Resources::create_texture(const char *texture_name, const size_t texture_width, const size_t texture_height, const char *move_texture_name, const char *inactive_texture_name)
 {
 	Animating_texture *new_texture = new Animating_texture(texture_name, texture_width, texture_height);
 	if (move_texture_name)
@@ -38,21 +38,21 @@ Animating_texture *create_texture(const char *texture_name, const size_t texture
 
 Resources * Resources::get_instance() 
 {
-	if (Resources == nullptr)
+	if (resources == nullptr)
 	{
-		Resources = new Resources();
-		destroyer.initialize(Resources);
+		resources = new Resources();
+		destroyer.initialize(resources);
 	}
 
-	return Resources;
+	return resources;
 }
 
 Resources_destroyer::~Resources_destroyer() 
 { 
-	delete Resources; 
+	delete resources; 
 }
 
-void Resources_destroyer::initialize(Resources *par_animation_manager) 
+void Resources_destroyer::initialize(Resources *par_resources) 
 { 
-	animation_manager = par_animation_manager; 
+	resources = par_resources; 
 }
