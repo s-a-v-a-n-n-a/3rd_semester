@@ -43,6 +43,16 @@ public:
 	// void draw(Screen_information *screen) override;
 	// bool on_mouse(const double par_x, const double par_y) override;
 	bool on_key_pressed(const unsigned key_state) override;
+
+	Button_manager *create_button_panel(const Vector_ll &position, const size_t width, const size_t height);
+	Canvas_manager_manager *create_canvas_manager(const Vector_ll &position, const size_t width, const size_t height);
+	Button *create_restore_button(Button_manager *panel, Visual_object *to_restore, const char *text, const size_t width, const size_t height);
+	Button *create_canvas_creator(Button_manager *panel, Canvas_manager_manager *canvas_manager, const char *text, const size_t width, const size_t height);
+	Tools_vidget *create_color_vidget(const Vector_ll &position, const size_t width, const size_t height);
+	Brush_size_manager *create_size_vidget(const Vector_ll &position, const size_t width, const size_t height);
+
+	// test
+	Test_button *create_test_button(const Vector_ll &position, const char *text, const size_t width, const size_t height);
 };
 
 

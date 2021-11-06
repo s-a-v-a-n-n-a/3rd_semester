@@ -8,7 +8,7 @@ Resources::~Resources()
 {
 	long long textures_amount = (long long)textures.get_length();
 
-	for (long long i = textures_amount; i >= 0; --i)
+	for (long long i = textures_amount; i > 0; --i)
 	{
 		textures.delete_from_end();
 	}

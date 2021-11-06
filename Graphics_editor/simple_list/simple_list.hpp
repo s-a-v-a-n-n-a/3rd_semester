@@ -75,7 +75,7 @@ public:
 		if (length <= 0)
 			return;
 
-		delete array[length];
+		delete array[length - 1];
 		length--;
 	}
 

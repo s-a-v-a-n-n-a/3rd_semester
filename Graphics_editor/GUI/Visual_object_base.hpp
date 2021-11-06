@@ -38,11 +38,8 @@ public:
 	Visual_object() = delete;
 	Visual_object(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height);
 	Visual_object(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width = 0, const size_t par_height = 0);
-	virtual ~Visual_object()
-	{
-		delete texture;
-	}
-
+	~Visual_object() = default;
+	
 	virtual void add_visual_object(Visual_object *par_object);
 	virtual void slow_delete_visual_object(size_t index);
 	virtual long long very_slow_delete_visual_object(Visual_object *par_object);
