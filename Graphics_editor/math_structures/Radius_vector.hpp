@@ -139,5 +139,6 @@ public:
 };
 
 typedef Radius_vector<long long> Vector_ll;
+typedef Radius_vector<double> Vector_d;
 
 #endif // RADIUS_VECTOR_CLASS

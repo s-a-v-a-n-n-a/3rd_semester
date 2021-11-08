@@ -81,6 +81,16 @@ void Screen_information::draw_point(const Vector_ll &par_point, const Color &par
 	window.draw(&sfml_point, 1, sf::Points);
 }
 
+void Screen_information::draw_line(const Vector_ll &left, const Vector_ll &right, const Color &par_color)
+{
+	sf::Color color(par_color.r, par_color.g, par_color.b, par_color.a);
+	sf::Vertex sfml_line[] = {  sf::Vertex(sf::Vector2f(left.get_x(), left.get_y()), color), 
+								sf::Vertex(sf::Vector2f(right.get_x(), right.get_y()), color) };
+	
+	window.draw(sfml_line, 2, sf::Lines);
+}
+
+
 void Screen_information::draw_text(const char *par_text, const Vector_ll &par_position, const Color &par_color, const size_t par_text_size)
 {
 	sf::Font font = {};

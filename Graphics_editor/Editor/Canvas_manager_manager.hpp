@@ -22,6 +22,8 @@ public:
 	Canvas_manager_manager(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Pencil *par_pencil);
 	~Canvas_manager_manager() = default;
 
+	Window_control_panel *create_control_panel(Visual_object *parent, const Vector_ll &position, const size_t width, const size_t height);
+
 	void tick(Screen_information *screen, const double delta_time) override;
 	void draw(Screen_information *screen) override;
 

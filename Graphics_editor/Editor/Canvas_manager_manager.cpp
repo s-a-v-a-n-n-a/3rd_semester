@@ -35,13 +35,14 @@ Canvas_manager_manager::Canvas_manager_manager(const size_t par_type, const Vect
 Canvas_manager_manager::Canvas_manager_manager(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Pencil *par_pencil)
 : Visual_object(par_type, par_position, par_texture, par_width, par_height), pencil(par_pencil)
 {
-	Full_texture *header = new Full_texture(WINDOW_HEADER, get_width(), DEFAULT_BUTTON_HEIGHT);
-	Window_control_panel *control = new Window_control_panel((size_t)Vidget_type::WINDOW_CONTROL_PANEL, 
-															par_position, 
-															header, 
-															get_width(), 
-															DEFAULT_BUTTON_HEIGHT, 
-															this);
+	// Full_texture *header = new Full_texture(WINDOW_HEADER, get_width(), DEFAULT_BUTTON_HEIGHT);
+	// Window_control_panel *control = new Window_control_panel((size_t)Vidget_type::WINDOW_CONTROL_PANEL, 
+	// 														par_position, 
+	// 														header, 
+	// 														get_width(), 
+	// 														DEFAULT_BUTTON_HEIGHT, 
+	// 														this);
+	Window_control_panel *control = create_control_panel(this, par_position, get_width(), DEFAULT_BUTTON_HEIGHT);
 
 	Button_manager *panel = new Button_manager((size_t)Vidget_type::BUTTON_MANAGER, par_position + Vector_ll(0, DEFAULT_BUTTON_HEIGHT), MEDIUM_GREY, par_width, INCREASED_BUTTON_HEIGHT);
 
@@ -53,9 +54,23 @@ Canvas_manager_manager::Canvas_manager_manager(const size_t par_type, const Vect
 												pencil,
 												0);
 	
-	add_visual_object(control);
+	// add_visual_object(control);
 	add_visual_object(panel);
 	add_visual_object(canvas);
+}
+
+Window_control_panel *Canvas_manager_manager::create_control_panel(Visual_object *parent, const Vector_ll &position, const size_t width, const size_t height)
+{
+	Full_texture *texture = new Full_texture(WINDOW_HEADER, width, height);
+	Window_control_panel *control = new Window_control_panel((size_t)Vidget_type::WINDOW_CONTROL_PANEL, 
+															position, 
+															texture, 
+															width, 
+															height, 
+															parent);
+	add_visual_object(control);
+
+	return control;
 }
 
 void Canvas_manager_manager::add_canvas()

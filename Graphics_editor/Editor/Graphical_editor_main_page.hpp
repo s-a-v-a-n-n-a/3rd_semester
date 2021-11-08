@@ -6,6 +6,8 @@
 #include "../GUI/Button_manager.hpp"
 #include "../GUI/Resource_manager.hpp"
 
+#include "Spline_manager.hpp"
+
 #include "Vidget_types.hpp"
 
 // #include "Editor_control_panel.hpp"
@@ -43,6 +45,8 @@ public:
 	// void draw(Screen_information *screen) override;
 	// bool on_mouse(const double par_x, const double par_y) override;
 	bool on_key_pressed(const unsigned key_state) override;
+
+	Spline_manager *create_spline_manager(const Vector_ll &position, const size_t width, const size_t height);
 
 	Button_manager *create_button_panel(const Vector_ll &position, const size_t width, const size_t height);
 	Canvas_manager_manager *create_canvas_manager(const Vector_ll &position, const size_t width, const size_t height);

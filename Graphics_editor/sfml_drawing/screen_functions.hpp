@@ -79,6 +79,7 @@ public:
 	void draw_circle(const Vector_ll &par_position, const Color &par_color, const double par_radius, const Color &par_fill_color = TRANSPARENT);
 	void draw_rectangle(const Vector_ll &par_position, const Color &par_color, const double par_width, const double par_height);
 	void draw_point(const Vector_ll &point, const Color &par_color);
+	void draw_line(const Vector_ll &left, const Vector_ll &right, const Color &par_color);
 	void draw_text(const char *par_text, const Vector_ll &par_position, const Color &par_color, const size_t text_size);
 	void draw_image(const Color *array, const Vector_ll &position, const size_t width, const size_t height);
 	void draw_texture(const Vector_ll &position, const char *texture_name);

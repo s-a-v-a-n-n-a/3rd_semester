@@ -21,6 +21,7 @@ const char CANVAS_TEXT[] = " Canvas ";
 const char NEW_CANVAS_TEXT[] = " New canvas ";
 const char COLOR_TEXT[] = " Color ";
 const char SIZE_TEXT[] = " Size ";
+const char SPLINE_TEXT[] = " Spline ";
 
 Graphical_editor_main_page::Graphical_editor_main_page(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height)
 : Visual_object(par_type, par_position, par_color, par_width, par_height), pencil()
@@ -29,8 +30,13 @@ Graphical_editor_main_page::Graphical_editor_main_page(const size_t par_type, co
 	
 	Canvas_manager_manager *canvas = create_canvas_manager(par_position + Vector_ll(DEFAULT_CANVAS_POS_X, DEFAULT_CANVAS_POS_Y), DEFAULT_CANVAS_SIZE, DEFAULT_CANVAS_SIZE + DEFAULT_BUTTON_HEIGHT);
 	
-	Tools_vidget *tools_vidget = create_color_vidget(par_position + Vector_ll(DEFAULT_COLOR_VIDGET_POS_X, DEFAULT_COLOR_VIDGET_POS_Y), DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);// new Tools_vidget((size_t)Vidget_type::PALETTE, par_position + Vector_ll(DEFAULT_COLOR_VIDGET_POS_X, DEFAULT_COLOR_VIDGET_POS_Y), tools_background, DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT, &pencil);
-	Brush_size_manager *brushes_vidget = create_size_vidget(par_position + Vector_ll(DEFAULT_SIZE_VIDGET_POS_X, DEFAULT_SIZE_VIDGET_POS_Y), THICK_PALETTE_WIDTH, THICK_PALETTE_HEIGHT);// new Brush_size_manager((size_t)Vidget_type::PALETTE, par_position + Vector_ll(DEFAULT_SIZE_VIDGET_POS_X, DEFAULT_SIZE_VIDGET_POS_Y), brushes_background, THICK_PALETTE_WIDTH, THICK_PALETTE_HEIGHT, &pencil);
+	Tools_vidget *tools_vidget = create_color_vidget(par_position + Vector_ll(DEFAULT_COLOR_VIDGET_POS_X, DEFAULT_COLOR_VIDGET_POS_Y), DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
+	tools_vidget->set_visible(false);
+	tools_vidget->set_reactive(false);
+
+	Brush_size_manager *brushes_vidget = create_size_vidget(par_position + Vector_ll(DEFAULT_SIZE_VIDGET_POS_X, DEFAULT_SIZE_VIDGET_POS_Y), THICK_PALETTE_WIDTH, THICK_PALETTE_HEIGHT);
+	brushes_vidget->set_visible(false);
+	brushes_vidget->set_reactive(false);
 
 	size_t current_button_size = get_text_length(GHOST_TYPE, CANVAS_TEXT, INCREASED_BUTTON_HEIGHT / 2);
 	create_restore_button(panel, canvas, CANVAS_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
@@ -42,12 +48,27 @@ Graphical_editor_main_page::Graphical_editor_main_page(const size_t par_type, co
 	create_restore_button(panel, tools_vidget, COLOR_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
 
     current_button_size = get_text_length(GHOST_TYPE, SIZE_TEXT, INCREASED_BUTTON_HEIGHT / 2);
-	create_restore_button(panel, tools_vidget, SIZE_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
+	create_restore_button(panel, brushes_vidget, SIZE_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
+
+    Spline_manager *spline = create_spline_manager(par_position + Vector_ll(0, 600), 400, 400 + DEFAULT_BUTTON_HEIGHT);
+
+    current_button_size = get_text_length(GHOST_TYPE, SPLINE_TEXT, INCREASED_BUTTON_HEIGHT / 2);
+	create_restore_button(panel, spline, SPLINE_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
 
     // test
     create_test_button(par_position + Vector_ll(0, 1000), "", 300, 300);
 
 	set_active(canvas);
+}
+
+Spline_manager *Graphical_editor_main_page::create_spline_manager(const Vector_ll &position, const size_t width, const size_t height)
+{
+	Full_texture *spline_background = Resources::get_instance()->create_texture(WINDOW_BACKGROUND, width, height);// new Full_texture(WINDOW_BACKGROUND, DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
+
+	Spline_manager *spline = new Spline_manager((size_t)Vidget_type::SPLINE_MANAGER, position, spline_background, width, height);
+	add_visual_object(spline);
+
+	return spline;
 }
 
 Button_manager *Graphical_editor_main_page::create_button_panel(const Vector_ll &position, const size_t width, const size_t height)
