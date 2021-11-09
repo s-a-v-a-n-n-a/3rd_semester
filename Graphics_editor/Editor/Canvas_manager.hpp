@@ -9,11 +9,11 @@
 #include "Canvas.hpp"
 #include "Tab.hpp"
 
-
 class Canvas_manager : public Visual_object
 {
 private:
 	Tab *tab;
+	Canvas *canvas;
 
 public:
 	// поэтому получает информацию о главном
@@ -25,6 +25,8 @@ public:
 
 	void set_offset(const Vector_ll &par_offset);
 	Vector_ll get_offset() const;
+
+	Canvas *get_canvas() { return canvas; }
 };
 
 #endif // CANVAS_MANAGER_SINGLE

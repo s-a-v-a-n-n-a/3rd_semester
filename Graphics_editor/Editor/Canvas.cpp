@@ -81,6 +81,56 @@ bool Canvas::point_inside (const size_t par_x, const size_t par_y)
 	return false;
 }
 
+void Canvas::set_red (const unsigned char from, const unsigned char to)
+{
+	size_t width = get_width();
+	size_t height = get_height();
+
+	// printf("from: %u, to: %u\n", from, to);
+
+	for (size_t i = 0; i < width * height; ++i)
+	{
+		if (drawing[i].get_r() == from)
+		{
+			drawing[i].set_r(to);
+		}
+	}
+
+	get_texture()->set_texture(drawing, get_width(), get_height());
+}
+
+void Canvas::set_green (const unsigned char from, const unsigned char to)
+{
+	size_t width = get_width();
+	size_t height = get_height();
+
+	for (size_t i = 0; i < width * height; ++i)
+	{
+		if (drawing[i].get_g() == from)
+		{
+			drawing[i].set_g(to);
+		}
+	}
+
+	get_texture()->set_texture(drawing, get_width(), get_height());
+}
+
+void Canvas::set_blue (const unsigned char from, const unsigned char to)
+{
+	size_t width = get_width();
+	size_t height = get_height();
+
+	for (size_t i = 0; i < width * height; ++i)
+	{
+		if (drawing[i].get_b() == from)
+		{
+			drawing[i].set_b(to);
+		}
+	}
+
+	get_texture()->set_texture(drawing, get_width(), get_height());
+}
+
 bool Canvas::on_mouse_click (const bool state, const size_t par_x, const size_t par_y)
 {
 	if (!point_inside(par_x, par_y))

@@ -60,3 +60,23 @@ bool Canvas_keeper::on_mouse_click(const size_t par_x, const size_t par_y)
 
 	return true;
 }
+
+Red_component_changer::Red_component_changer(Canvas *par_to_change)
+: to_change(par_to_change)
+{
+	;
+}
+
+bool Red_component_changer::on_mouse_click(const size_t par_x, const size_t par_y)
+{
+	to_change->set_red(par_x, par_y);
+
+	return true;
+}
+
+bool Red_component_changer::on_mouse_move(const Vector_ll from, const Vector_ll to)
+{
+	to_change->set_red(to.get_x(), to.get_y());
+
+	return true;
+}

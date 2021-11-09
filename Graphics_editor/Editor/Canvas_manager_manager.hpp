@@ -15,6 +15,7 @@ class Canvas_manager_manager : public Visual_object
 {
 private:
 	Pencil *pencil;
+	Canvas_manager *active_canvas;
 	// Drop_down_menu *drop_and_down_menu;
 
 public:
@@ -31,6 +32,7 @@ public:
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
 
 	void add_canvas();
+	Canvas *get_active_canvas();
 };
 
 #endif // CANVAS_MANAGER_MANAGER_H

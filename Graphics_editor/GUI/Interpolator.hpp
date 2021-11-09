@@ -84,16 +84,6 @@ public:
 	// code from wikipedia
 	Vector_d interpolation(const Vector_d &point_0, const Vector_d &point_1, const Vector_d &point_2, const Vector_d &point_3, double t, double alpha)
 	{
-		// Vector_d direction = point_1 - point_0;
-		// direction.normalization();
-
-		// if (direction.get_x())
-		// {
-		// 	return point_0 + direction * (t - point_0.get_x()) / direction.get_x();
-		// }
-		// else 
-		// 	return point_1;
-
 		double t1 = 0.0f;
 	    double t2 = get_t(point_0, point_1, t1, alpha);
 	    double t3 = get_t(point_1, point_2, t2, alpha);
@@ -115,8 +105,6 @@ public:
 
 	Vector_d get_point(double x, size_t *last_ref_point)
 	{
-		printf("reference points amount: %lu\n", reference_points.size());
-
 		while (*last_ref_point + 1 < reference_points.size() && x > reference_points[*last_ref_point + 1].get_x())
 		{
 			(*last_ref_point)++;
@@ -138,8 +126,6 @@ public:
 			else
 				point_3 = Vector_d(reference_points[*last_ref_point + 2].get_x(), reference_points[*last_ref_point + 2].get_y());
 
-			printf("0 p0: %lg, %lg; p1: %lg, %lg; p2: %lg, %lg; p3: %lg, %lg\n", point_0.get_x(), point_0.get_y(), point_1.get_x(), point_1.get_y(), point_2.get_x(), point_2.get_y(), point_3.get_x(), point_3.get_y());
-			printf("t: %lg\n", (x - point_1.get_x())/(point_2.get_x() - point_1.get_x()));
 			return interpolation(point_0, point_1, point_2, point_3, (x - point_1.get_x())/(point_2.get_x() - point_1.get_x()), 0.5);
 		}
 		
@@ -159,16 +145,10 @@ public:
 			else
 				point_0 = Vector_d(reference_points[*last_ref_point - 1].get_x(), reference_points[*last_ref_point - 1].get_y());
 
-			printf("1 p0: %lg, %lg; p1: %lg, %lg; p2: %lg, %lg; p3: %lg, %lg\n", point_0.get_x(), point_0.get_y(), point_1.get_x(), point_1.get_y(), point_2.get_x(), point_2.get_y(), point_3.get_x(), point_3.get_y());
-			printf("t: %lg\n", (x - point_1.get_x())/(point_2.get_x() - point_1.get_x()));
 			return interpolation(point_0, point_1, point_2, point_3, (x - point_1.get_x())/(point_2.get_x() - point_1.get_x()), 0.5);
 
 		}
 
-		// Vector_d point_0 = reference_points[(*last_ref_point)]; 
-		// Vector_d point_1 = reference_points[(*last_ref_point) + 1];
-
-		// Vector_d closest = point_1 - point_0;
 		Vector_d point_0 = reference_points[(*last_ref_point) - 1]; 
 
 		Vector_d point_1 = reference_points[(*last_ref_point)]; 
@@ -178,36 +158,35 @@ public:
 
 		Vector_d closest = point_1 - point_0;
 
-		printf("x p0: %lg, %lg; p1: %lg, %lg; p2: %lg, %lg; p3: %lg, %lg\n", point_0.get_x(), point_0.get_y(), point_1.get_x(), point_1.get_y(), point_2.get_x(), point_2.get_y(), point_3.get_x(), point_3.get_y());
-		printf("t: %lg\n", (x - point_1.get_x())/(point_2.get_x() - point_1.get_x()));
 		return interpolation(point_0, point_1, point_2, point_3, (x - point_1.get_x())/(point_2.get_x() - point_1.get_x()), 0.5);
-		// return interpolation(point_0, point_1, point_0, point_1, x, 0.5);
 	}
 };
 
 class Spline : public Visual_object
 {
 private:
+	Button_delegate *delegate;
+
 	std::vector<Vector_d> points;
 
+	long long high_limit;
+	long long low_limit;
+
 public:
-	Spline(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width = 0, const size_t par_height = 0)
-	: Visual_object(par_type, par_position, par_color, par_width, par_height), points(par_width, 0)
+	Spline(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Button_delegate *par_delegate)
+	: Visual_object(par_type, par_position, par_color, par_width, par_height), points(par_width, 0), delegate(par_delegate), high_limit(MAX_COLOR_VALUE), low_limit(MAX_COLOR_VALUE)
 	{
-		// Button *left  = create_spline_dot(par_position + Vector_ll(0, par_height - DEFAULT_DOT_SIZE), DEFAULT_DOT_SIZE, DEFAULT_DOT_SIZE);
 		Button *left = new Button((size_t)Vidget_type::BUTTON, par_position + Vector_ll(0, par_height), BLACK, DEFAULT_DOT_SIZE, DEFAULT_DOT_SIZE, NULL, "");
 		Drag_and_drop_delegate *drag = new Drag_and_drop_delegate(left);
 		left->set_delegate(drag);
 
 		get_objects()->add_to_end(left);
-		
-		// printf("added left one\n");
 
 		Button *right = create_spline_dot(par_position + Vector_ll(par_width, 0), DEFAULT_DOT_SIZE, DEFAULT_DOT_SIZE);
-		
-		printf("added right one\n");
 	}
-	~Spline() = default;
+	~Spline() { delete delegate; };
+
+	void set_delegate(Button_delegate *par_delegate) { delegate = par_delegate; }
 
 	Button *create_spline_dot(const Vector_ll &position, const size_t width, const size_t height)
 	{
@@ -227,7 +206,6 @@ public:
 		for (size_t i = 0; i < width; ++i)
 		{
 			points[i] = interpolator->get_point(i, &last_reference); 
-			// printf("y is %lg\n", points[i].get_y());
 		}
 	}
 
@@ -238,15 +216,11 @@ public:
 		size_t points_amount = get_objects()->get_length();
 		Visual_object **points_array = get_objects()->get_array();
 		
-		// reference_points.push_back(Vector_d(points_array[0]->get_position().get_x() - get_position().get_x(), points_array[0]->get_position().get_y() - get_position().get_y() + DEFAULT_DOT_SIZE));
-		// reference_points.push_back(Vector_d(points_array[1]->get_position().get_x() - get_position().get_x() + DEFAULT_DOT_SIZE, points_array[1]->get_position().get_y() - get_position().get_y()));
 		for (size_t i = 0; i < points_amount; ++i)
 		{
-			// printf(":)\n");
 			reference_points.push_back(Vector_d(points_array[i]->get_position().get_x() - get_position().get_x(), points_array[i]->get_position().get_y() - get_position().get_y()));
 		}
-		printf("reference_points size %lu\n", reference_points.size());
-
+		
 		Interpolator *interpolator = new Interpolator(reference_points);
 		interpolator->add_point(Vector_d(par_object->get_position().get_x() - get_position().get_x(), par_object->get_position().get_y() - get_position().get_y()));
 
@@ -259,7 +233,6 @@ public:
 
 	void draw(Screen_information *screen) override
 	{
-		// Visual_object::draw(screen);
 		screen->draw_rectangle(get_position(), get_color(), get_width(), get_height());
 
 		Visual_object **objects_array = get_objects()->get_array();
@@ -279,6 +252,14 @@ public:
 			screen->draw_line(Vector_ll((size_t)points[i].get_x() + get_position().get_x() + DEFAULT_DOT_SIZE/2, (size_t)points[i].get_y() + get_position().get_y() + DEFAULT_DOT_SIZE/2), Vector_ll((size_t)points[i + 1].get_x() + get_position().get_x() + DEFAULT_DOT_SIZE/2, (size_t)points[i + 1].get_y() + get_position().get_y() + DEFAULT_DOT_SIZE/2), BLACK); // а если хочу разноцветные линии?
 		}
 	}
+
+	Vector_ll create_color_relation(const size_t max_x, const size_t max_y, const size_t par_x, const size_t par_y)
+	{
+		double scale_x = ((double)(par_x - get_position().get_x()) / (double)get_width());
+		double scale_y = ((double)(par_y - get_position().get_y()) / (double)get_height());
+
+		return Vector_ll((size_t)(((double)max_x) * scale_x), (size_t)(((double)max_y) * scale_y));
+	}
 	
 	bool on_mouse_click (const bool state, const size_t par_x, const size_t par_y) override
 	{
@@ -290,6 +271,10 @@ public:
 			{
 				if ((get_objects()->get_array()[i])->on_mouse_click(state, par_x, par_y))//(((get_objects()->get_array()[i])->get_reactive() || state == Mouse_state::MOVED) && (get_objects()->get_array()[i])->on_mouse(state, par_x, par_y)) // ??????
 				{
+					Vector_ll par = create_color_relation(MAX_COLOR_VALUE, MAX_COLOR_VALUE, par_x, par_y);
+
+					delegate->on_mouse_click(par.get_x(), par.get_y());
+
 					return true;
 				}
 
@@ -303,13 +288,27 @@ public:
 			if (check_point.get_y() + DEFAULT_DOT_SIZE >= par_y - get_position().get_y() && check_point.get_y() - DEFAULT_DOT_SIZE <= par_y - get_position().get_y())
 			{
 				Button *new_dot = create_spline_dot(Vector_ll(par_x, par_y), DEFAULT_DOT_SIZE, DEFAULT_DOT_SIZE);
+
+				Vector_ll par = create_color_relation(MAX_COLOR_VALUE, MAX_COLOR_VALUE, par_x, par_y);
+				
+				delegate->on_mouse_click(par.get_x(), par.get_y());
 			}
 		}
 
 		return false;
 	}
 	
-	// bool on_mouse_move	(const Vector_ll from, const Vector_ll to) override;
+	bool on_mouse_move (const Vector_ll from, const Vector_ll to) override
+	{
+		bool standart_result = Visual_object::on_mouse_move(from, to);
+
+		if (standart_result && delegate)
+		{
+			delegate->on_mouse_move(from, create_color_relation(MAX_COLOR_VALUE, MAX_COLOR_VALUE, to.get_x(), to.get_y()));
+		}
+
+		return standart_result;
+	}
 };
 
 #endif // INTERPOLATOR_H

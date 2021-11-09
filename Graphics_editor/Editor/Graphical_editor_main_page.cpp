@@ -50,7 +50,7 @@ Graphical_editor_main_page::Graphical_editor_main_page(const size_t par_type, co
     current_button_size = get_text_length(GHOST_TYPE, SIZE_TEXT, INCREASED_BUTTON_HEIGHT / 2);
 	create_restore_button(panel, brushes_vidget, SIZE_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
 
-    Spline_manager *spline = create_spline_manager(par_position + Vector_ll(0, 600), 400, 400 + DEFAULT_BUTTON_HEIGHT);
+    Spline_manager *spline = create_spline_manager(par_position + Vector_ll(0, 600), 400, 400 + DEFAULT_BUTTON_HEIGHT, canvas->get_active_canvas());
 
     current_button_size = get_text_length(GHOST_TYPE, SPLINE_TEXT, INCREASED_BUTTON_HEIGHT / 2);
 	create_restore_button(panel, spline, SPLINE_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
@@ -61,11 +61,11 @@ Graphical_editor_main_page::Graphical_editor_main_page(const size_t par_type, co
 	set_active(canvas);
 }
 
-Spline_manager *Graphical_editor_main_page::create_spline_manager(const Vector_ll &position, const size_t width, const size_t height)
+Spline_manager *Graphical_editor_main_page::create_spline_manager(const Vector_ll &position, const size_t width, const size_t height, Canvas *active_canvas)
 {
 	Full_texture *spline_background = Resources::get_instance()->create_texture(WINDOW_BACKGROUND, width, height);// new Full_texture(WINDOW_BACKGROUND, DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
 
-	Spline_manager *spline = new Spline_manager((size_t)Vidget_type::SPLINE_MANAGER, position, spline_background, width, height);
+	Spline_manager *spline = new Spline_manager((size_t)Vidget_type::SPLINE_MANAGER, position, spline_background, width, height, active_canvas);
 	add_visual_object(spline);
 
 	return spline;

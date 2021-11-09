@@ -1,5 +1,8 @@
 #include "Tab.hpp"
 
+const size_t DEFAULT_TAB_WIDTH = 250;
+const size_t DEFAULT_TAB_HEIGHT = 80;
+
 Tab::Tab(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Visual_object *par_parent)
 : Visual_object(par_type, par_position, par_color, par_width, par_height)
 {

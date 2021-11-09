@@ -50,4 +50,18 @@ public:
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
 };
 
+class Red_component_changer : public Button_delegate
+{
+private:
+	Canvas *to_change;
+
+public:
+	Red_component_changer(Canvas *par_to_change);
+
+	void set_changable(Canvas *par_to_change) { to_change = par_to_change; }
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
+};
+
 #endif // EDITOR_DELEGATES

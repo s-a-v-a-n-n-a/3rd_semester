@@ -29,6 +29,10 @@ public:
 
 	void draw_point(const size_t par_x, const size_t par_y);
 
+	void set_red (const unsigned char from, const unsigned char to);
+	void set_green (const unsigned char from, const unsigned char to);
+	void set_blue (const unsigned char from, const unsigned char to);
+
 	void draw(Screen_information *screen) override;
 	bool point_inside (const size_t par_x, const size_t par_y) override;
 	bool on_mouse_click(const bool state, const size_t par_x, const size_t par_y) override; // const Mouse_event par_event, 
