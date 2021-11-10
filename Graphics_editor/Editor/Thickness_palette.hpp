@@ -9,30 +9,31 @@ class Thickness_palette : public Visual_object
 private:
 
 public:
-	Thickness_palette(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil)
-	: Visual_object(par_type, par_position, par_color, par_width, par_height)
+	Thickness_palette(const Visual_object::Config &par_base, Pencil *par_pencil)
+	: Visual_object(par_base)
 	{
 		// create BLACK button 
 		// ATTENTION
 		// MAGIC
 		// ------------------------------------------------------------------------
-		Button_manager *panel = new Button_manager((size_t)Vidget_type::BUTTON_MANAGER, par_position, TRANSPARENT, par_width, DEFAULT_BUTTON_HEIGHT);
+		Visual_object::Config panel_base = { (size_t)Vidget_type::BUTTON_MANAGER, get_position(), nullptr, TRANSPARENT, get_width(), DEFAULT_BUTTON_HEIGHT };
+		Button_manager *panel = new Button_manager(panel_base);
 
 	    size_t offset = 0;
 	    Change_thickness *change_thickness_1 = new Change_thickness(par_pencil, 1);
-    	Full_texture *texture = new Full_texture(TEXT_TEXTURE, DEFAULT_BUTTON_HEIGHT, DEFAULT_BUTTON_HEIGHT);
+    	Full_texture *texture = Resources::get_instance()->create_texture(TEXT_TEXTURE, DEFAULT_BUTTON_HEIGHT, DEFAULT_BUTTON_HEIGHT);
     	// offset += texture->get_width();
 
-    	panel->add_button(change_thickness_1, "1", texture, par_width/4, par_width/4);
+    	panel->add_button(change_thickness_1, "1", texture, get_width()/4, get_width()/4);
 
     	Change_thickness *change_thickness_5 = new Change_thickness(par_pencil, 5);
-    	panel->add_button(change_thickness_5, "5", texture, par_width/4, par_width/4);
+    	panel->add_button(change_thickness_5, "5", texture, get_width()/4, get_width()/4);
 
     	Change_thickness *change_thickness_10 = new Change_thickness(par_pencil, 10);
-    	panel->add_button(change_thickness_10, "10", texture, par_width/4, par_width/4);
+    	panel->add_button(change_thickness_10, "10", texture, get_width()/4, get_width()/4);
 
     	Change_thickness *change_thickness_20 = new Change_thickness(par_pencil, 20);
-    	panel->add_button(change_thickness_20, "20", texture, par_width/4, par_width/4);
+    	panel->add_button(change_thickness_20, "20", texture, get_width()/4, get_width()/4);
 		
 		add_visual_object(panel);
 	}

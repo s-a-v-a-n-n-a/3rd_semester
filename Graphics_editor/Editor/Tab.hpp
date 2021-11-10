@@ -18,8 +18,9 @@ private:
 	Visual_object *parent;
 
 public:
-	Tab(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Visual_object *par_parent);
-	Tab(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Visual_object *par_parent);
+	Tab(const Visual_object::Config &par_base, Visual_object *par_parent);
+	// Tab(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Visual_object *par_parent);
+	// Tab(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Visual_object *par_parent);
 	~Tab() = default;
 
 	void draw(Screen_information *screen) override;

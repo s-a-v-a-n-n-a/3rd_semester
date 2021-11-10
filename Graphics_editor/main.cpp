@@ -18,7 +18,7 @@ int main()
 
 Graphical_editor_main_page *create_editor()
 {
-	Graphical_editor_main_page *editor = new Graphical_editor_main_page((size_t)Vidget_type::EDITOR, Vector_ll(0, 0), DARK_GREY, DEFAULT_SIZE, DEFAULT_SIZE);
+	Graphical_editor_main_page *editor = new Graphical_editor_main_page({(size_t)Vidget_type::EDITOR, Vector_ll(0, 0), nullptr, DARK_GREY, DEFAULT_SIZE, DEFAULT_SIZE});
 
 	return editor;
 }

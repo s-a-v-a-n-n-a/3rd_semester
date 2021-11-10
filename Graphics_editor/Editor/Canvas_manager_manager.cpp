@@ -1,58 +1,24 @@
 #include "Canvas_manager_manager.hpp"
 
-Canvas_manager_manager::Canvas_manager_manager(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil)
-: Visual_object(par_type, par_position, par_color, par_width, par_height), pencil(par_pencil), active_canvas(nullptr)
+Canvas_manager_manager::Canvas_manager_manager(const Visual_object::Config &par_base, Pencil *par_pencil)
+: Visual_object(par_base), pencil(par_pencil), active_canvas(nullptr)
 {
 	// size_t button_height = 80;
 
 	// создаёт Window_control_panel
     // ------------------------------------------------------------------------------
-	Full_texture *header = new Full_texture(WINDOW_HEADER, par_width, DEFAULT_BUTTON_HEIGHT);
-	Window_control_panel *control = new Window_control_panel((size_t)Vidget_type::WINDOW_CONTROL_PANEL, 
-															par_position, 
-															header, 
-															par_width, 
-															DEFAULT_BUTTON_HEIGHT, 
-															this);
+	Window_control_panel *control = create_control_panel(this, get_position(), get_width(), DEFAULT_BUTTON_HEIGHT);
 
-
-	Button_manager *panel = new Button_manager((size_t)Vidget_type::BUTTON_MANAGER, par_position + Vector_ll(0, DEFAULT_BUTTON_HEIGHT), MEDIUM_GREY, par_width, INCREASED_BUTTON_HEIGHT);
+	Button_manager *panel = new Button_manager({ (size_t)Vidget_type::BUTTON_MANAGER, get_position() + Vector_ll(0, DEFAULT_BUTTON_HEIGHT), nullptr, MEDIUM_GREY, get_width(), INCREASED_BUTTON_HEIGHT });
+	
+	// Button_manager *panel = new Button_manager((size_t)Vidget_type::BUTTON_MANAGER, par_position + Vector_ll(0, DEFAULT_BUTTON_HEIGHT), MEDIUM_GREY, par_width, INCREASED_BUTTON_HEIGHT);
 
 	// создаёт начальный объект
 	// ------------------------------------------------------------------------------
-	Canvas_manager *canvas = new Canvas_manager((size_t)Vidget_type::CANVAS_MANAGER, 
-												par_position + Vector_ll(0.0, DEFAULT_BUTTON_HEIGHT), 
-												WHITE, 
-												par_width, 
-												par_height - DEFAULT_BUTTON_HEIGHT, 
-												pencil,
-												0);
+	Canvas_manager *canvas = new Canvas_manager({ (size_t)Vidget_type::CANVAS_MANAGER, get_position() + Vector_ll(0.0, DEFAULT_BUTTON_HEIGHT), nullptr, WHITE, get_width(), get_height() - DEFAULT_BUTTON_HEIGHT }, pencil, 0);
 
 	active_canvas = canvas;
 
-	add_visual_object(control);
-	add_visual_object(panel);
-	add_visual_object(canvas);
-}
-
-Canvas_manager_manager::Canvas_manager_manager(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Pencil *par_pencil)
-: Visual_object(par_type, par_position, par_texture, par_width, par_height), pencil(par_pencil), active_canvas(nullptr)
-{
-	Window_control_panel *control = create_control_panel(this, par_position, get_width(), DEFAULT_BUTTON_HEIGHT);
-
-	Button_manager *panel = new Button_manager((size_t)Vidget_type::BUTTON_MANAGER, par_position + Vector_ll(0, DEFAULT_BUTTON_HEIGHT), MEDIUM_GREY, par_width, INCREASED_BUTTON_HEIGHT);
-
-	Canvas_manager *canvas = new Canvas_manager((size_t)Vidget_type::CANVAS_MANAGER, 
-												par_position + Vector_ll(0.0, DEFAULT_BUTTON_HEIGHT), 
-												GREY, 
-												get_width(), 
-												get_height() - DEFAULT_BUTTON_HEIGHT, 
-												pencil,
-												0);
-
-	// is it really good decision?
-	active_canvas = canvas;
-	
 	// add_visual_object(control);
 	add_visual_object(panel);
 	add_visual_object(canvas);
@@ -60,27 +26,56 @@ Canvas_manager_manager::Canvas_manager_manager(const size_t par_type, const Vect
 
 Window_control_panel *Canvas_manager_manager::create_control_panel(Visual_object *parent, const Vector_ll &position, const size_t width, const size_t height)
 {
-	Full_texture *texture = new Full_texture(WINDOW_HEADER, width, height);
-	Window_control_panel *control = new Window_control_panel((size_t)Vidget_type::WINDOW_CONTROL_PANEL, 
-															position, 
-															texture, 
-															width, 
-															height, 
-															parent);
+	Full_texture *texture = Resources::get_instance()->create_texture(WINDOW_HEADER, width, height);
+
+	Visual_object::Config panel_base = { (size_t)Vidget_type::WINDOW_CONTROL_PANEL, position, texture, TRANSPARENT, width, height };
+	Window_control_panel *control = new Window_control_panel(panel_base, parent);
 	add_visual_object(control);
 
 	return control;
 }
 
+// Canvas_manager_manager::Canvas_manager_manager(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Pencil *par_pencil)
+// : Visual_object(par_type, par_position, par_texture, par_width, par_height), pencil(par_pencil), active_canvas(nullptr)
+// {
+// 	Window_control_panel *control = create_control_panel(this, par_position, get_width(), DEFAULT_BUTTON_HEIGHT);
+
+// 	Button_manager *panel = new Button_manager((size_t)Vidget_type::BUTTON_MANAGER, par_position + Vector_ll(0, DEFAULT_BUTTON_HEIGHT), MEDIUM_GREY, par_width, INCREASED_BUTTON_HEIGHT);
+
+// 	Canvas_manager *canvas = new Canvas_manager((size_t)Vidget_type::CANVAS_MANAGER, 
+// 												par_position + Vector_ll(0.0, DEFAULT_BUTTON_HEIGHT), 
+// 												GREY, 
+// 												get_width(), 
+// 												get_height() - DEFAULT_BUTTON_HEIGHT, 
+// 												pencil,
+// 												0);
+
+// 	// is it really good decision?
+// 	active_canvas = canvas;
+	
+// 	// add_visual_object(control);
+// 	add_visual_object(panel);
+// 	add_visual_object(canvas);
+// }
+
+// Window_control_panel *Canvas_manager_manager::create_control_panel(Visual_object *parent, const Vector_ll &position, const size_t width, const size_t height)
+// {
+// 	Full_texture *texture = new Full_texture(WINDOW_HEADER, width, height);
+// 	Window_control_panel *control = new Window_control_panel((size_t)Vidget_type::WINDOW_CONTROL_PANEL, 
+// 															position, 
+// 															texture, 
+// 															width, 
+// 															height, 
+// 															parent);
+// 	add_visual_object(control);
+
+// 	return control;
+// }
+
 void Canvas_manager_manager::add_canvas()
 {
-	Canvas_manager *canvas = new Canvas_manager((size_t)Vidget_type::CANVAS_MANAGER, 
-												get_position() + Vector_ll(0.0, DEFAULT_BUTTON_HEIGHT), 
-												WHITE, 
-												get_width(), 
-												get_height() - DEFAULT_BUTTON_HEIGHT, 
-												pencil,
-												get_objects()->get_length() - 2);
+	Visual_object::Config canvas_base = { (size_t)Vidget_type::CANVAS_MANAGER, get_position() + Vector_ll(0.0, DEFAULT_BUTTON_HEIGHT), nullptr, WHITE, get_width(), get_height() - DEFAULT_BUTTON_HEIGHT };
+	Canvas_manager *canvas = new Canvas_manager(canvas_base, pencil, get_objects()->get_length() - 2);
 
 	active_canvas = canvas;
 

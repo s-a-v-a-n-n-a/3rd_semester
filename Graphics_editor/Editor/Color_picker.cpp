@@ -2,17 +2,36 @@
 
 const size_t DEFAULT_POINTER_RADIUS = 5;
 
-Color_picker::Color_picker(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil)
-: Visual_object(par_type, par_position, par_color, par_width, par_height), pencil(par_pencil), main_color(RED), current_position(0, par_height)
+// Color_picker::Color_picker(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil)
+// : Visual_object(par_type, par_position, par_color, par_width, par_height), pencil(par_pencil), main_color(RED), current_position(0, par_height)
+// {
+// 	set_main_color(RED);
+
+// 	Full_texture *circle = new Full_texture(PICKING_CIRCLE_TEXTURE, 18, 18);
+	
+// 	size_t circle_width = circle->get_width();
+// 	size_t circle_height = circle->get_height();
+
+// 	picker = new Button((size_t)Vidget_type::BUTTON, par_position + Vector_ll(circle_width, circle_height), circle, circle_width, circle_height, nullptr, "");
+// 	Drag_and_drop_delegate *dnd = new Drag_and_drop_delegate(picker);
+// 	picker->set_delegate(dnd);
+
+// 	add_visual_object(picker);
+// }
+
+Color_picker::Color_picker(const Visual_object::Config &par_base, Pencil *par_pencil)
+: Visual_object(par_base), pencil(par_pencil), main_color(RED), current_position(0, get_height())
 {
 	set_main_color(RED);
 
-	Full_texture *circle = new Full_texture(PICKING_CIRCLE_TEXTURE, 18, 18);
+	Full_texture *circle = Resources::get_instance()->create_texture(PICKING_CIRCLE_TEXTURE, 18, 18);// new Full_texture(WINDOW_BACKGROUND, DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
 	
 	size_t circle_width = circle->get_width();
 	size_t circle_height = circle->get_height();
 
-	picker = new Button((size_t)Vidget_type::BUTTON, par_position + Vector_ll(circle_width, circle_height), circle, circle_width, circle_height, nullptr, "");
+	Visual_object::Config buttton_base = { (size_t)Vidget_type::BUTTON, get_position() + Vector_ll(circle_width, circle_height), circle, TRANSPARENT, circle_width, circle_height };
+	picker = new Button(buttton_base, nullptr, "");
+	
 	Drag_and_drop_delegate *dnd = new Drag_and_drop_delegate(picker);
 	picker->set_delegate(dnd);
 

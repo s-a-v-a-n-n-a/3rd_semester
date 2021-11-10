@@ -1,53 +1,59 @@
 #include "Visual_object_base.hpp"
 
 // const size_t VIDGETS_AMOUNT = 9;
-
-Visual_object::Visual_object(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height)
-: objects(), type(par_type), position(0, 0), color(WHITE), width(0), height(0)
+Visual_object::Visual_object(const Visual_object::Config &par_base)
+: objects(), base(par_base),
+  current_active(nullptr), active(false), visible(true), reactive(true), alive(true)
 {
-	stable_position = par_position;
-	position = par_position;
-	color    = par_color;
-	texture  = NULL;
-
-	width  = par_width;
-	height = par_height;
-
-	current_active = NULL;
-	active         = false;
-	visible        = true;
-	reactive       = true;
-	alive          = true;
-
-	// for (size_t i = 0; i < VIDGETS_AMOUNT; ++i)
-	// 	type_amount = 0;
+	;
 }
 
-Visual_object::Visual_object(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height)
-: objects(), type(par_type), position(0, 0), color(WHITE), width(0), height(0)
-{
-	stable_position = par_position;
-	position = par_position;
-	color    = TRANSPARENT;
-	texture  = par_texture;
+// Visual_object::Visual_object(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height)
+// : objects(), type(par_type), position(0, 0), color(WHITE), width(0), height(0)
+// {
+// 	stable_position = par_position;
+// 	position = par_position;
+// 	color    = par_color;
+// 	texture  = NULL;
 
-	if (par_width && par_height)
-	{
-		width = par_width;
-		height = par_height;
-	}
-	else
-	{
-		width = texture->get_width();
-		height = texture->get_height();
-	}
+// 	width  = par_width;
+// 	height = par_height;
 
-	current_active = NULL;
-	active         = false;
-	visible        = true;
-	reactive       = true;
-	alive          = true;
-}
+// 	current_active = NULL;
+// 	active         = false;
+// 	visible        = true;
+// 	reactive       = true;
+// 	alive          = true;
+
+// 	// for (size_t i = 0; i < VIDGETS_AMOUNT; ++i)
+// 	// 	type_amount = 0;
+// }
+
+// Visual_object::Visual_object(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height)
+// : objects(), type(par_type), position(0, 0), color(WHITE), width(0), height(0)
+// {
+// 	stable_position = par_position;
+// 	position = par_position;
+// 	color    = TRANSPARENT;
+// 	texture  = par_texture;
+
+// 	if (par_width && par_height)
+// 	{
+// 		width = par_width;
+// 		height = par_height;
+// 	}
+// 	else
+// 	{
+// 		width = texture->get_width();
+// 		height = texture->get_height();
+// 	}
+
+// 	current_active = NULL;
+// 	active         = false;
+// 	visible        = true;
+// 	reactive       = true;
+// 	alive          = true;
+// }
 
 void Visual_object::add_visual_object(Visual_object *par_object) 
 { 
@@ -80,7 +86,7 @@ long long Visual_object::very_slow_delete_visual_object(Visual_object *par_objec
 void Visual_object::set_position(const Vector_ll &par_position)
 {
 	Vector_ll offset = par_position - get_position();
-	position = par_position;
+	base.position = par_position;
 
 	Visual_object **objects_array = objects.get_array();
 	size_t objects_amount = objects.get_length();
@@ -95,9 +101,9 @@ void Visual_object::draw(Screen_information *screen)
 {
 	assert(screen);
 
-	if (texture)
+	if (base.texture)
 	{
-		screen->draw_texture(position, texture->get_texture(), get_width(), get_height()); // пока нету такой функции
+		screen->draw_texture(get_position(), base.texture->get_texture(), get_width(), get_height()); // пока нету такой функции
 
 		// sf::Sprite sprite;
 
@@ -116,7 +122,7 @@ void Visual_object::draw(Screen_information *screen)
 	}
 	else
 	{
-		screen->draw_rectangle(position, get_color(), width, height);
+		screen->draw_rectangle(get_position(), get_color(), get_width(), get_height());
 	}
 
 	// if (get_reactive())
@@ -136,8 +142,8 @@ void Visual_object::draw(Screen_information *screen)
 
 bool Visual_object::point_inside(const size_t par_x, const size_t par_y)
 {
-	if (par_x >= position.get_x() && par_x <= position.get_x() + width &&
-		par_y >= position.get_y() && par_y <= position.get_y() + height)
+	if (par_x >= get_position().get_x() && par_x <= get_position().get_x() + get_width() &&
+		par_y >= get_position().get_y() && par_y <= get_position().get_y() + get_height())
 		return true;
 	
 	return false;

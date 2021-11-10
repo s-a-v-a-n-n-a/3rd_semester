@@ -8,8 +8,8 @@ class Test_button : public Button
 private:
 
 public:
-	Test_button (const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Button_delegate *par_click, const char *par_text)
-	: Button(par_type, par_position, par_texture, par_width, par_height, par_click, par_text)
+	Test_button (const Visual_object::Config &par_base, Button_delegate *par_click, const char *par_text)
+	: Button(par_base, par_click, par_text)
 	{
 		;
 	}

@@ -24,6 +24,8 @@ sfml_text.o: sfml_drawing/Text.cpp
 # -----------------------------------------------------------------------------------
 # Vector_ll.o: math_structures/Vector_ll.cpp
 # 	$(COMPILATOR) $(CFLAGS) -c -o Vector_ll.o math_structures/Vector_ll.cpp
+interpolation.o: math_structures/Interpolator.cpp
+	$(COMPILATOR) $(CFLAGS) -c -o interpolation.o math_structures/Interpolator.cpp
 # -----------------------------------------------------------------------------------
 
 
@@ -43,9 +45,6 @@ resource_manager.o: GUI/Resource_manager.cpp
 
 animations.o: GUI/Animations.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o animations.o GUI/Animations.cpp
-
-interpolation.o: GUI/Interpolator.cpp
-	$(COMPILATOR) $(CFLAGS) -c -o interpolation.o GUI/Interpolator.cpp
 # -----------------------------------------------------------------------------------
 
 

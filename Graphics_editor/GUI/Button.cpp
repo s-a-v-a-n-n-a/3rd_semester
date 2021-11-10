@@ -3,33 +3,47 @@
 const size_t DEFAULT_BUTTON_HEIGHT = 50;
 const size_t INCREASED_BUTTON_HEIGHT = 70;
 
-Button::Button(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Button_delegate *par_click, const char *par_text)
-: Visual_object(par_type, par_position, par_color, par_width, par_height) // const char *par_text = NULL
-{
-	size_t offset = par_height / 2;
-	Text *text = new Text((size_t)Vidget_type::TEXT, 
-							par_text, 
-							offset, 
-							par_position + Vector_ll(par_width/2.0, par_height/2.0), //par_position + 
-							DEFAULT_TEXT_COLOR);
-	add_visual_object(text);
-
-	click = par_click;
-}
-
-Button::Button(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Button_delegate *par_click, const char *par_text)
-: Visual_object(par_type, par_position, par_texture, par_width, par_height) // const char *par_text = NULL
+Button::Button(const Visual_object::Config &base, Button_delegate *par_click, const char *par_text)
+: Visual_object(base)
 {
 	size_t offset = get_height() / 2;
 	Text *text = new Text((size_t)Vidget_type::TEXT, 
 							par_text, 
 							offset, 
-							par_position + Vector_ll(get_width()/2.0, get_height()/2.0), //par_position + 
+							get_position() + Vector_ll(get_width()/2.0, get_height()/2.0), //par_position + 
 							DEFAULT_TEXT_COLOR);
 	add_visual_object(text);
 
 	click = par_click;
 }
+
+// Button::Button(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Button_delegate *par_click, const char *par_text)
+// : Visual_object(par_type, par_position, par_color, par_width, par_height) // const char *par_text = NULL
+// {
+// 	size_t offset = par_height / 2;
+// 	Text *text = new Text((size_t)Vidget_type::TEXT, 
+// 							par_text, 
+// 							offset, 
+// 							par_position + Vector_ll(par_width/2.0, par_height/2.0), //par_position + 
+// 							DEFAULT_TEXT_COLOR);
+// 	add_visual_object(text);
+
+// 	click = par_click;
+// }
+
+// Button::Button(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Button_delegate *par_click, const char *par_text)
+// : Visual_object(par_type, par_position, par_texture, par_width, par_height) // const char *par_text = NULL
+// {
+// 	size_t offset = get_height() / 2;
+// 	Text *text = new Text((size_t)Vidget_type::TEXT, 
+// 							par_text, 
+// 							offset, 
+// 							par_position + Vector_ll(get_width()/2.0, get_height()/2.0), //par_position + 
+// 							DEFAULT_TEXT_COLOR);
+// 	add_visual_object(text);
+
+// 	click = par_click;
+// }
 
 Button::~Button()
 {

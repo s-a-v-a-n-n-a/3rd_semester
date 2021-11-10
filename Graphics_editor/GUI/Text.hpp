@@ -26,7 +26,7 @@ private:
 
 public:
 	Text(const size_t par_type, const char *par_text, const size_t par_font_size, const Vector_ll &par_position, const Color &par_color)
-	: Visual_object(par_type, par_position, par_color, strlen(par_text), par_font_size)
+	: Visual_object({par_type, par_position, nullptr, par_color, strlen(par_text), par_font_size})
 	{
 		set_color(par_color);
 

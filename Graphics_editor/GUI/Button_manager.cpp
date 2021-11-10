@@ -1,14 +1,25 @@
 #include "Button_manager.hpp"
 
-Button_manager::Button_manager(const size_t par_type, const Vector_ll &par_position, Color par_color, double par_width, double par_height)
-: Visual_object(par_type, par_position, par_color, par_width, par_height)
+Button_manager::Button_manager(const Visual_object::Config &par_base)
+: Visual_object(par_base), current_end_position(par_base.position)
 {
-    size_t button_height = par_height;
+    // size_t button_height = par_height;
 
-    size_t current_button_offset = 0;
+    // size_t current_button_offset = 0;
 
-    current_end_position = par_position;
+    // current_end_position = par_position;
+    ;
 }
+
+// Button_manager::Button_manager(const size_t par_type, const Vector_ll &par_position, Color par_color, double par_width, double par_height)
+// : Visual_object(par_type, par_position, par_color, par_width, par_height)
+// {
+//     size_t button_height = par_height;
+
+//     size_t current_button_offset = 0;
+
+//     current_end_position = par_position;
+// }
 
 Button_manager::~Button_manager()
 {
@@ -23,11 +34,14 @@ Button_manager::~Button_manager()
 
 Button *Button_manager::add_button(Button_delegate *par_delegate, const char *par_text, const Color par_color, const size_t par_width, const size_t par_height)
 {
-	Button *new_button = new Button((size_t)Vidget_type::BUTTON,
-    								current_end_position, 
-    								par_color, 
-								  	par_width, 
-								  	par_height,
+	Visual_object::Config buttton_base = { (size_t)Vidget_type::BUTTON,
+    										current_end_position, 
+    										nullptr,
+    										par_color, 
+								  			par_width, 
+								  			par_height };
+
+	Button *new_button = new Button(buttton_base,
 								  	par_delegate, 
 								  	par_text);
 
@@ -42,11 +56,14 @@ Button *Button_manager::add_button(Button_delegate *par_delegate, const char *pa
 {
 	size_t button_width = par_width == 0 ? par_texture->get_width() : par_width;
 
-	Button *new_button = new Button((size_t)Vidget_type::BUTTON,
-    								current_end_position, 
-    								par_texture,
-    								par_width,
-    								par_height,
+	Visual_object::Config buttton_base = { (size_t)Vidget_type::BUTTON,
+    										current_end_position, 
+    										par_texture,
+    										TRANSPARENT, 
+								  			par_width, 
+								  			par_height };
+
+	Button *new_button = new Button(buttton_base,
 								  	par_delegate, 
 								  	par_text);
 

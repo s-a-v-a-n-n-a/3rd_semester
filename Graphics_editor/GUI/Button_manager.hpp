@@ -11,7 +11,7 @@ private:
 	Vector_ll current_end_position;
 
 public:
-	Button_manager(const size_t par_type, const Vector_ll &par_position, Color par_color, double par_width, double par_height);
+	Button_manager(const Visual_object::Config &par_base);
 	~Button_manager();
 
 	Button *add_button(Button_delegate *par_delegate, const char *par_text, const Color par_color, const size_t par_width, const size_t par_height = DEFAULT_BUTTON_HEIGHT);

@@ -3,6 +3,7 @@
 
 #include "../GUI/Visual_object_base.hpp"
 #include "../GUI/Button.hpp"
+#include "../GUI/Resource_manager.hpp"
 
 #include "Graphical_delegates.hpp"
 #include "Pencil.hpp"
@@ -22,7 +23,7 @@ private:
 	Vector_ll current_position;
 
 public:
-	Color_picker(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil);
+	Color_picker(const Visual_object::Config &par_base, Pencil *par_pencil);
 
 	void set_main_color(const Color &par_main);
 

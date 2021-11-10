@@ -1,35 +1,43 @@
 #include "Canvas.hpp"
 
-Canvas::Canvas(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil)
-: Visual_object(par_type, par_position, par_color, par_width, par_height)
+Canvas::Canvas(const Visual_object::Config &par_base, Pencil *par_pencil)
+: Visual_object(par_base), pencil(par_pencil), current_drawing_color(BLACK), drawing_state(false)
 {
-	pencil = par_pencil;
-
-	current_drawing_color = BLACK;
-
-	drawing = new Color[par_width * par_height];
-	for (size_t i = 0; i < par_width * par_height; ++i)
+	drawing = new Color[get_width() * get_height()];
+	for (size_t i = 0; i < get_width() * get_height(); ++i)
 		drawing[i] = WHITE;
-
-	drawing_state = false;
 }
 
-Canvas::Canvas(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Pencil *par_pencil)
-: Visual_object(par_type, par_position, par_texture, par_width, par_height)
-{
-	size_t new_width = par_texture->get_width();
-	size_t new_height = par_texture->get_height();
+// Canvas::Canvas(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil)
+// : Visual_object(par_type, par_position, par_color, par_width, par_height)
+// {
+// 	pencil = par_pencil;
 
-	pencil = par_pencil;
+// 	current_drawing_color = BLACK;
 
-	current_drawing_color = BLACK;
+// 	drawing = new Color[par_width * par_height];
+// 	for (size_t i = 0; i < par_width * par_height; ++i)
+// 		drawing[i] = WHITE;
 
-	drawing = new Color[par_width * par_height];
-	for (size_t i = 0; i < par_width * par_height; ++i)
-		drawing[i] = WHITE;
+// 	drawing_state = false;
+// }
 
-	drawing_state = false;
-}
+// Canvas::Canvas(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Pencil *par_pencil)
+// : Visual_object(par_type, par_position, par_texture, par_width, par_height)
+// {
+// 	size_t new_width = par_texture->get_width();
+// 	size_t new_height = par_texture->get_height();
+
+// 	pencil = par_pencil;
+
+// 	current_drawing_color = BLACK;
+
+// 	drawing = new Color[par_width * par_height];
+// 	for (size_t i = 0; i < par_width * par_height; ++i)
+// 		drawing[i] = WHITE;
+
+// 	drawing_state = false;
+// }
 
 void Canvas::draw_point(const size_t par_x, const size_t par_y)
 {

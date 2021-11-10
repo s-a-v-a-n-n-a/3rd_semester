@@ -2,6 +2,7 @@
 #define CANVAS_MANAGER_MANAGER_H
 
 #include "../GUI/Visual_object_base.hpp"
+#include "../GUI/Resource_manager.hpp"
 
 class Canvas_manager_manager;
 
@@ -19,8 +20,9 @@ private:
 	// Drop_down_menu *drop_and_down_menu;
 
 public:
-	Canvas_manager_manager(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil);
-	Canvas_manager_manager(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Pencil *par_pencil);
+	Canvas_manager_manager(const Visual_object::Config &par_base, Pencil *par_pencil);
+	// Canvas_manager_manager(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil);
+	// Canvas_manager_manager(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Pencil *par_pencil);
 	~Canvas_manager_manager() = default;
 
 	Window_control_panel *create_control_panel(Visual_object *parent, const Vector_ll &position, const size_t width, const size_t height);
@@ -33,6 +35,8 @@ public:
 
 	void add_canvas();
 	Canvas *get_active_canvas();
+
+	// Window_control_panel *create_control_panel(Visual_object *parent, const Vector_ll &position, const size_t width, const size_t height);
 };
 
 #endif // CANVAS_MANAGER_MANAGER_H
