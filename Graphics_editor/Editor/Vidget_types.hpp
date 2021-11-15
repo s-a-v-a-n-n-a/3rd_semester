@@ -17,7 +17,7 @@ enum class Vidget_type
 	GRADIENT_BAR,
 	COLOR_PICKER,
 	SPLINE,
-	SPLINE_MANAGER,
+	EFFECTS_WINDOW,
 	EDITOR
 };
 

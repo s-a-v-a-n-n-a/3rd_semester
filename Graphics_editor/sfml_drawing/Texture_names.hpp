@@ -19,7 +19,10 @@ const char SIMPLE_BUTTON[] = "graphical_attributes/Textures/Simple_button_textur
 const char SIMPLE_BUTTON_MOVE[] = "graphical_attributes/Textures/Simple_button_move_texture.png";
 
 const char GRADIENT_BAR_TEXTURE[] = "graphical_attributes/Textures/Gradient_bar.png";
+
 const char PICKING_CIRCLE_TEXTURE[] = "graphical_attributes/Textures/circle.png";
+const char PICKING_RECT_TEXTURE[] = "graphical_attributes/Textures/rectangle.png";
+
 const char TOOLS_BACKGROUND_TEXTURE[] = "graphical_attributes/Textures/Tools_background.png";
 const char BRUSHES_BACKGROUND_TEXTURE[] = "graphical_attributes/Textures/Brush_size_background.png";
 const char WINDOW_CONTROL_TEXTURE[] = "graphical_attributes/Textures/Window_control.png";

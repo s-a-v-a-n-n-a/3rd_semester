@@ -63,6 +63,9 @@ public:
 
 		return { (vector_type)((double)x / scale), (vector_type)((double)y / scale) };
 	}
+
+	bool operator==(const Radius_vector &other) const { if (x == other.x && y == other.y) return true; return false; }
+	bool operator!=(const Radius_vector &other) const { if (x != other.x || y != other.y) return true; return false; }
 	
 	void componentwise_multiplication(const Radius_vector &other)
 	{ 

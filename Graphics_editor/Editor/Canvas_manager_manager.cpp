@@ -74,6 +74,12 @@ Window_control_panel *Canvas_manager_manager::create_control_panel(Visual_object
 
 void Canvas_manager_manager::add_canvas()
 {
+	if ((get_objects()->get_length() - 1) * DEFAULT_TAB_WIDTH >= get_width())
+	{
+		printf("Unable to create new canvas\n");
+		return;
+	}
+
 	Visual_object::Config canvas_base = { (size_t)Vidget_type::CANVAS_MANAGER, get_position() + Vector_ll(0.0, DEFAULT_BUTTON_HEIGHT), nullptr, WHITE, get_width(), get_height() - DEFAULT_BUTTON_HEIGHT };
 	Canvas_manager *canvas = new Canvas_manager(canvas_base, pencil, get_objects()->get_length() - 2);
 

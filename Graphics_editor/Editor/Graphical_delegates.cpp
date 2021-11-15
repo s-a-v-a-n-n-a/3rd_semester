@@ -31,10 +31,12 @@ void Interactive::set_interactive(Visual_object *par_to_interact)
 {
 	to_interact = par_to_interact;
 }
+
 // ---------------------------------------------------------------------------------------------------------
 
 // Animating
 // ---------------------------------------------------------------------------------------------------------
+
 Animating::Animating(Visual_object *par_to_animate) 
 : to_animate(nullptr), move_in(nullptr), move_out(nullptr), move_in_index(-1), move_out_index(-1)
 {
@@ -43,6 +45,9 @@ Animating::Animating(Visual_object *par_to_animate)
 
 bool Animating::on_mouse_click(const size_t par_x, const size_t par_y)
 {
+	Full_texture *default_texture = ((Animating_texture*)(to_animate->get_texture()))->get_default_texture();
+	((Animating_texture*)(to_animate->get_texture()))->set_current_texture(default_texture);
+	
 	if (move_in)
 	{
 		Animation_manager::get_instance()->slow_delete_animation(move_in);
@@ -73,11 +78,11 @@ bool Animating::on_mouse_move(const Vector_ll from, const Vector_ll to)
 				move_out_index = -1;
 			}
 
-			move_in = new Animation((Animating_texture*)to_animate->get_texture(), to_animate, ((Animating_texture*)(to_animate->get_texture()))->get_default_texture(), ((Animating_texture*)(to_animate->get_texture()))->get_move_texture(), 0.01);
+			move_in = new Animation((Animating_texture*)to_animate->get_texture(), to_animate, ((Animating_texture*)(to_animate->get_texture()))->get_default_texture(), ((Animating_texture*)(to_animate->get_texture()))->get_move_texture(), 0.05);
 			move_in_index = Animation_manager::get_instance()->add_animation(move_in);
 		}
 	}
-	else if(!to_animate->point_inside(to.get_x(), to.get_y()))
+	else if(!to_animate->point_inside(to.get_x(), to.get_y()) && to_animate->point_inside(from.get_x(), from.get_y()))
 	{
 		if (!move_out)
 		{
@@ -88,7 +93,7 @@ bool Animating::on_mouse_move(const Vector_ll from, const Vector_ll to)
 				move_in_index = -1;
 			}
 			
-			move_out = new Animation((Animating_texture*)to_animate->get_texture(), to_animate, ((Animating_texture*)(to_animate->get_texture()))->get_move_texture(), ((Animating_texture*)(to_animate->get_texture()))->get_default_texture(), 0.01);
+			move_out = new Animation((Animating_texture*)to_animate->get_texture(), to_animate, ((Animating_texture*)(to_animate->get_texture()))->get_move_texture(), ((Animating_texture*)(to_animate->get_texture()))->get_default_texture(), 0.05);
 			move_out_index = Animation_manager::get_instance()->add_animation(move_out);
 		}
 	}
@@ -100,6 +105,53 @@ void Animating::set_animating(Visual_object *par_to_animate)
 {
 	to_animate = par_to_animate;
 }
+// ---------------------------------------------------------------------------------------------------------
+
+// Magnetic
+// ---------------------------------------------------------------------------------------------------------
+// bool Magnetic::in_bounds(const size_t par_x, const size_t par_y)
+// {
+// 	if (par_x >= left_bound.get_x() && par_x <= right_bound.get_x()
+// 		&& par_y >= left_bound.get_y() && par_y <= right_bound.get_y())
+// 		return true;
+
+// 	return false;
+// }
+
+// bool Magnetic::on_mouse_click(const size_t par_x, const size_t par_y)
+// {
+// 	printf("mouse!!!\n");
+
+// 	if (!pressed)
+// 	{
+// 		pressed = true;
+
+// 		if (in_bounds(par_x, par_y))
+// 			to_control->set_position(Vector_ll(par_x, par_y));
+// 	}
+// 	else
+// 		pressed = false;
+
+// 	return true;
+// }
+
+// bool Magnetic::on_mouse_move(const Vector_ll from, const Vector_ll to)
+// {
+// 	printf("it is moving\n");
+
+// 	if (pressed && in_bounds(to.get_x(), to.get_y()))
+// 	{
+// 		to_control->set_position(to);
+
+// 		return true;
+// 	}
+// 	else if (!in_bounds(to.get_x(), to.get_y()))
+// 	{
+// 		pressed = false;
+
+// 		return false;
+// 	}
+// }
 // ---------------------------------------------------------------------------------------------------------
 
 // Restore_delegate
@@ -117,10 +169,12 @@ bool Restore_delegate::on_mouse_click(const size_t par_x, const size_t par_y)
 
 	return true;
 }
+
 // ---------------------------------------------------------------------------------------------------------
 
 // Animating_restore_delegate
 // ---------------------------------------------------------------------------------------------------------
+
 Animating_restore_delegate::Animating_restore_delegate(Visual_object *par_to_restore, Visual_object *par_to_interact)
 : Restore_delegate(par_to_restore), Animating(par_to_interact)
 {
@@ -137,6 +191,7 @@ bool Animating_restore_delegate::on_mouse_move(const Vector_ll from, const Vecto
 {
 	return Animating::on_mouse_move(from, to);
 }
+
 // ---------------------------------------------------------------------------------------------------------
 
 
@@ -305,11 +360,20 @@ bool Drag_and_drop_delegate::on_mouse_release()
 
 bool Drag_and_drop_delegate::on_mouse_move(const Vector_ll from, const Vector_ll to)
 {
+	// if (to_change_place->point_inside(to.get_x(), to.get_y()))
+	// {
+	// 	clicked = false;
+	// 	return false;
+	// }
+
 	if (clicked)
 	{
 		last_position = to;
 
-		Vector_ll new_position = to_change_place->get_position() + last_position - first_position;
+		// printf("last: x %lld, y %lld; new: x %lld, y %lld\n", to_change_place->get_position().get_x(), to_change_place->get_position().get_y(), (to_change_place->get_position() + last_position - first_position).get_x(), (to_change_place->get_position() + last_position - first_position).get_y());
+
+		// Vector_ll new_position = to_change_place->get_position() + last_position - first_position;
+		Vector_ll new_position = to_change_place->get_position() + to - from;
 		bool bad_position = false;
 
 		if (new_position.get_x() < 0)
@@ -328,8 +392,81 @@ bool Drag_and_drop_delegate::on_mouse_move(const Vector_ll from, const Vector_ll
 
 		to_change_place->set_position(new_position);
 		first_position = last_position;
+
+		return true;
 	}
+	else
+		clicked = false;
+
+	return false;
+}
+
+// One_dim_move
+// ---------------------------------------------------------------------------------------------------------
+
+One_dim_move::One_dim_move(Visual_object *par_to_change_place, const bool par_x_dimension) 
+: to_change_place(par_to_change_place), clicked(false), first_position(0, 0), last_position(0, 0), x_dimension(par_x_dimension)
+{
+	;
+}
+
+bool One_dim_move::on_mouse_click(const size_t par_x, const size_t par_y)
+{
+	clicked = true;
+
+	first_position = Vector_ll(par_x, par_y);
 
 	return true;
 }
-// ---------------------------------------------------------------------------------------------------------
+
+bool One_dim_move::on_mouse_release()
+{
+	clicked = false;
+
+	first_position = last_position;
+
+	return true;
+}
+
+bool One_dim_move::on_mouse_move(const Vector_ll from, const Vector_ll to)
+{
+	// if (to_change_place->point_inside(to.get_x(), to.get_y()))
+	// {
+	// 	clicked = false;
+	// 	return false;
+	// }
+
+	if (clicked)
+	{
+		last_position = to;
+
+		Vector_ll new_position = to_change_place->get_position() + to - from;
+		if (x_dimension)
+			new_position.set_y(to_change_place->get_position().get_y());
+		else
+			new_position.set_x(to_change_place->get_position().get_x());
+
+		bool bad_position = false;
+
+		if (new_position.get_x() < 0)
+		{
+			new_position.set_x(0);
+			bad_position = true;
+		}
+		if (new_position.get_y() < 0)
+		{
+			new_position.set_y(0);
+			bad_position = true;
+		}
+
+		if (bad_position)
+			on_mouse_release();
+
+		to_change_place->set_position(new_position);
+		first_position = last_position;
+
+		return true;
+	}
+
+	return false;
+}

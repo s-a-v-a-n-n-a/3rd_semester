@@ -4,6 +4,14 @@
 #include "../GUI/Visual_object_base.hpp"
 #include "Pencil.hpp"
 
+struct RGBA_effect
+{
+	int r;
+	int g;
+	int b;
+	int a;
+};
+
 class Canvas : public Visual_object
 {
 private:
@@ -12,7 +20,10 @@ private:
 	// Color current_background_color;
 	Color current_drawing_color;
 
+	Color *original_drawing;
 	Color *drawing;
+
+	RGBA_effect effect[MAX_COLOR_VALUE + 1];
 
 	bool drawing_state;
 
@@ -25,6 +36,7 @@ public:
 
 	~Canvas()
 	{
+		delete [] original_drawing;
 		delete [] drawing;
 	}
 

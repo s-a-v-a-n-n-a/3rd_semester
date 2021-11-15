@@ -34,6 +34,9 @@ Button_manager::~Button_manager()
 
 Button *Button_manager::add_button(Button_delegate *par_delegate, const char *par_text, const Color par_color, const size_t par_width, const size_t par_height)
 {
+	if (current_end_position.get_x() + par_width > get_position().get_x() + get_width())
+		return NULL;
+
 	Visual_object::Config buttton_base = { (size_t)Vidget_type::BUTTON,
     										current_end_position, 
     										nullptr,
@@ -54,6 +57,9 @@ Button *Button_manager::add_button(Button_delegate *par_delegate, const char *pa
 
 Button *Button_manager::add_button(Button_delegate *par_delegate, const char *par_text, Texture *par_texture, const size_t par_width, const size_t par_height)
 {
+	if (current_end_position.get_x() + par_width > get_position().get_x() + get_width())
+		return NULL;
+
 	size_t button_width = par_width == 0 ? par_texture->get_width() : par_width;
 
 	Visual_object::Config buttton_base = { (size_t)Vidget_type::BUTTON,
@@ -67,8 +73,8 @@ Button *Button_manager::add_button(Button_delegate *par_delegate, const char *pa
 								  	par_delegate, 
 								  	par_text);
 
-	current_end_position += Vector_ll(button_width, 0.0);
-
+	current_end_position += Vector_ll(par_width, 0.0);
+	
 	add_visual_object(new_button);
 
 	return new_button;

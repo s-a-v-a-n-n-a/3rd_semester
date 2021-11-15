@@ -55,6 +55,8 @@ public:
 
 	virtual void draw(Screen_information *screen);
 
+	void move_to_end(Visual_object *child, size_t child_number);
+
 	virtual bool point_inside (const size_t par_x, const size_t par_y);
 	virtual bool on_mouse_click  (const bool state, const size_t par_x, const size_t par_y); //const Mouse_event par_event,
 	virtual bool on_mouse_move	(const Vector_ll from, const Vector_ll to);

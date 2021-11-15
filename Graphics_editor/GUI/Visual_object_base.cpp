@@ -8,53 +8,6 @@ Visual_object::Visual_object(const Visual_object::Config &par_base)
 	;
 }
 
-// Visual_object::Visual_object(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height)
-// : objects(), type(par_type), position(0, 0), color(WHITE), width(0), height(0)
-// {
-// 	stable_position = par_position;
-// 	position = par_position;
-// 	color    = par_color;
-// 	texture  = NULL;
-
-// 	width  = par_width;
-// 	height = par_height;
-
-// 	current_active = NULL;
-// 	active         = false;
-// 	visible        = true;
-// 	reactive       = true;
-// 	alive          = true;
-
-// 	// for (size_t i = 0; i < VIDGETS_AMOUNT; ++i)
-// 	// 	type_amount = 0;
-// }
-
-// Visual_object::Visual_object(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height)
-// : objects(), type(par_type), position(0, 0), color(WHITE), width(0), height(0)
-// {
-// 	stable_position = par_position;
-// 	position = par_position;
-// 	color    = TRANSPARENT;
-// 	texture  = par_texture;
-
-// 	if (par_width && par_height)
-// 	{
-// 		width = par_width;
-// 		height = par_height;
-// 	}
-// 	else
-// 	{
-// 		width = texture->get_width();
-// 		height = texture->get_height();
-// 	}
-
-// 	current_active = NULL;
-// 	active         = false;
-// 	visible        = true;
-// 	reactive       = true;
-// 	alive          = true;
-// }
-
 void Visual_object::add_visual_object(Visual_object *par_object) 
 { 
 	objects.add_to_end(par_object); 
@@ -149,6 +102,17 @@ bool Visual_object::point_inside(const size_t par_x, const size_t par_y)
 	return false;
 }
 
+void Visual_object::move_to_end(Visual_object *child, size_t child_number)
+{
+	set_active(child);
+	child->set_active_state(true);
+	
+	// slow_delete
+	objects.extract(child_number);
+	// push
+	add_visual_object(child);
+}
+
 bool Visual_object::on_mouse_click(const bool state, const size_t par_x, const size_t par_y) // const Mouse_event par_event, 
 {
 	if (point_inside(par_x, par_y))
@@ -159,13 +123,14 @@ bool Visual_object::on_mouse_click(const bool state, const size_t par_x, const s
 		{
 			if ((get_objects()->get_array()[i])->on_mouse_click(state, par_x, par_y))//(((get_objects()->get_array()[i])->get_reactive() || state == Mouse_state::MOVED) && (get_objects()->get_array()[i])->on_mouse(state, par_x, par_y)) // ??????
 			{
-				set_active(get_objects()->get_array()[i]);
-				(get_objects()->get_array()[i])->set_active_state(true);
+				// set_active(get_objects()->get_array()[i]);
+				// (get_objects()->get_array()[i])->set_active_state(true);
 				
-				// slow_delete
-				objects.extract(i);
-				// push
-				add_visual_object(get_active());
+				// // slow_delete
+				// objects.extract(i);
+				// // push
+				// add_visual_object(get_active());
+				move_to_end(get_objects()->get_array()[i], i);
 				
 				return true;
 			}
@@ -179,28 +144,35 @@ bool Visual_object::on_mouse_click(const bool state, const size_t par_x, const s
 
 bool Visual_object::on_mouse_move(const Vector_ll from, const Vector_ll to)
 {
+	bool move = false;
+	bool tmp_move = false;
+
 	if (get_reactive() && (point_inside(from.get_x(), from.get_y()) || point_inside(to.get_x(), to.get_y())))
 	{
 		size_t objects_amount = objects.get_length();
 		
 		for (long long i = (long long)objects_amount - 1; i >= 0; --i)
 		{
-			if ((get_objects()->get_array()[i])->on_mouse_move(from, to))//(((get_objects()->get_array()[i])->get_reactive() || state == Mouse_state::MOVED) && (get_objects()->get_array()[i])->on_mouse(state, par_x, par_y)) // ??????
-			{
-				set_active(get_objects()->get_array()[i]);
-				(get_objects()->get_array()[i])->set_active_state(true);
+			tmp_move = (objects.get_array()[i])->on_mouse_move(from, to);
+			
+			if (tmp_move)
+				move = tmp_move;
+			// if ((objects.get_array()[i])->on_mouse_move(from, to))//(((get_objects()->get_array()[i])->get_reactive() || state == Mouse_state::MOVED) && (get_objects()->get_array()[i])->on_mouse(state, par_x, par_y)) // ??????
+			// {
+			// 	// set_active(get_objects()->get_array()[i]);
+			// 	// (get_objects()->get_array()[i])->set_active_state(true);
 				
-				// slow_delete
-				objects.extract(i);
-				// push
-				add_visual_object(get_active());
+			// 	// slow_delete
+			// 	// objects.extract(i);
+			// 	// // push
+			// 	// add_visual_object(get_active());
 				
-				return true;
-			}
+			// 	return true;
+			// }
 		}
 	}
 
-	return false;
+	return move;
 }
 
 bool Visual_object::on_key_pressed(const unsigned key_mask)
@@ -211,12 +183,13 @@ bool Visual_object::on_key_pressed(const unsigned key_mask)
 	{
 		if ((get_objects()->get_array()[i])->get_reactive() && (get_objects()->get_array()[i])->on_key_pressed(key_mask)) // ??????
 		{
-			set_active(get_objects()->get_array()[i]);
+			// set_active(get_objects()->get_array()[i]);
 			
-			// slow_delete
-			objects.extract(i);
-			// push
-			add_visual_object(get_active());
+			// // slow_delete
+			// objects.extract(i);
+			// // push
+			// add_visual_object(get_active());
+			move_to_end(get_objects()->get_array()[i], i);
 			
 			return true;
 		}

@@ -29,6 +29,9 @@ void delete_editor(Graphical_editor_main_page *editor)
 }
 
 Vector_ll click_place(0, 0);
+
+// maybe class Application's method
+// it may can also capture mouse
 void draw_editor(Graphical_editor_main_page *editor)
 {
 	Screen_information screen(DEFAULT_SIZE, DEFAULT_SIZE);

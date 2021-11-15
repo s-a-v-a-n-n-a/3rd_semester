@@ -9,6 +9,8 @@ Animation::Animation(Animating_texture *par_to_store, Visual_object *par_changab
 
 void Animation::tick(const double time)
 {
+	// printf("time %lg\n", current_time);
+
 	if (current_time > 1)
 	{
 		set_alive(false);
@@ -30,7 +32,11 @@ void Animation::tick(const double time)
 
 	(*(to_store->get_current_texture())).draw(sprite_from);
 	(*(to_store->get_current_texture())).draw(sprite_to);
+	(*(to_store->get_current_texture())).display();
 }
+
+// Animation manager
+// ---------------------------------------------------------------------------------------------------------------
 
 Animation_manager * Animation_manager::animation_manager = nullptr;
 Animation_manager_destroyer Animation_manager::destroyer;

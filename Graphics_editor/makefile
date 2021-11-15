@@ -1,8 +1,8 @@
 COMPILATOR = g++
 CFLAGS = -g -masm=intel -no-pie -march=native -O3 -std=c++17
 
-link: screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o tools_vidget.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o main.o
-	$(COMPILATOR) screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o tools_vidget.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o main.o -o main -lsfml-graphics -lsfml-window -lsfml-system
+link: screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o main.o
+	$(COMPILATOR) screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o main.o -o main -lsfml-graphics -lsfml-window -lsfml-system
 
 main.o : main.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o main.o main.cpp
@@ -70,8 +70,8 @@ graphical_delegate.o: Editor/Graphical_delegates.cpp
 color_picker.o: Editor/Color_picker.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o color_picker.o Editor/Color_picker.cpp
 
-tools_vidget.o: Editor/Tools_vidget.cpp
-	$(COMPILATOR) $(CFLAGS) -c -o tools_vidget.o Editor/Tools_vidget.cpp
+color_selection.o: Editor/Color_selection.cpp
+	$(COMPILATOR) $(CFLAGS) -c -o color_selection.o Editor/Color_selection.cpp
 
 canvas_manager.o: Editor/Canvas_manager.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o canvas_manager.o Editor/Canvas_manager.cpp
@@ -84,6 +84,9 @@ window_control_panel.o: Editor/Window_control_panel.cpp
 
 graphical_editor.o: Editor/Graphical_editor_main_page.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o graphical_editor.o Editor/Graphical_editor_main_page.cpp
+
+spline.o: Editor/Spline.cpp
+	$(COMPILATOR) $(CFLAGS) -c -o spline.o Editor/Spline.cpp
 # -----------------------------------------------------------------------------------
 
 clean: 

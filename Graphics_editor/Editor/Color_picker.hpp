@@ -15,7 +15,7 @@ class Color_picker : public Visual_object
 private:
 	Pencil *pencil;
 
-	Button *picker;
+	Magnetic *picker;
 
 	Color color_array[MAX_COLOR_VALUE * MAX_COLOR_VALUE];
 	Color main_color;

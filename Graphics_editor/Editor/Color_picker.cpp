@@ -2,23 +2,6 @@
 
 const size_t DEFAULT_POINTER_RADIUS = 5;
 
-// Color_picker::Color_picker(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil)
-// : Visual_object(par_type, par_position, par_color, par_width, par_height), pencil(par_pencil), main_color(RED), current_position(0, par_height)
-// {
-// 	set_main_color(RED);
-
-// 	Full_texture *circle = new Full_texture(PICKING_CIRCLE_TEXTURE, 18, 18);
-	
-// 	size_t circle_width = circle->get_width();
-// 	size_t circle_height = circle->get_height();
-
-// 	picker = new Button((size_t)Vidget_type::BUTTON, par_position + Vector_ll(circle_width, circle_height), circle, circle_width, circle_height, nullptr, "");
-// 	Drag_and_drop_delegate *dnd = new Drag_and_drop_delegate(picker);
-// 	picker->set_delegate(dnd);
-
-// 	add_visual_object(picker);
-// }
-
 Color_picker::Color_picker(const Visual_object::Config &par_base, Pencil *par_pencil)
 : Visual_object(par_base), pencil(par_pencil), main_color(RED), current_position(0, get_height())
 {
@@ -29,11 +12,12 @@ Color_picker::Color_picker(const Visual_object::Config &par_base, Pencil *par_pe
 	size_t circle_width = circle->get_width();
 	size_t circle_height = circle->get_height();
 
-	Visual_object::Config buttton_base = { (size_t)Vidget_type::BUTTON, get_position() + Vector_ll(circle_width, circle_height), circle, TRANSPARENT, circle_width, circle_height };
-	picker = new Button(buttton_base, nullptr, "");
+	Visual_object::Config buttton_base = { (size_t)Vidget_type::BUTTON, get_position() + Vector_ll(0, get_height()) - Vector_ll(0, circle_height), circle, TRANSPARENT, circle_width, circle_height };
+	picker = new Magnetic(buttton_base, get_position(), get_position() + Vector_ll(get_width(), get_height()) - Vector_ll(circle_width, circle_height));
 	
-	Drag_and_drop_delegate *dnd = new Drag_and_drop_delegate(picker);
-	picker->set_delegate(dnd);
+	// Drag_and_drop_delegate *dnd = new Drag_and_drop_delegate(picker);
+	// Magnetic *magnit_delegate = new Magnetic(picker, get_position(), get_position() + Vector_ll(get_width(), get_height()));
+	// picker->set_delegate(magnit_delegate);
 
 	add_visual_object(picker);
 }
@@ -68,15 +52,17 @@ bool Color_picker::on_mouse_click(const bool state, const size_t par_x, const si
 			Vector_ll last_position = current_position;
 			current_position = Vector_ll(par_x, par_y) - get_position();
 			
-			picker->set_position(picker->get_position() + current_position - last_position);
-			picker->on_mouse_click(state, par_x, par_y);
+			// picker->set_position(picker->get_position() + current_position - last_position);
+			picker->on_mouse_click(state, par_x - picker->get_width()/2, par_y - picker->get_height()/2);
 			
 			set_pencil_color();
 
 			return true;
 		}
 		else
-			picker->on_mouse_click(state, par_x, par_y);
+			picker->on_mouse_click(state, par_x - picker->get_width()/2, par_y - picker->get_height()/2);
+
+		// picker->on_mouse_click(state, par_x, par_y);
 	}
 
 	return false;
@@ -87,7 +73,7 @@ bool Color_picker::on_mouse_move(const Vector_ll from, const Vector_ll to)
 	// printf("move picker\n");
 	// picker->set_position(picker->get_position() + to - last);
 
-	return picker->on_mouse_move(from, to);
+	return picker->on_mouse_move(from, to - Vector_ll(picker->get_width()/2, picker->get_height()/2));
 }
 
 void Color_picker::draw(Screen_information *screen)
@@ -95,8 +81,8 @@ void Color_picker::draw(Screen_information *screen)
 	Vector_ll position(get_position());
 
 	screen->draw_image(color_array, get_position(), get_width(), get_height());
-	
-	Full_texture *circle = new Full_texture(PICKING_CIRCLE_TEXTURE, 18, 18);
-	screen->draw_texture(position + current_position - Vector_ll(circle->get_width()/2, circle->get_height()/2), PICKING_CIRCLE_TEXTURE);
-	delete circle;
+	picker->draw(screen);
+	// Full_texture *circle = new Full_texture(PICKING_CIRCLE_TEXTURE, 18, 18);
+	// screen->draw_texture(position + current_position - Vector_ll(circle->get_width()/2, circle->get_height()/2), PICKING_CIRCLE_TEXTURE);
+	// delete circle;
 }

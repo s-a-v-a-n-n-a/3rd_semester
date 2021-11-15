@@ -113,11 +113,16 @@ public:
 	// }
 	void set_texture(const sf::Texture *par_texture) 
 	{ 
+		// printf("-_________-\n");
+
 		sf::Sprite sprite;
 		sprite.setTexture(*par_texture);
 
+		texture.clear(sf::Color(255, 255, 255, 0));
 		texture.draw(sprite);
+		texture.display();
 	}
+
 	void set_texture(Color *array, const size_t width, const size_t height) override 
 	{ 
 		tmp_texture.update((sf::Uint8*)array, width, height, 0, 0); 
@@ -125,6 +130,7 @@ public:
 		sf::Sprite sprite;
 		sprite.setTexture(tmp_texture);
 
+		texture.clear(sf::Color(255, 255, 255, 0));
 		texture.draw(sprite);
 		texture.display();
 	}

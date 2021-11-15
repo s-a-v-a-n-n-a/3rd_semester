@@ -17,34 +17,6 @@ Button::Button(const Visual_object::Config &base, Button_delegate *par_click, co
 	click = par_click;
 }
 
-// Button::Button(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Button_delegate *par_click, const char *par_text)
-// : Visual_object(par_type, par_position, par_color, par_width, par_height) // const char *par_text = NULL
-// {
-// 	size_t offset = par_height / 2;
-// 	Text *text = new Text((size_t)Vidget_type::TEXT, 
-// 							par_text, 
-// 							offset, 
-// 							par_position + Vector_ll(par_width/2.0, par_height/2.0), //par_position + 
-// 							DEFAULT_TEXT_COLOR);
-// 	add_visual_object(text);
-
-// 	click = par_click;
-// }
-
-// Button::Button(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Button_delegate *par_click, const char *par_text)
-// : Visual_object(par_type, par_position, par_texture, par_width, par_height) // const char *par_text = NULL
-// {
-// 	size_t offset = get_height() / 2;
-// 	Text *text = new Text((size_t)Vidget_type::TEXT, 
-// 							par_text, 
-// 							offset, 
-// 							par_position + Vector_ll(get_width()/2.0, get_height()/2.0), //par_position + 
-// 							DEFAULT_TEXT_COLOR);
-// 	add_visual_object(text);
-
-// 	click = par_click;
-// }
-
 Button::~Button()
 {
 	Visual_object **objects = get_objects()->get_array();
@@ -104,16 +76,126 @@ bool Button::on_mouse_click(const bool state, const size_t par_x, const size_t p
 
 bool Button::on_mouse_move(const Vector_ll from, const Vector_ll to)
 {
-	if (point_inside(from.get_x(), from.get_y()) || point_inside(to.get_x(), to.get_y()))
+	if (point_inside(from.get_x(), from.get_y()))
 	{
 		set_active_state(true);
 		// printf("mouse move\n");
 	    return click->on_mouse_move(from, to);
 	}
+	// else if (!point_inside(to.get_x(), to.get_y()))
+	// {
+	// 	click->on_mouse_release();
+	// 	return false;
+	// }
 	else
 	{
+		click->on_mouse_release();
 		return false;
 	}
 
 	// return click->on_mouse_move(from, to);
+}
+
+Magnetic::Magnetic(const Visual_object::Config &par_base, const Vector_ll &par_left_bound, const Vector_ll &par_right_bound, const size_t par_radius)
+: Visual_object(par_base), left_bound(par_left_bound), right_bound(par_right_bound), pressed(false), radius(par_radius)
+{
+	;
+}
+
+bool Magnetic::in_x_bounds(const size_t par_x, const size_t par_y)
+{
+	if (par_x >= left_bound.get_x() && par_x <= right_bound.get_x() && (left_bound.get_y() - (long long)par_y) <= (long long)radius && ((long long)par_y - right_bound.get_y()) <= (long long)radius)
+		return true;
+
+	return false;
+}
+
+bool Magnetic::in_y_bounds(const size_t par_x, const size_t par_y)
+{
+	if (par_y >= left_bound.get_y() && par_y <= right_bound.get_y() && (left_bound.get_x() - (long long)par_x) <= (long long)radius && ((long long)par_x - right_bound.get_x()) <= (long long)radius)
+	{
+		// printf("y: %lu, y1 %lld; y2 %lld\n", par_y, left_bound.get_y(), right_bound.get_y());
+		return true;
+	}
+
+	return false;
+}
+
+bool Magnetic::on_mouse_click(const bool state, const size_t par_x, const size_t par_y)
+{
+	if (state)
+	{
+		pressed = true;
+
+		bool in_x = in_x_bounds(par_x, par_y);
+		bool in_y = in_y_bounds(par_x, par_y);
+
+		if (in_x && in_y)
+		{
+			// printf("both\n");
+			set_position(Vector_ll(par_x, par_y));
+
+			return true;
+		}
+		else if (in_x)
+		{
+			set_position(Vector_ll(par_x, get_position().get_y()));
+
+			return true;
+		}
+		else if (in_y)
+		{
+			set_position(Vector_ll(get_position().get_x(), par_y));
+
+			return true;
+		}
+
+		pressed = false;
+		return false;
+	}
+	else
+	{
+		// printf("released\n");
+		pressed = false;
+	}
+
+	return true;
+}
+
+bool Magnetic::on_mouse_move(const Vector_ll from, const Vector_ll to)
+{
+	// printf("it is moving: %d\n", in);
+	if (pressed)
+	{
+		bool in_x = in_x_bounds(to.get_x(), to.get_y());
+		bool in_y = in_y_bounds(to.get_x(), to.get_y());
+		
+		if (in_x || in_y)
+		{
+			// set_position(to);
+			if (in_x && in_y)
+			{
+				set_position(to);
+			}
+			else if (in_x)
+			{
+				set_position(Vector_ll(to.get_x(), get_position().get_y()));
+			}
+			else if (in_y)
+			{
+				set_position(Vector_ll(get_position().get_x(), to.get_y()));
+			}
+
+			return true;
+		}
+		else
+			return false;
+	}
+	else// if (!in_bounds(to.get_x(), to.get_y()))
+	{
+		pressed = false;
+
+		return false;
+	}
+	return true;
 }

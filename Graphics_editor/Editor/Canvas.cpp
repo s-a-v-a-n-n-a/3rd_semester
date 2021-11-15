@@ -4,44 +4,22 @@ Canvas::Canvas(const Visual_object::Config &par_base, Pencil *par_pencil)
 : Visual_object(par_base), pencil(par_pencil), current_drawing_color(BLACK), drawing_state(false)
 {
 	drawing = new Color[get_width() * get_height()];
+	original_drawing = new Color[get_width() * get_height()];
 	for (size_t i = 0; i < get_width() * get_height(); ++i)
+	{
+		original_drawing[i] = WHITE;
 		drawing[i] = WHITE;
+	}
+
+	for (int i = 0; i <= (int)MAX_COLOR_VALUE; ++i)
+	{
+		effect[i] = { -1, -1, -1, -1 };
+	}
 }
-
-// Canvas::Canvas(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil)
-// : Visual_object(par_type, par_position, par_color, par_width, par_height)
-// {
-// 	pencil = par_pencil;
-
-// 	current_drawing_color = BLACK;
-
-// 	drawing = new Color[par_width * par_height];
-// 	for (size_t i = 0; i < par_width * par_height; ++i)
-// 		drawing[i] = WHITE;
-
-// 	drawing_state = false;
-// }
-
-// Canvas::Canvas(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Pencil *par_pencil)
-// : Visual_object(par_type, par_position, par_texture, par_width, par_height)
-// {
-// 	size_t new_width = par_texture->get_width();
-// 	size_t new_height = par_texture->get_height();
-
-// 	pencil = par_pencil;
-
-// 	current_drawing_color = BLACK;
-
-// 	drawing = new Color[par_width * par_height];
-// 	for (size_t i = 0; i < par_width * par_height; ++i)
-// 		drawing[i] = WHITE;
-
-// 	drawing_state = false;
-// }
 
 void Canvas::draw_point(const size_t par_x, const size_t par_y)
 {
-	size_t width = get_width();
+	size_t width  = get_width();
 	size_t height = get_height();
 
 	size_t position_x = get_position().get_x();
@@ -59,7 +37,21 @@ void Canvas::draw_point(const size_t par_x, const size_t par_y)
 
 	for (size_t i = begin_y; i < end_y; ++i)
 		for (size_t j = begin_x; j < end_x; ++j)
-			drawing[i * width + j] = current_drawing_color;
+		{
+			size_t index = i * width + j;
+
+			original_drawing[index] = current_drawing_color;
+			
+			unsigned char red    = effect[original_drawing[index].get_r()].r == -1 ? original_drawing[index].get_r() : effect[original_drawing[index].get_r()].r;
+			unsigned char green  = effect[original_drawing[index].get_g()].g == -1 ? original_drawing[index].get_g() : effect[original_drawing[index].get_g()].g;
+			unsigned char blue   = effect[original_drawing[index].get_b()].b == -1 ? original_drawing[index].get_b() : effect[original_drawing[index].get_b()].b;
+			unsigned char bright = effect[original_drawing[index].get_a()].a == -1 ? original_drawing[index].get_a() : effect[original_drawing[index].get_a()].a;
+
+			drawing[index].set_a(bright);
+			drawing[index].set_r(red);
+			drawing[index].set_g(green);
+			drawing[index].set_b(blue);
+		}
 
 	get_texture()->set_texture(drawing, get_width(), get_height());
 }
@@ -91,14 +83,13 @@ bool Canvas::point_inside (const size_t par_x, const size_t par_y)
 
 void Canvas::set_red (const unsigned char from, const unsigned char to)
 {
-	size_t width = get_width();
+	size_t width  = get_width();
 	size_t height = get_height();
 
-	// printf("from: %u, to: %u\n", from, to);
-
+	effect[from].r = to;
 	for (size_t i = 0; i < width * height; ++i)
 	{
-		if (drawing[i].get_r() == from)
+		if (original_drawing[i].get_r() == from)
 		{
 			drawing[i].set_r(to);
 		}
@@ -109,12 +100,13 @@ void Canvas::set_red (const unsigned char from, const unsigned char to)
 
 void Canvas::set_green (const unsigned char from, const unsigned char to)
 {
-	size_t width = get_width();
+	size_t width  = get_width();
 	size_t height = get_height();
 
+	effect[from].g = to;
 	for (size_t i = 0; i < width * height; ++i)
 	{
-		if (drawing[i].get_g() == from)
+		if (original_drawing[i].get_g() == from)
 		{
 			drawing[i].set_g(to);
 		}
@@ -128,9 +120,10 @@ void Canvas::set_blue (const unsigned char from, const unsigned char to)
 	size_t width = get_width();
 	size_t height = get_height();
 
+	effect[from].b = to;
 	for (size_t i = 0; i < width * height; ++i)
 	{
-		if (drawing[i].get_b() == from)
+		if (original_drawing[i].get_b() == from)
 		{
 			drawing[i].set_b(to);
 		}

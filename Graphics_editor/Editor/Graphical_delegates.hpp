@@ -25,6 +25,8 @@ public:
 	void set_interactive(Visual_object *par_to_interact);
 };
 
+// --------------------------------------------------------------------------------------------------------------------------
+
 class Animating : virtual public Button_delegate
 {
 private:
@@ -56,6 +58,8 @@ public:
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
 };
 
+// --------------------------------------------------------------------------------------------------------------------------
+
 class Animating_restore_delegate : public Restore_delegate, public Animating
 {
 public:
@@ -72,6 +76,31 @@ public:
 
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
 };
+
+// --------------------------------------------------------------------------------------------------------------------------
+
+// class Magnetic : public Button_delegate
+// {
+// protected:
+// 	Visual_object *to_control;
+
+// 	Vector_ll left_bound;
+// 	Vector_ll right_bound;
+
+// 	bool pressed;
+
+// public:
+// 	Magnetic(Visual_object *par_to_control, const Vector_ll &par_left_bound, const Vector_ll &par_right_bound) 
+// 	: to_control(par_to_control), left_bound(par_left_bound), right_bound(par_right_bound), pressed(false)
+// 	{ ; }
+
+// 	bool in_bounds(const size_t par_x, const size_t par_y);
+
+// 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+// 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
+// };
+
+// --------------------------------------------------------------------------------------------------------------------------
 
 class Roll_up_delegate : virtual public Button_delegate
 {
@@ -94,6 +123,8 @@ public:
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
 };
 
+// --------------------------------------------------------------------------------------------------------------------------
+
 class Close_delegate : public Button_delegate
 {
 private: 
@@ -115,6 +146,8 @@ public:
 
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
 };
+
+// --------------------------------------------------------------------------------------------------------------------------
 
 class Change_color : public Button_delegate
 {
@@ -140,6 +173,8 @@ public:
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
 };
 
+// --------------------------------------------------------------------------------------------------------------------------
+
 class Drag_and_drop_delegate : public Button_delegate
 {
 private:
@@ -152,6 +187,27 @@ private:
 
 public:
 	Drag_and_drop_delegate(Visual_object *par_to_change_place);
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+	bool on_mouse_release();
+	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
+};
+
+// --------------------------------------------------------------------------------------------------------------------------
+
+class One_dim_move : public Button_delegate
+{
+private:
+	Visual_object *to_change_place;
+
+	bool clicked;
+	bool x_dimension;
+
+	Vector_ll first_position;
+	Vector_ll last_position;
+
+public:
+	One_dim_move(Visual_object *par_to_change_place, const bool par_x_dimension);
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
 	bool on_mouse_release();

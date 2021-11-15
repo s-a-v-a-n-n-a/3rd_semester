@@ -6,8 +6,6 @@
 #include "../GUI/Button_manager.hpp"
 #include "../GUI/Resource_manager.hpp"
 
-#include "Spline_manager.hpp"
-
 #include "Vidget_types.hpp"
 
 // #include "Editor_control_panel.hpp"
@@ -16,8 +14,9 @@
 
 // #include "Canvases_list.hpp"
 #include "Canvas_manager_manager.hpp"
-#include "Tools_vidget.hpp"
-#include "Brush_size_manager.hpp"
+#include "Color_selection.hpp"
+#include "Brush_size_selection.hpp"
+#include "Effects_window.hpp"
 
 #include "Pencil.hpp"
 
@@ -47,14 +46,14 @@ public:
 	// bool on_mouse(const double par_x, const double par_y) override;
 	bool on_key_pressed(const unsigned key_state) override;
 
-	Spline_manager *create_spline_manager(const Vector_ll &position, const size_t width, const size_t height, Canvas *active_canvas);
+	Effects_window *create_effects_window(const Vector_ll &position, const size_t width, const size_t height, Canvas *active_canvas);
 
 	Button_manager *create_button_panel(const Vector_ll &position, const size_t width, const size_t height);
 	Canvas_manager_manager *create_canvas_manager(const Vector_ll &position, const size_t width, const size_t height);
 	Button *create_restore_button(Button_manager *panel, Visual_object *to_restore, const char *text, const size_t width, const size_t height);
 	Button *create_canvas_creator(Button_manager *panel, Canvas_manager_manager *canvas_manager, const char *text, const size_t width, const size_t height);
-	Tools_vidget *create_color_vidget(const Vector_ll &position, const size_t width, const size_t height);
-	Brush_size_manager *create_size_vidget(const Vector_ll &position, const size_t width, const size_t height);
+	Color_selection_window *create_color_vidget(const Vector_ll &position, const size_t width, const size_t height);
+	Brush_size_selection_window *create_size_vidget(const Vector_ll &position, const size_t width, const size_t height);
 
 	// test
 	Test_button *create_test_button(const Vector_ll &position, const char *text, const size_t width, const size_t height);
