@@ -16,6 +16,8 @@ class Button : public Visual_object
 private:
 	Button_delegate *click;
 
+	bool pressed;
+
 public:
 	Button() = delete;
 	Button(const Visual_object::Config &base, Button_delegate *par_click, const char *par_text);

@@ -115,31 +115,36 @@ void Visual_object::move_to_end(Visual_object *child, size_t child_number)
 
 bool Visual_object::on_mouse_click(const bool state, const size_t par_x, const size_t par_y) // const Mouse_event par_event, 
 {
-	if (point_inside(par_x, par_y))
+	bool result = false;
+	
+	if (!point_inside(par_x, par_y))
+		return result;
+	
+	size_t objects_amount = objects.get_length();
+	
+	for (long long i = (long long)objects_amount - 1; i >= 0; --i)
 	{
-		size_t objects_amount = objects.get_length();
-		
-		for (long long i = (long long)objects_amount - 1; i >= 0; --i)
+		if ((get_objects()->get_array()[i])->on_mouse_click(state, par_x, par_y))//(((get_objects()->get_array()[i])->get_reactive() || state == Mouse_state::MOVED) && (get_objects()->get_array()[i])->on_mouse(state, par_x, par_y)) // ??????
 		{
-			if ((get_objects()->get_array()[i])->on_mouse_click(state, par_x, par_y))//(((get_objects()->get_array()[i])->get_reactive() || state == Mouse_state::MOVED) && (get_objects()->get_array()[i])->on_mouse(state, par_x, par_y)) // ??????
-			{
-				// set_active(get_objects()->get_array()[i]);
-				// (get_objects()->get_array()[i])->set_active_state(true);
-				
-				// // slow_delete
-				// objects.extract(i);
-				// // push
-				// add_visual_object(get_active());
-				move_to_end(get_objects()->get_array()[i], i);
-				
-				return true;
-			}
+			// set_active(get_objects()->get_array()[i]);
+			// (get_objects()->get_array()[i])->set_active_state(true);
+			
+			// // slow_delete
+			// objects.extract(i);
+			// // push
+			// add_visual_object(get_active());
+			move_to_end(get_objects()->get_array()[i], i);
+			
+			result = true;
 
-			set_active_state(false);
+			// if (state)
+				break;
 		}
+
+		set_active_state(false);
 	}
 
-	return false;
+	return result;
 }
 
 bool Visual_object::on_mouse_move(const Vector_ll from, const Vector_ll to)

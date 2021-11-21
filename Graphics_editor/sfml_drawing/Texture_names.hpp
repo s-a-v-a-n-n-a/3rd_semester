@@ -36,6 +36,9 @@ const char SLIDER_DOWN[] = "graphical_attributes/Textures/Arrow_down.png";
 const char SLIDER_UP[] = "graphical_attributes/Textures/Arrow_right.png";
 const char SLIDER[] = "graphical_attributes/Textures/Magnet.png";
 
+const char PENCIL_TEXTURE[] = "graphical_attributes/Textures/Brush.png";
+
 extern const char *COLORED_BUTTONS[];
+extern const char *TOOLS_BUTTONS[];
 
 #endif // TEXTURE_NAMES_H

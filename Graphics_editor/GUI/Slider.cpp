@@ -77,7 +77,10 @@ void Slider::count_intermediate_state() const
 	size_t new_point = (size_t)(current_relation * (double)((double)high_limit - (double)low_limit) + (double)low_limit);
 
 	if (horizontal)
+	{
+		printf("calling delegate\n");
 		delegate->on_mouse_click(new_point, 0);
+	}
 	else
 		delegate->on_mouse_click(0, new_point);
 }

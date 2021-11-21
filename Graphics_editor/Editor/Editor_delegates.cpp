@@ -65,14 +65,16 @@ bool Canvas_keeper::on_mouse_click(const size_t par_x, const size_t par_y)
 
 bool Red_component_changer::on_mouse_click(const size_t par_x, const size_t par_y)
 {
-	to_change->set_red(par_x, par_y);
+	// (Canvas*)to_change->set_red(par_x, par_y);
+	effect->set_red(par_x, par_y);
 
 	return true;
 }
 
 bool Red_component_changer::on_mouse_move(const Vector_ll from, const Vector_ll to)
 {
-	to_change->set_red(to.get_x(), to.get_y());
+	// (Canvas*)to_change->set_red(to.get_x(), to.get_y());
+	effect->set_red(to.get_x(), to.get_y());
 
 	return true;
 }
@@ -81,14 +83,16 @@ bool Red_component_changer::on_mouse_move(const Vector_ll from, const Vector_ll 
 
 bool Green_component_changer::on_mouse_click(const size_t par_x, const size_t par_y)
 {
-	to_change->set_green(par_x, par_y);
+	// (Canvas*)to_change->set_green(par_x, par_y);
+	effect->set_green(par_x, par_y);
 
 	return true;
 }
 
 bool Green_component_changer::on_mouse_move(const Vector_ll from, const Vector_ll to)
 {
-	to_change->set_green(to.get_x(), to.get_y());
+	// (Canvas*)to_change->set_green(to.get_x(), to.get_y());
+	effect->set_green(to.get_x(), to.get_y());
 
 	return true;
 }
@@ -97,14 +101,16 @@ bool Green_component_changer::on_mouse_move(const Vector_ll from, const Vector_l
 
 bool Blue_component_changer::on_mouse_click(const size_t par_x, const size_t par_y)
 {
-	to_change->set_blue(par_x, par_y);
+	// (Canvas*)to_change->set_blue(par_x, par_y);
+	effect->set_blue(par_x, par_y);
 
 	return true;
 }
 
 bool Blue_component_changer::on_mouse_move(const Vector_ll from, const Vector_ll to)
 {
-	to_change->set_blue(to.get_x(), to.get_y());
+	// (Canvas*)to_change->set_blue(to.get_x(), to.get_y());
+	effect->set_blue(to.get_x(), to.get_y());
 
 	return true;
 }

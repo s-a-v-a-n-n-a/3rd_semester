@@ -2,6 +2,7 @@
 #include "cstdlib"
 
 #include "Editor/Graphical_editor_main_page.hpp"
+// #include "Editor/Application.hpp"
 
 const size_t DEFAULT_SIZE = 1800;
 
@@ -11,7 +12,8 @@ void 						draw_editor		(Graphical_editor_main_page *editor);
 
 int main()
 {
-	Graphical_editor_main_page *editor = create_editor();
+	// Application::get_app()->launch();
+    Graphical_editor_main_page *editor = create_editor();
 	draw_editor(editor);
 	delete_editor(editor);
 }

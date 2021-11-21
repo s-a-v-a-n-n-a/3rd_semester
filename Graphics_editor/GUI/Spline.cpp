@@ -55,7 +55,7 @@ void Spline::recount(Interpolator *interpolator)
 {
 	size_t width = get_width();
 	size_t last_reference = 0;
-	for (size_t i = DEFAULT_DOT_SIZE/2; i < width - DEFAULT_DOT_SIZE; ++i)
+	for (size_t i = DEFAULT_DOT_SIZE/2; i < width - DEFAULT_DOT_SIZE/2; ++i)
 	{
 		Vector_d point_d = interpolator->get_point(i, &last_reference);
 		points[i] = point_d;
@@ -77,7 +77,7 @@ void Spline::add_visual_object(Visual_object *par_object)
 void Spline::draw(Screen_information *screen)
 {
 	size_t points_amount = get_width();
-	for (size_t i = DEFAULT_DOT_SIZE/2; i < points_amount - DEFAULT_DOT_SIZE - 1; ++i)
+	for (size_t i = DEFAULT_DOT_SIZE; i < points_amount - DEFAULT_DOT_SIZE - 1; ++i)
 	{
 		size_t y1 = (size_t)points[i].get_y() + get_position().get_y() + DEFAULT_DOT_SIZE/2;
 
@@ -98,8 +98,8 @@ void Spline::draw(Screen_information *screen)
 
 Vector_ll Spline::create_relation(const double par_x, const double par_y)
 {
-	double scale_x = ((par_x) / (double)(get_width()));
-	double scale_y = ((par_y) / (double)(get_height()));
+	double scale_x = ((par_x) / ((double)get_width() - (double)DEFAULT_DOT_SIZE));
+	double scale_y = ((par_y) / ((double)get_height() - (double)DEFAULT_DOT_SIZE));
 
 	// printf("scale y %lg\n", scale_y);
 	double max_x = (double)(high_limit.get_x() - low_limit.get_x());
@@ -111,14 +111,20 @@ Vector_ll Spline::create_relation(const double par_x, const double par_y)
 void Spline::transfer_graph()
 {
 	size_t width = get_width();
+	size_t height = get_height();
 	size_t go = (width - DEFAULT_DOT_SIZE) / MAX_COLOR_VALUE;
 	// size_t go = 1;
 	if (go < 1)
 		go = 1;
 	for (size_t i = DEFAULT_DOT_SIZE/2; i < width - DEFAULT_DOT_SIZE/2 - 1; i += go)	
 	{
-		Vector_ll par = create_relation(points[i].get_x() - DEFAULT_DOT_SIZE/2, points[i].get_y() - DEFAULT_DOT_SIZE/2);
-		
+		Vector_ll par = create_relation(points[i].get_x(), height - DEFAULT_DOT_SIZE - points[i].get_y());
+
+		// if (par.get_x() == 255)
+		// {
+		// 	printf("%lld\n", par.get_y());
+		// }
+		// printf("%lld %lld\n", par.get_x(), par.get_y());
 		delegate->on_mouse_click(par.get_x(), par.get_y());
 	}
 }

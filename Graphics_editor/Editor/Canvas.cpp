@@ -1,7 +1,10 @@
 #include "Canvas.hpp"
 
-Canvas::Canvas(const Visual_object::Config &par_base, Pencil *par_pencil)
-: Visual_object(par_base), pencil(par_pencil), current_drawing_color(BLACK), drawing_state(false)
+#include "Pencil.hpp"
+#include "Toolbar.hpp"
+
+Canvas::Canvas(const Visual_object::Config &par_base) //, Pencil *par_pencil
+: Visual_object(par_base), Affected(), current_drawing_color(BLACK), drawing_state(false) // pencil(par_pencil),
 {
 	drawing = new Color[get_width() * get_height()];
 	original_drawing = new Color[get_width() * get_height()];
@@ -19,6 +22,8 @@ Canvas::Canvas(const Visual_object::Config &par_base, Pencil *par_pencil)
 
 void Canvas::draw_point(const size_t par_x, const size_t par_y)
 {
+	set_applied(false);
+
 	size_t width  = get_width();
 	size_t height = get_height();
 
@@ -27,13 +32,15 @@ void Canvas::draw_point(const size_t par_x, const size_t par_y)
 
 	// size_t y_coord = position_y + get_height() - (par_y - position_y);
 
-	size_t pencil_size = pencil->get_size() / 2;
+	Tool *current_tool = Toolbar::get_instance()->get_active_tool();
+	size_t tool_size = current_tool->get_size() / 2;
+	printf("%lu\n", tool_size);
 
-	size_t begin_x = par_x - position_x > pencil_size ? par_x - position_x - pencil_size : par_x - position_x;
-	size_t begin_y = par_y - position_y > pencil_size ? par_y - position_y - pencil_size : par_y - position_y;
+	size_t begin_x = par_x - position_x > tool_size ? par_x - position_x - tool_size : par_x - position_x;
+	size_t begin_y = par_y - position_y > tool_size ? par_y - position_y - tool_size : par_y - position_y;
 
-	size_t end_x = par_x - position_x + pencil_size < width ? par_x - position_x + pencil_size : par_x - position_x;
-	size_t end_y = par_y - position_y + pencil_size < height ? par_y - position_y + pencil_size : par_y - position_y;
+	size_t end_x = par_x - position_x + tool_size < width ? par_x - position_x + tool_size : par_x - position_x;
+	size_t end_y = par_y - position_y + tool_size < height ? par_y - position_y + tool_size : par_y - position_y;
 
 	for (size_t i = begin_y; i < end_y; ++i)
 		for (size_t j = begin_x; j < end_x; ++j)
@@ -42,18 +49,19 @@ void Canvas::draw_point(const size_t par_x, const size_t par_y)
 
 			original_drawing[index] = current_drawing_color;
 			
-			unsigned char red    = effect[original_drawing[index].get_r()].r == -1 ? original_drawing[index].get_r() : effect[original_drawing[index].get_r()].r;
-			unsigned char green  = effect[original_drawing[index].get_g()].g == -1 ? original_drawing[index].get_g() : effect[original_drawing[index].get_g()].g;
-			unsigned char blue   = effect[original_drawing[index].get_b()].b == -1 ? original_drawing[index].get_b() : effect[original_drawing[index].get_b()].b;
-			unsigned char bright = effect[original_drawing[index].get_a()].a == -1 ? original_drawing[index].get_a() : effect[original_drawing[index].get_a()].a;
+			// unsigned char red    = effect[original_drawing[index].get_r()].r == -1 ? original_drawing[index].get_r() : effect[original_drawing[index].get_r()].r;
+			// unsigned char green  = effect[original_drawing[index].get_g()].g == -1 ? original_drawing[index].get_g() : effect[original_drawing[index].get_g()].g;
+			// unsigned char blue   = effect[original_drawing[index].get_b()].b == -1 ? original_drawing[index].get_b() : effect[original_drawing[index].get_b()].b;
+			// unsigned char bright = effect[original_drawing[index].get_a()].a == -1 ? original_drawing[index].get_a() : effect[original_drawing[index].get_a()].a;
 
-			drawing[index].set_a(bright);
-			drawing[index].set_r(red);
-			drawing[index].set_g(green);
-			drawing[index].set_b(blue);
+			// drawing[index].set_a(bright);
+			// drawing[index].set_r(red);
+			// drawing[index].set_g(green);
+			// drawing[index].set_b(blue);
 		}
+	// Affected::tick();
 
-	get_texture()->set_texture(drawing, get_width(), get_height());
+	// get_texture()->set_texture(drawing, get_width(), get_height());
 }
 
 void Canvas::draw(Screen_information *screen)
@@ -81,64 +89,66 @@ bool Canvas::point_inside (const size_t par_x, const size_t par_y)
 	return false;
 }
 
-void Canvas::set_red (const unsigned char from, const unsigned char to)
-{
-	size_t width  = get_width();
-	size_t height = get_height();
+// void Canvas::set_red (const unsigned char from, const unsigned char to)
+// {
+// 	size_t width  = get_width();
+// 	size_t height = get_height();
 
-	effect[from].r = to;
-	for (size_t i = 0; i < width * height; ++i)
-	{
-		if (original_drawing[i].get_r() == from)
-		{
-			drawing[i].set_r(to);
-		}
-	}
+// 	effect[from].r = to;
+// 	for (size_t i = 0; i < width * height; ++i)
+// 	{
+// 		if (original_drawing[i].get_r() == from)
+// 		{
+// 			drawing[i].set_r(to);
+// 		}
+// 	}
 
-	get_texture()->set_texture(drawing, get_width(), get_height());
-}
+// 	get_texture()->set_texture(drawing, get_width(), get_height());
+// }
 
-void Canvas::set_green (const unsigned char from, const unsigned char to)
-{
-	size_t width  = get_width();
-	size_t height = get_height();
+// void Canvas::set_green (const unsigned char from, const unsigned char to)
+// {
+// 	size_t width  = get_width();
+// 	size_t height = get_height();
 
-	effect[from].g = to;
-	for (size_t i = 0; i < width * height; ++i)
-	{
-		if (original_drawing[i].get_g() == from)
-		{
-			drawing[i].set_g(to);
-		}
-	}
+// 	effect[from].g = to;
+// 	for (size_t i = 0; i < width * height; ++i)
+// 	{
+// 		if (original_drawing[i].get_g() == from)
+// 		{
+// 			drawing[i].set_g(to);
+// 		}
+// 	}
 
-	get_texture()->set_texture(drawing, get_width(), get_height());
-}
+// 	get_texture()->set_texture(drawing, get_width(), get_height());
+// }
 
-void Canvas::set_blue (const unsigned char from, const unsigned char to)
-{
-	size_t width = get_width();
-	size_t height = get_height();
+// void Canvas::set_blue (const unsigned char from, const unsigned char to)
+// {
+// 	size_t width = get_width();
+// 	size_t height = get_height();
 
-	effect[from].b = to;
-	for (size_t i = 0; i < width * height; ++i)
-	{
-		if (original_drawing[i].get_b() == from)
-		{
-			drawing[i].set_b(to);
-		}
-	}
+// 	effect[from].b = to;
+// 	for (size_t i = 0; i < width * height; ++i)
+// 	{
+// 		if (original_drawing[i].get_b() == from)
+// 		{
+// 			drawing[i].set_b(to);
+// 		}
+// 	}
 
-	get_texture()->set_texture(drawing, get_width(), get_height());
-}
+// 	get_texture()->set_texture(drawing, get_width(), get_height());
+// }
 
 bool Canvas::on_mouse_click (const bool state, const size_t par_x, const size_t par_y)
 {
 	if (!point_inside(par_x, par_y))
 		return false;
 
-	if (pencil->get_color() != current_drawing_color)
-		current_drawing_color = pencil->get_color();
+	Tool *current_tool = Toolbar::get_instance()->get_active_tool();
+
+	if (current_tool->get_color() != current_drawing_color)
+		current_drawing_color = current_tool->get_color();
 
 	if (state)
 	{

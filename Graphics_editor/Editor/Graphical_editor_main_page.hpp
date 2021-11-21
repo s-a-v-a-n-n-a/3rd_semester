@@ -4,7 +4,9 @@
 #include "../GUI/Visual_object_base.hpp"
 #include "../GUI/Button.hpp"
 #include "../GUI/Button_manager.hpp"
+
 #include "../GUI/Resource_manager.hpp"
+// #include "../GUI/Resource_manager.hpp"
 
 #include "Vidget_types.hpp"
 

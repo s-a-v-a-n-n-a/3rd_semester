@@ -7,7 +7,7 @@ Canvas_manager::Canvas_manager(const Visual_object::Config &par_base, Pencil *pa
 	// ------------------------------------------------------------------------------
 	Full_texture *canvas_texture = Resources::get_instance()->create_texture(CANVAS_TEXTURE, get_width(), (size_t)(get_height() - INCREASED_BUTTON_HEIGHT));
 	Visual_object::Config canvas_base = { (size_t)Vidget_type::CANVAS, get_position() + Vector_ll(0.0, INCREASED_BUTTON_HEIGHT), canvas_texture, TRANSPARENT, get_width(), get_height() - INCREASED_BUTTON_HEIGHT };
-	canvas = new Canvas(canvas_base, par_pencil);
+	canvas = new Canvas(canvas_base); // , par_pencil
 
 	// создаёт кнопку управления
 	// ------------------------------------------------------------------------------

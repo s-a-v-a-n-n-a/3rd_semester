@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <dlfcn.h>
 
-#include "dynamic_library.hpp"
+// #include "dynamic_library.hpp"
 
 int (*sum)(int x, int y);
 

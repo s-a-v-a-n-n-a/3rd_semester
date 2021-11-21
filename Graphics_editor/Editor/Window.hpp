@@ -3,6 +3,8 @@
 
 #include "../GUI/Visual_object_base.hpp"
 
+#include "../GUI/Resource_manager.hpp"
+
 class Window : public Visual_object
 {
 private:

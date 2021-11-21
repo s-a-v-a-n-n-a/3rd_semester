@@ -5,6 +5,7 @@
 #include "../sfml_drawing/Animating_texture.hpp"
 #include "../GUI/Animations.hpp"
 
+#include "Toolbar.hpp"
 #include "Pencil.hpp"
 // #include "Canvas_manager.hpp"
 
@@ -44,6 +45,8 @@ public:
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
 
+	void reset();
+
 	void set_animating(Visual_object *par_to_animate);
 };
 
@@ -56,6 +59,7 @@ public:
 	Restore_delegate(Visual_object *par_to_restore);
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+	bool on_mouse_release() override;
 };
 
 // --------------------------------------------------------------------------------------------------------------------------
@@ -111,6 +115,7 @@ public:
 	Roll_up_delegate(Visual_object *par_to_roll_up);
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+	bool on_mouse_release() override;
 	Visual_object *get_roll_up();
 };
 
@@ -122,6 +127,7 @@ public:
 	Animating_roll_up_delegate(Visual_object *par_to_roll_up, Visual_object *par_to_interact);
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+	bool on_mouse_release() override;
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
 };
 
@@ -190,6 +196,7 @@ public:
 	Change_thickness_non_fixedly(Pencil *par_pencil, const size_t par_size);
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+	bool on_mouse_release() override;
 };
 
 // --------------------------------------------------------------------------------------------------------------------------
@@ -291,5 +298,29 @@ public:
 
 // 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
 // };
+
+class Pick_tool : public Button_delegate
+{
+private:
+	Tool *tool;
+	Toolbar *toolbar;
+
+public:
+	Pick_tool(Toolbar *par_toolbar, Tool *par_tool)
+	: toolbar(par_toolbar), tool(par_tool)
+	{}
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override
+	{
+		return true;
+	}
+
+	bool on_mouse_release() override
+	{
+		toolbar->set_active_tool(tool);
+
+		return true;
+	}
+};
 
 #endif // GRAPHICAL_DELEGATES

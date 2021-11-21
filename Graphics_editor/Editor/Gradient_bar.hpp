@@ -4,6 +4,8 @@
 #include "../GUI/Visual_object_base.hpp"
 #include "../GUI/Button.hpp"
 
+#include "../GUI/Resource_manager.hpp"
+
 #include "Color_picker.hpp"
 
 const size_t BAR_DEFAULT_WIDTH = 30;

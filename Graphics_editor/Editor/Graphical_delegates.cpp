@@ -43,7 +43,7 @@ Animating::Animating(Visual_object *par_to_animate)
 	to_animate = par_to_animate;
 }
 
-bool Animating::on_mouse_click(const size_t par_x, const size_t par_y)
+void Animating::reset()
 {
 	Full_texture *default_texture = ((Animating_texture*)(to_animate->get_texture()))->get_default_texture();
 	((Animating_texture*)(to_animate->get_texture()))->set_current_texture(default_texture);
@@ -61,6 +61,26 @@ bool Animating::on_mouse_click(const size_t par_x, const size_t par_y)
 		move_out = nullptr;
 		move_out_index = -1;
 	}
+}
+
+bool Animating::on_mouse_click(const size_t par_x, const size_t par_y)
+{
+	// Full_texture *default_texture = ((Animating_texture*)(to_animate->get_texture()))->get_default_texture();
+	// ((Animating_texture*)(to_animate->get_texture()))->set_current_texture(default_texture);
+	
+	// if (move_in)
+	// {
+	// 	Animation_manager::get_instance()->slow_delete_animation(move_in);
+	// 	move_in = nullptr;
+	// 	move_in_index = -1;
+	// }
+
+	// if (move_out)
+	// {
+	// 	Animation_manager::get_instance()->slow_delete_animation(move_out);
+	// 	move_out = nullptr;
+	// 	move_out_index = -1;
+	// }
 
 	return true;
 }
@@ -164,6 +184,14 @@ Restore_delegate::Restore_delegate(Visual_object *par_to_restore)
 
 bool Restore_delegate::on_mouse_click(const size_t par_x, const size_t par_y)
 {
+	// to_restore->set_visible(true);
+	// to_restore->set_reactive(true);
+
+	return true;
+}
+
+bool Restore_delegate::on_mouse_release()
+{
 	to_restore->set_visible(true);
 	to_restore->set_reactive(true);
 
@@ -220,6 +248,11 @@ Roll_up_delegate::Roll_up_delegate(Visual_object *par_to_roll_up)
 
 bool Roll_up_delegate::on_mouse_click(const size_t par_x, const size_t par_y)
 {
+	return true;
+}
+
+bool Roll_up_delegate::on_mouse_release()
+{
 	to_roll_up->set_visible(false);
 	to_roll_up->set_reactive(false);
 
@@ -241,6 +274,12 @@ bool Animating_roll_up_delegate::on_mouse_click(const size_t par_x, const size_t
 {
 	Roll_up_delegate::on_mouse_click(par_x, par_y);
 	return Animating::on_mouse_click(par_x, par_y);
+}
+
+bool Animating_roll_up_delegate::on_mouse_release()
+{
+	Animating::reset();
+	return Roll_up_delegate::on_mouse_release();
 }
 
 bool Animating_roll_up_delegate::on_mouse_move(const Vector_ll from, const Vector_ll to)
@@ -305,7 +344,9 @@ Change_color::Change_color(Pencil *par_pencil, const Color &par_color)
 
 bool Change_color::on_mouse_click(const size_t par_x, const size_t par_y)
 {
-	pencil->set_color(color);
+	// pencil->set_color(color);
+	Tool *current_tool = Toolbar::get_instance()->get_active_tool();
+	current_tool->set_color(color);
 
 	return true;
 }
@@ -321,7 +362,9 @@ Change_thickness::Change_thickness(Pencil *par_pencil, const size_t par_size)
 
 bool Change_thickness::on_mouse_click(const size_t par_x, const size_t par_y)
 {
-	pencil->set_size(size);
+	// pencil->set_size(size);
+	Tool *current_tool = Toolbar::get_instance()->get_active_tool();
+	current_tool->set_size(size);
 
 	return true;
 }
@@ -337,10 +380,26 @@ Change_thickness_non_fixedly::Change_thickness_non_fixedly(Pencil *par_pencil, c
 
 bool Change_thickness_non_fixedly::on_mouse_click(const size_t par_x, const size_t par_y)
 {
-	// may be a mistake in future
+	// // may be a mistake in future
 	current_size = par_x + par_y;
 
-	pencil->set_size(current_size);
+	// // pencil->set_size(current_size);
+	Tool *current_tool = Toolbar::get_instance()->get_active_tool();
+	printf("current_tool %p\n", current_tool);
+	current_tool->set_size(current_size);
+
+	return true;
+}
+
+bool Change_thickness_non_fixedly::on_mouse_release()
+{
+	// may be a mistake in future
+
+	// pencil->set_size(current_size);
+	// Tool *current_tool = Toolbar::get_instance()->get_active_tool();
+	// printf("current_tool %p\n", current_tool);
+	// current_tool->set_size(current_size);
+
 	return true;
 }
 // ---------------------------------------------------------------------------------------------------------

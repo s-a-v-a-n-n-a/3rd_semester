@@ -4,7 +4,7 @@ const size_t DEFAULT_BUTTON_HEIGHT = 50;
 const size_t INCREASED_BUTTON_HEIGHT = 70;
 
 Button::Button(const Visual_object::Config &base, Button_delegate *par_click, const char *par_text)
-: Visual_object(base)
+: Visual_object(base), pressed(false)
 {
 	size_t offset = get_height() / 2;
 	Text *text = new Text((size_t)Vidget_type::TEXT, 
@@ -57,13 +57,21 @@ bool Button::on_mouse_click(const bool state, const size_t par_x, const size_t p
 	    	if (state)
 	    	{
 	    		// printf("mouse click\n");
-	    		return click->on_mouse_click(par_x, par_y);
+	    		bool result = click->on_mouse_click(par_x, par_y);
+	    		if (result)
+	    			pressed = true;
 	    	}
 	    	// else if (state == Mouse_state::MOVED)
 	    	// 	return click->on_mouse_move(par_x, par_y);
+	    	else if (pressed)
+	    	{
+	    		bool result = click->on_mouse_release();
+	    		if (result)
+	    			pressed = false;
+	    	}
 	    	else
 	    	{
-	    		return click->on_mouse_release();
+	    		pressed = false;
 	    	}
 
 	    return true;
@@ -76,29 +84,28 @@ bool Button::on_mouse_click(const bool state, const size_t par_x, const size_t p
 
 bool Button::on_mouse_move(const Vector_ll from, const Vector_ll to)
 {
-	if (point_inside(from.get_x(), from.get_y()))
+	bool result = false;
+	
+	bool from_in = point_inside(from.get_x(), from.get_y());
+	bool to_in = point_inside(to.get_x(), to.get_y());
+
+	if (from_in || to_in)
 	{
-		set_active_state(true);
+		if (to_in)
+			set_active_state(true);
 		// printf("mouse move\n");
-		bool result = false;
 		if (click)
 			result = click->on_mouse_move(from, to);
-	    
-	    return result;
 	}
-	// else if (!point_inside(to.get_x(), to.get_y()))
-	// {
-	// 	click->on_mouse_release();
-	// 	return false;
-	// }
 	else
 	{
-		if (click)
-			click->on_mouse_release();
-		return false;
+		result = false;
 	}
 
-	// return click->on_mouse_move(from, to);
+	if (!point_inside(to.get_x(), to.get_y()))
+		pressed = false;
+
+	return result;
 }
 
 Magnetic::Magnetic(const Visual_object::Config &par_base, Visual_object *par_parent, const Vector_ll &par_left_bound, const Vector_ll &par_right_bound, const size_t par_radius, Button_delegate *par_delegate)

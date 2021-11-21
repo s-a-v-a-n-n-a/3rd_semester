@@ -10,3 +10,8 @@ const char *COLORED_BUTTONS[] =
 	"graphical_attributes/Textures/Green_button.png",
 	"graphical_attributes/Textures/Yellow_button.png"
 };
+
+const char *TOOLS_BUTTONS[] = 
+{
+	"graphical_attributes/Textures/Brush.png"
+};
