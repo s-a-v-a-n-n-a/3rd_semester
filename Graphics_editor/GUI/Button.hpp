@@ -34,9 +34,16 @@ public:
 class Magnetic : public Visual_object
 {
 private:
-	// Button_delegate *delegate;
+	Visual_object *parent;
+	Vector_ll last_parent_position;
+
+	Button_delegate *delegate;
+
 	Vector_ll left_bound;
 	Vector_ll right_bound;
+
+	double x_relation;
+	double y_relation;
 
 	size_t radius;
 
@@ -44,14 +51,23 @@ private:
 
 public:
 	Magnetic() = delete;
-	Magnetic(const Visual_object::Config &par_base, const Vector_ll &par_left_bound, const Vector_ll &par_right_bound, const size_t par_radius = 0);
+	Magnetic(const Visual_object::Config &par_base, Visual_object *par_parent, const Vector_ll &par_left_bound, const Vector_ll &par_right_bound, const size_t par_radius = 0, Button_delegate *par_delegate = NULL);
 	~Magnetic();
+
+	void set_position(const Vector_ll &par_position) override;
 
 	bool in_x_bounds(const size_t par_x, const size_t par_y);
 	bool in_y_bounds(const size_t par_x, const size_t par_y);
 
+	double get_x_relation() const { return x_relation; }
+	double get_y_relation() const { return y_relation; }
+	void set_x_relation(const double par_x_relation);
+	void set_y_relation(const double par_y_relation);
+
 	bool on_mouse_click(const bool state, const size_t par_x, const size_t par_y) override;
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
+
+	// void set_relative_position(const Vector_ll &par_relative_position) { relative_position = par_relative_position; }
 };
 
 #endif // BUTTON_CLASS

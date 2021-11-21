@@ -17,6 +17,7 @@
 #include "Color_selection.hpp"
 #include "Brush_size_selection.hpp"
 #include "Effects_window.hpp"
+#include "Thickness_window.hpp"
 
 #include "Pencil.hpp"
 
@@ -46,6 +47,7 @@ public:
 	// bool on_mouse(const double par_x, const double par_y) override;
 	bool on_key_pressed(const unsigned key_state) override;
 
+	Thickness_window *create_thickness_slider(const Vector_ll &position, const size_t width, const size_t height, Pencil *pencil);
 	Effects_window *create_effects_window(const Vector_ll &position, const size_t width, const size_t height, Canvas *active_canvas);
 
 	Button_manager *create_button_panel(const Vector_ll &position, const size_t width, const size_t height);

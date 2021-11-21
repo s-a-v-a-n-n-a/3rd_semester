@@ -34,7 +34,7 @@ public:
 		Full_texture *rect = Resources::get_instance()->create_texture(PICKING_RECT_TEXTURE, 5, get_height());// new Full_texture(WINDOW_BACKGROUND, DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
 		
 		Visual_object::Config buttton_base = { (size_t)Vidget_type::BUTTON, get_position(), rect, TRANSPARENT, 5, get_height() };
-		picker = new Magnetic(buttton_base, get_position(), get_position() + Vector_ll(get_width() - 5, 0), get_height());
+		picker = new Magnetic(buttton_base, this, get_position(), get_position() + Vector_ll(get_width() - 5, 0), get_height());
 	
 		add_visual_object(picker);
 	}

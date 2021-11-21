@@ -3,6 +3,8 @@
 
 #include "../sfml_drawing/colors.hpp"
 
+const size_t DEFAULT_PENCIL_SIZE = 20;
+
 class Pencil
 {
 private:
@@ -13,7 +15,7 @@ public:
 	Pencil()
 	{
 		color = BLACK;
-		size = 20;
+		size = DEFAULT_PENCIL_SIZE;
 	}
 
 	Pencil(const Color &par_color, const size_t par_size)

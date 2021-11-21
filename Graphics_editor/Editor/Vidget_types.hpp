@@ -18,6 +18,9 @@ enum class Vidget_type
 	COLOR_PICKER,
 	SPLINE,
 	EFFECTS_WINDOW,
+	SLIDER,
+	MAGNETIC,
+	MANAGER,
 	EDITOR
 };
 

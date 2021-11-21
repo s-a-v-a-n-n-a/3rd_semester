@@ -13,6 +13,11 @@ const size_t DEFAULT_COLOR_VIDGET_POS_Y = 100;
 const size_t DEFAULT_SIZE_VIDGET_POS_X = 0;
 const size_t DEFAULT_SIZE_VIDGET_POS_Y = 400;
 
+const size_t THICKNESS_WINDOW_WIDTH = 400;
+const size_t THICKNESS_WINDOW_HEIGHT = 100;
+const size_t THICKNESS_WINDOW_POS_X = 0;
+const size_t THICKNESS_WINDOW_POS_Y = 600;
+
 const size_t DEFAULT_BUTTON_WIDTH = 200;
 
 const size_t DEFAULT_TEXT_OFFSET = 20;
@@ -21,7 +26,8 @@ const char CANVAS_TEXT[]     = " Canvas ";
 const char NEW_CANVAS_TEXT[] = " New canvas ";
 const char COLOR_TEXT[]      = " Color ";
 const char SIZE_TEXT[]       = " Size ";
-const char SPLINE_TEXT[]     = " SPline ";
+const char SPLINE_TEXT[]     = " Filter ";
+const char SLIDER_TEXT[]     = " Slider ";
 
 Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Config &par_base)
 : Visual_object(par_base), pencil()
@@ -44,6 +50,8 @@ Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Conf
 
     Effects_window *spline = create_effects_window(par_position + Vector_ll(0, 700), 400, 400 + DEFAULT_BUTTON_HEIGHT, canvas->get_active_canvas());
 	
+	Thickness_window *slider = create_thickness_slider(par_position + Vector_ll(THICKNESS_WINDOW_POS_X, THICKNESS_WINDOW_POS_Y), THICKNESS_WINDOW_WIDTH, THICKNESS_WINDOW_HEIGHT, &pencil);
+
 	size_t current_button_size = get_text_length(GHOST_TYPE, CANVAS_TEXT, INCREASED_BUTTON_HEIGHT / 2);
 	create_restore_button(panel, canvas, CANVAS_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
 
@@ -59,10 +67,23 @@ Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Conf
     current_button_size = get_text_length(GHOST_TYPE, SPLINE_TEXT, INCREASED_BUTTON_HEIGHT / 2);
 	create_restore_button(panel, spline, SPLINE_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
 
+	current_button_size = get_text_length(GHOST_TYPE, SLIDER_TEXT, INCREASED_BUTTON_HEIGHT / 2);
+	create_restore_button(panel, slider, SLIDER_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
+
     // test
     // create_test_button(par_position + Vector_ll(0, 1000), "", 300, 300);
 
 	set_active(canvas);
+}
+
+Thickness_window *Graphical_editor_main_page::create_thickness_slider(const Vector_ll &position, const size_t width, const size_t height, Pencil *pencil)
+{
+	Full_texture *slider_background = Resources::get_instance()->create_texture(WINDOW_BACKGROUND, width, height);// new Full_texture(WINDOW_BACKGROUND, DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
+
+	Thickness_window *slider = new Thickness_window({(size_t)Vidget_type::MANAGER, position, slider_background, TRANSPARENT, width, height}, pencil);
+	add_visual_object(slider);
+
+	return slider;
 }
 
 Effects_window *Graphical_editor_main_page::create_effects_window(const Vector_ll &position, const size_t width, const size_t height, Canvas *active_canvas)

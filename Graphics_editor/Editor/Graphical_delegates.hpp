@@ -114,6 +114,8 @@ public:
 	Visual_object *get_roll_up();
 };
 
+// --------------------------------------------------------------------------------------------------------------------------
+
 class Animating_roll_up_delegate : public Roll_up_delegate, public Animating
 {
 public:
@@ -149,6 +151,7 @@ public:
 
 // --------------------------------------------------------------------------------------------------------------------------
 
+// такого шоб я тут не видела 
 class Change_color : public Button_delegate
 {
 private:
@@ -161,6 +164,8 @@ public:
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
 };
 
+// --------------------------------------------------------------------------------------------------------------------------
+
 class Change_thickness : public Button_delegate
 {
 private:
@@ -169,6 +174,20 @@ private:
 
 public:
 	Change_thickness(Pencil *par_pencil, const size_t par_size);
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+};
+
+// --------------------------------------------------------------------------------------------------------------------------
+
+class Change_thickness_non_fixedly : public Button_delegate
+{
+private:
+	Pencil *pencil;
+	size_t current_size;
+
+public:
+	Change_thickness_non_fixedly(Pencil *par_pencil, const size_t par_size);
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
 };
@@ -213,5 +232,64 @@ public:
 	bool on_mouse_release();
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
 };
+
+// --------------------------------------------------------------------------------------------------------------------------
+
+class Change_fixedly : public Button_delegate
+{
+private:
+	Visual_object *to_control;
+
+	long long delta;
+	bool change_x;
+
+public:
+	Change_fixedly(Visual_object *par_to_control, const long long par_delta, const bool par_change_x);
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+};
+
+// --------------------------------------------------------------------------------------------------------------------------
+
+class Magnet_control : public Button_delegate
+{
+private:
+	Visual_object *to_control;
+
+public:
+	Magnet_control(Visual_object *par_to_control)
+	: to_control(par_to_control)
+	{
+		;
+	}
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override
+	{
+		return to_control->on_mouse_click(true, par_x, par_y);
+	}
+	bool on_mouse_release() override
+	{
+		return to_control->on_mouse_click(false, to_control->get_position().get_x(), to_control->get_position().get_y());
+	}
+	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override
+	{
+		return to_control->on_mouse_move(from, to);
+	}
+};
+
+// --------------------------------------------------------------------------------------------------------------------------
+
+// class Change_on_relation : public Button_delegate
+// {
+// private:
+// 	Visual_object *to_control;
+
+// 	bool x_coord;
+
+// public:
+// 	Change_on_relation(Visual_object *par_to_control, const bool par_x_coord);
+
+// 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+// };
 
 #endif // GRAPHICAL_DELEGATES

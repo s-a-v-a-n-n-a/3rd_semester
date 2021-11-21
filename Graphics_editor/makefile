@@ -1,8 +1,8 @@
 COMPILATOR = g++
 CFLAGS = -g -masm=intel -no-pie -march=native -O3 -std=c++17
 
-link: screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o main.o
-	$(COMPILATOR) screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o main.o -o main -lsfml-graphics -lsfml-window -lsfml-system
+link: screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o slider.o main.o
+	$(COMPILATOR) screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o slider.o main.o -o main -lsfml-graphics -lsfml-window -lsfml-system
 
 main.o : main.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o main.o main.cpp
@@ -39,6 +39,12 @@ button.o: GUI/Button.cpp
 
 button_manager.o: GUI/Button_manager.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o button_manager.o GUI/Button_manager.cpp
+
+spline.o: GUI/Spline.cpp
+	$(COMPILATOR) $(CFLAGS) -c -o spline.o GUI/Spline.cpp
+
+slider.o: GUI/Slider.cpp
+	$(COMPILATOR) $(CFLAGS) -c -o slider.o GUI/Slider.cpp
 
 resource_manager.o: GUI/Resource_manager.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o resource_manager.o GUI/Resource_manager.cpp
@@ -84,9 +90,6 @@ window_control_panel.o: Editor/Window_control_panel.cpp
 
 graphical_editor.o: Editor/Graphical_editor_main_page.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o graphical_editor.o Editor/Graphical_editor_main_page.cpp
-
-spline.o: Editor/Spline.cpp
-	$(COMPILATOR) $(CFLAGS) -c -o spline.o Editor/Spline.cpp
 # -----------------------------------------------------------------------------------
 
 clean: 

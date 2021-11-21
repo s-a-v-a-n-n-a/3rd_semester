@@ -23,11 +23,11 @@ private:
 
 	std::vector<Vector_d> points;
 
-	long long high_limit;
-	long long low_limit;
+	Vector_ll high_limit;
+	Vector_ll low_limit;
 
 public:
-	Spline(const Visual_object::Config &par_base, Button_delegate *par_delegate);
+	Spline(const Visual_object::Config &par_base, Button_delegate *par_delegate, const Vector_ll &par_high_limit, const Vector_ll &par_low_limit);
 	~Spline() { delete delegate; };
 
 	void set_delegate(Button_delegate *par_delegate) { delegate = par_delegate; }
@@ -41,7 +41,7 @@ public:
 
 	void draw(Screen_information *screen) override;
 
-	Vector_ll create_relation(const size_t max_x, const size_t max_y, const double par_x, const double par_y);
+	Vector_ll create_relation(const double par_x, const double par_y);
 	
 	bool on_mouse_click (const bool state, const size_t par_x, const size_t par_y) override;
 	bool on_mouse_move (const Vector_ll from, const Vector_ll to) override;

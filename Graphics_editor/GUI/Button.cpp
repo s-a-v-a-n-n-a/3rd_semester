@@ -80,7 +80,11 @@ bool Button::on_mouse_move(const Vector_ll from, const Vector_ll to)
 	{
 		set_active_state(true);
 		// printf("mouse move\n");
-	    return click->on_mouse_move(from, to);
+		bool result = false;
+		if (click)
+			result = click->on_mouse_move(from, to);
+	    
+	    return result;
 	}
 	// else if (!point_inside(to.get_x(), to.get_y()))
 	// {
@@ -89,17 +93,83 @@ bool Button::on_mouse_move(const Vector_ll from, const Vector_ll to)
 	// }
 	else
 	{
-		click->on_mouse_release();
+		if (click)
+			click->on_mouse_release();
 		return false;
 	}
 
 	// return click->on_mouse_move(from, to);
 }
 
-Magnetic::Magnetic(const Visual_object::Config &par_base, const Vector_ll &par_left_bound, const Vector_ll &par_right_bound, const size_t par_radius)
-: Visual_object(par_base), left_bound(par_left_bound), right_bound(par_right_bound), pressed(false), radius(par_radius)
+Magnetic::Magnetic(const Visual_object::Config &par_base, Visual_object *par_parent, const Vector_ll &par_left_bound, const Vector_ll &par_right_bound, const size_t par_radius, Button_delegate *par_delegate)
+: Visual_object(par_base), parent(par_parent), left_bound(par_left_bound), right_bound(par_right_bound), pressed(false), radius(par_radius), delegate(par_delegate)
 {
-	;
+	last_parent_position = parent->get_position();
+
+	// задать relation
+	if (right_bound.get_x() - left_bound.get_x())
+		x_relation = (double)get_position().get_x() / (double)(right_bound.get_x() - left_bound.get_x());
+	else
+		x_relation = 0;
+
+	if (right_bound.get_y() - left_bound.get_y())
+		y_relation = (double)get_position().get_y() / (double)(right_bound.get_y() - left_bound.get_y());
+	else
+		y_relation = 0;
+}
+
+void Magnetic::set_x_relation(const double par_x_relation)
+{
+	if (par_x_relation > 1 || par_x_relation < 0)
+		return;
+
+	x_relation = par_x_relation;
+
+	size_t max_width = right_bound.get_x() - left_bound.get_x();
+	size_t x_position = (size_t)((double)max_width * par_x_relation);
+	
+	set_position(Vector_ll(x_position, get_position().get_y()));
+}
+
+void Magnetic::set_y_relation(const double par_y_relation)
+{
+	if (par_y_relation > 1 || par_y_relation < 0)
+		return;
+
+	y_relation = par_y_relation;
+
+	size_t max_height = right_bound.get_y() - left_bound.get_y();
+	size_t y_position = (size_t)((double)max_height * par_y_relation);
+	
+	set_position(Vector_ll(get_position().get_x(), y_position));
+}
+
+void Magnetic::set_position(const Vector_ll &par_position)
+{
+	Vector_ll offset = parent->get_position() - last_parent_position;
+	last_parent_position = parent->get_position();
+	
+	Visual_object::set_position(get_position() + offset);
+	left_bound += offset;
+	right_bound += offset;
+
+	size_t par_x = par_position.get_x();
+	size_t par_y = par_position.get_y();
+
+	bool in_x = in_x_bounds(par_x, par_y);
+	bool in_y = in_y_bounds(par_x, par_y);
+
+	if ((!in_x) || (!in_y))
+		return;
+	
+	Visual_object::set_position(par_position);
+
+	x_relation = ((double)right_bound.get_x() - (double)par_position.get_x()) / ((double)right_bound.get_x() - (double)left_bound.get_x());
+	y_relation = ((double)right_bound.get_y() - (double)par_position.get_y()) / ((double)right_bound.get_y() - (double)left_bound.get_y());
+	// Vector_ll offset = par_position - get_position();
+
+	// if (delegate)
+	// 	delegate->on_mouse_click(offset.get_x(), offset.get_y());
 }
 
 bool Magnetic::in_x_bounds(const size_t par_x, const size_t par_y)
@@ -114,7 +184,6 @@ bool Magnetic::in_y_bounds(const size_t par_x, const size_t par_y)
 {
 	if (par_y >= left_bound.get_y() && par_y <= right_bound.get_y() && (left_bound.get_x() - (long long)par_x) <= (long long)radius && ((long long)par_x - right_bound.get_x()) <= (long long)radius)
 	{
-		// printf("y: %lu, y1 %lld; y2 %lld\n", par_y, left_bound.get_y(), right_bound.get_y());
 		return true;
 	}
 
@@ -132,7 +201,6 @@ bool Magnetic::on_mouse_click(const bool state, const size_t par_x, const size_t
 
 		if (in_x && in_y)
 		{
-			// printf("both\n");
 			set_position(Vector_ll(par_x, par_y));
 
 			return true;
@@ -155,7 +223,6 @@ bool Magnetic::on_mouse_click(const bool state, const size_t par_x, const size_t
 	}
 	else
 	{
-		// printf("released\n");
 		pressed = false;
 	}
 
@@ -172,7 +239,6 @@ bool Magnetic::on_mouse_move(const Vector_ll from, const Vector_ll to)
 		
 		if (in_x || in_y)
 		{
-			// set_position(to);
 			if (in_x && in_y)
 			{
 				set_position(to);

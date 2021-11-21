@@ -314,16 +314,33 @@ bool Change_color::on_mouse_click(const size_t par_x, const size_t par_y)
 // Change_thickness
 // ---------------------------------------------------------------------------------------------------------
 Change_thickness::Change_thickness(Pencil *par_pencil, const size_t par_size)
-: pencil(nullptr), size(0)
+: pencil(par_pencil), size(par_size)
 {
-	pencil = par_pencil;
-	size = par_size;
+	;
 }
 
 bool Change_thickness::on_mouse_click(const size_t par_x, const size_t par_y)
 {
 	pencil->set_size(size);
 
+	return true;
+}
+// ---------------------------------------------------------------------------------------------------------
+
+// Change thickness in dynamics
+// ---------------------------------------------------------------------------------------------------------
+Change_thickness_non_fixedly::Change_thickness_non_fixedly(Pencil *par_pencil, const size_t par_size)
+: pencil(par_pencil), current_size(par_size)
+{
+	;
+}
+
+bool Change_thickness_non_fixedly::on_mouse_click(const size_t par_x, const size_t par_y)
+{
+	// may be a mistake in future
+	current_size = par_x + par_y;
+
+	pencil->set_size(current_size);
 	return true;
 }
 // ---------------------------------------------------------------------------------------------------------
@@ -469,4 +486,24 @@ bool One_dim_move::on_mouse_move(const Vector_ll from, const Vector_ll to)
 	}
 
 	return false;
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------
+
+Change_fixedly::Change_fixedly(Visual_object *par_to_control, const long long par_delta, const bool par_change_x)
+: to_control(par_to_control), delta(par_delta), change_x(par_change_x)
+{
+	;
+}
+
+bool Change_fixedly::on_mouse_click(const size_t par_x, const size_t par_y)
+{
+	Vector_ll last_position = to_control->get_position();
+	
+	if (change_x)
+		to_control->set_position(last_position + Vector_ll(delta, 0));
+	else
+		to_control->set_position(last_position + Vector_ll(0, delta));
+
+	return true;
 }

@@ -3,8 +3,8 @@
 const size_t DECREASED_DOT_SIZE = 5;
 const size_t DEFAULT_DOT_SIZE = 20;
 
-Spline::Spline(const Visual_object::Config &par_base, Button_delegate *par_delegate)
-: Visual_object(par_base), first(nullptr), last(nullptr), points(get_width(), 0), delegate(par_delegate), high_limit(MAX_COLOR_VALUE), low_limit(MAX_COLOR_VALUE)
+Spline::Spline(const Visual_object::Config &par_base, Button_delegate *par_delegate, const Vector_ll &par_high_limit, const Vector_ll &par_low_limit)
+: Visual_object(par_base), first(nullptr), last(nullptr), points(get_width(), 0), delegate(par_delegate), high_limit(par_high_limit), low_limit(par_low_limit)
 {
 	// first = new Magnetic({(size_t)Vidget_type::BUTTON, get_position() + Vector_ll(0, get_height()) - Vector_ll(0, DEFAULT_DOT_SIZE), nullptr, BLACK, DEFAULT_DOT_SIZE, DEFAULT_DOT_SIZE}, get_position() - Vector_ll(0, DEFAULT_DOT_SIZE), get_position() + Vector_ll(0, get_height()) - Vector_ll(0, DEFAULT_DOT_SIZE), DEFAULT_DOT_SIZE/2);
 
@@ -96,14 +96,16 @@ void Spline::draw(Screen_information *screen)
 	}
 }
 
-Vector_ll Spline::create_relation(const size_t max_x, const size_t max_y, const double par_x, const double par_y)
+Vector_ll Spline::create_relation(const double par_x, const double par_y)
 {
 	double scale_x = ((par_x) / (double)(get_width()));
 	double scale_y = ((par_y) / (double)(get_height()));
 
 	// printf("scale y %lg\n", scale_y);
+	double max_x = (double)(high_limit.get_x() - low_limit.get_x());
+	double max_y = (double)(high_limit.get_y() - low_limit.get_y());
 
-	return Vector_ll((long long)(((double)(max_x)) * scale_x), (long long)(((double)(max_y)) * scale_y));
+	return Vector_ll((long long)(((double)(max_x)) * scale_x) + low_limit.get_x(), (long long)(((double)(max_y)) * scale_y) + low_limit.get_y());
 }
 
 void Spline::transfer_graph()
@@ -115,7 +117,7 @@ void Spline::transfer_graph()
 		go = 1;
 	for (size_t i = DEFAULT_DOT_SIZE/2; i < width - DEFAULT_DOT_SIZE/2 - 1; i += go)	
 	{
-		Vector_ll par = create_relation(MAX_COLOR_VALUE, MAX_COLOR_VALUE, (size_t)points[i].get_x() - DEFAULT_DOT_SIZE/2, (size_t)points[i].get_y() - DEFAULT_DOT_SIZE/2);
+		Vector_ll par = create_relation(points[i].get_x() - DEFAULT_DOT_SIZE/2, points[i].get_y() - DEFAULT_DOT_SIZE/2);
 		
 		delegate->on_mouse_click(par.get_x(), par.get_y());
 	}

@@ -13,7 +13,7 @@ Color_picker::Color_picker(const Visual_object::Config &par_base, Pencil *par_pe
 	size_t circle_height = circle->get_height();
 
 	Visual_object::Config buttton_base = { (size_t)Vidget_type::BUTTON, get_position() + Vector_ll(0, get_height()) - Vector_ll(0, circle_height), circle, TRANSPARENT, circle_width, circle_height };
-	picker = new Magnetic(buttton_base, get_position(), get_position() + Vector_ll(get_width(), get_height()) - Vector_ll(circle_width, circle_height));
+	picker = new Magnetic(buttton_base, this, get_position(), get_position() + Vector_ll(get_width(), get_height()) - Vector_ll(circle_width, circle_height));
 	
 	// Drag_and_drop_delegate *dnd = new Drag_and_drop_delegate(picker);
 	// Magnetic *magnit_delegate = new Magnetic(picker, get_position(), get_position() + Vector_ll(get_width(), get_height()));

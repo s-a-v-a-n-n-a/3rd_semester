@@ -21,6 +21,8 @@ public:
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
 };
 
+// -------------------------------------------------------------------------------------------------
+
 class Interactive_create_canvas : public Create_canvas, public Interactive
 {
 public:
@@ -28,6 +30,8 @@ public:
 
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
 };
+
+// -------------------------------------------------------------------------------------------------
 
 class Animating_create_canvas : public Create_canvas, public Animating
 {
@@ -38,6 +42,8 @@ public:
 
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
 };
+
+// -------------------------------------------------------------------------------------------------
 
 class Canvas_keeper : public Button_delegate
 {
