@@ -15,7 +15,7 @@ Slider::Slider(const Visual_object::Config &par_base, Button_delegate *par_deleg
 	// ползунок
 	if (horizontal)
 	{
-		slider = create_sliding_button(get_position() + Vector_ll(height + 10, 0), 20, height, get_position() + Vector_ll(height + 10, 0), get_position() + Vector_ll(line_length + height - 20, 0), this);
+		slider = create_sliding_button(get_position() + Vector_ll(height + 10, 0), 20, height, get_position() + Vector_ll(height + 10, 0), get_position() + Vector_ll(line_length + height - 25, 0), this);
 		current_relation = slider->get_x_relation();
 	}
 	else
@@ -78,7 +78,6 @@ void Slider::count_intermediate_state() const
 
 	if (horizontal)
 	{
-		printf("calling delegate\n");
 		delegate->on_mouse_click(new_point, 0);
 	}
 	else

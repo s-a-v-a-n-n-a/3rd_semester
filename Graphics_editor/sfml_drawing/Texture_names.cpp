@@ -13,5 +13,15 @@ const char *COLORED_BUTTONS[] =
 
 const char *TOOLS_BUTTONS[] = 
 {
-	"graphical_attributes/Textures/Brush.png"
+	"graphical_attributes/Textures/Brush.png",
+	"graphical_attributes/Textures/Eraser.png",
+	"graphical_attributes/Textures/Pipette.png"
 };
+
+const char *ACTIVE_TOOLS_BUTTONS[] =
+{
+	"graphical_attributes/Textures/Brush_active.png",
+	"graphical_attributes/Textures/Eraser_active.png",
+	"graphical_attributes/Textures/Pipette_active.png"
+};
+

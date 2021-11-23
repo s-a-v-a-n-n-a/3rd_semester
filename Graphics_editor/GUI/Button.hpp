@@ -63,6 +63,7 @@ public:
 
 	double get_x_relation() const { return x_relation; }
 	double get_y_relation() const { return y_relation; }
+	
 	void set_x_relation(const double par_x_relation);
 	void set_y_relation(const double par_y_relation);
 

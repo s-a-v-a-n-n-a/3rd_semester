@@ -299,15 +299,15 @@ public:
 // 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
 // };
 
-class Pick_tool : public Button_delegate
+class Pick_tool : virtual public Button_delegate
 {
 private:
 	Tool *tool;
-	Toolbar *toolbar;
+	// Toolbar *toolbar;
 
 public:
-	Pick_tool(Toolbar *par_toolbar, Tool *par_tool)
-	: toolbar(par_toolbar), tool(par_tool)
+	Pick_tool(Tool *par_tool) // Toolbar *par_toolbar, 
+	: tool(par_tool) //  toolbar(par_toolbar),
 	{}
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override
@@ -317,9 +317,33 @@ public:
 
 	bool on_mouse_release() override
 	{
-		toolbar->set_active_tool(tool);
+		// toolbar->set_active_tool(tool);
+		Toolbar::get_instance()->set_active_tool(tool);
 
 		return true;
+	}
+};
+
+class Animating_pick_tool : public Pick_tool, public Animating
+{
+public:
+	Animating_pick_tool(Tool *par_tool, Visual_object *par_to_animate)
+	: Pick_tool(par_tool), Animating(par_to_animate)
+	{}
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override
+	{
+		Pick_tool::on_mouse_click(par_x, par_y);
+		return Animating::on_mouse_click(par_x, par_y);
+	}
+	bool on_mouse_release() override
+	{
+		Pick_tool::on_mouse_release();
+		return Animating::on_mouse_release();
+	}
+	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override
+	{
+		return Animating::on_mouse_move(from, to);
 	}
 };
 

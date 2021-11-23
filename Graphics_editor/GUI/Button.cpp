@@ -135,7 +135,7 @@ void Magnetic::set_x_relation(const double par_x_relation)
 	size_t max_width = right_bound.get_x() - left_bound.get_x();
 	size_t x_position = (size_t)((double)max_width * par_x_relation);
 	
-	set_position(Vector_ll(x_position, get_position().get_y()));
+	set_position(Vector_ll(left_bound.get_x() + x_position, get_position().get_y()));
 }
 
 void Magnetic::set_y_relation(const double par_y_relation)

@@ -9,7 +9,10 @@ Toolbar::Toolbar()
 	Pencil *pencil = new Pencil();
 	add_tool(pencil);
 
-	printf("first active %p\n", pencil);
+	Eraser *eraser = new Eraser();
+	add_tool(eraser);
+
+	tools_amount = tools.get_length();
 	set_active_tool(pencil);
 }
 
@@ -36,14 +39,29 @@ void Toolbar::set_active_tool(Tool *tool)
 
 Tool *Toolbar::get_active_tool()
 {
-	printf("active %p\n", active_tool);
-
 	return active_tool;
 }
 
 List<Tool*> *Toolbar::get_tools()
 {
 	return &tools;	
+}
+
+void Toolbar::set_color(const Color &color)
+{
+	current_color = color;
+
+	active_tool->set_color(color);
+}
+
+Color Toolbar::get_color() const
+{
+	return current_color;
+}
+
+size_t Toolbar::get_tools_amount() const
+{
+	return tools_amount;
 }
 
 

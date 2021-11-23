@@ -3,6 +3,8 @@
 #include "Pencil.hpp"
 #include "Toolbar.hpp"
 
+const Color DEFAULT_BACKGROUND_COLOR = WHITE;
+
 Canvas::Canvas(const Visual_object::Config &par_base) //, Pencil *par_pencil
 : Visual_object(par_base), Affected(), current_drawing_color(BLACK), drawing_state(false) // pencil(par_pencil),
 {
@@ -10,14 +12,14 @@ Canvas::Canvas(const Visual_object::Config &par_base) //, Pencil *par_pencil
 	original_drawing = new Color[get_width() * get_height()];
 	for (size_t i = 0; i < get_width() * get_height(); ++i)
 	{
-		original_drawing[i] = WHITE;
-		drawing[i] = WHITE;
+		original_drawing[i] = DEFAULT_BACKGROUND_COLOR;
+		drawing[i] = DEFAULT_BACKGROUND_COLOR;
 	}
 
-	for (int i = 0; i <= (int)MAX_COLOR_VALUE; ++i)
-	{
-		effect[i] = { -1, -1, -1, -1 };
-	}
+	// for (int i = 0; i <= (int)MAX_COLOR_VALUE; ++i)
+	// {
+	// 	effect[i] = { -1, -1, -1, -1 };
+	// }
 }
 
 void Canvas::draw_point(const size_t par_x, const size_t par_y)
@@ -34,31 +36,31 @@ void Canvas::draw_point(const size_t par_x, const size_t par_y)
 
 	Tool *current_tool = Toolbar::get_instance()->get_active_tool();
 	size_t tool_size = current_tool->get_size() / 2;
-	printf("%lu\n", tool_size);
+	
+	current_tool->apply(this, Vector_ll(par_x, par_y));
+	// size_t begin_x = par_x - position_x > tool_size ? par_x - position_x - tool_size : par_x - position_x;
+	// size_t begin_y = par_y - position_y > tool_size ? par_y - position_y - tool_size : par_y - position_y;
 
-	size_t begin_x = par_x - position_x > tool_size ? par_x - position_x - tool_size : par_x - position_x;
-	size_t begin_y = par_y - position_y > tool_size ? par_y - position_y - tool_size : par_y - position_y;
+	// size_t end_x = par_x - position_x + tool_size < width ? par_x - position_x + tool_size : par_x - position_x;
+	// size_t end_y = par_y - position_y + tool_size < height ? par_y - position_y + tool_size : par_y - position_y;
 
-	size_t end_x = par_x - position_x + tool_size < width ? par_x - position_x + tool_size : par_x - position_x;
-	size_t end_y = par_y - position_y + tool_size < height ? par_y - position_y + tool_size : par_y - position_y;
+	// for (size_t i = begin_y; i < end_y; ++i)
+	// 	for (size_t j = begin_x; j < end_x; ++j)
+	// 	{
+	// 		size_t index = i * width + j;
 
-	for (size_t i = begin_y; i < end_y; ++i)
-		for (size_t j = begin_x; j < end_x; ++j)
-		{
-			size_t index = i * width + j;
-
-			original_drawing[index] = current_drawing_color;
+	// 		original_drawing[index] = current_drawing_color;
 			
-			// unsigned char red    = effect[original_drawing[index].get_r()].r == -1 ? original_drawing[index].get_r() : effect[original_drawing[index].get_r()].r;
-			// unsigned char green  = effect[original_drawing[index].get_g()].g == -1 ? original_drawing[index].get_g() : effect[original_drawing[index].get_g()].g;
-			// unsigned char blue   = effect[original_drawing[index].get_b()].b == -1 ? original_drawing[index].get_b() : effect[original_drawing[index].get_b()].b;
-			// unsigned char bright = effect[original_drawing[index].get_a()].a == -1 ? original_drawing[index].get_a() : effect[original_drawing[index].get_a()].a;
+	// 		// unsigned char red    = effect[original_drawing[index].get_r()].r == -1 ? original_drawing[index].get_r() : effect[original_drawing[index].get_r()].r;
+	// 		// unsigned char green  = effect[original_drawing[index].get_g()].g == -1 ? original_drawing[index].get_g() : effect[original_drawing[index].get_g()].g;
+	// 		// unsigned char blue   = effect[original_drawing[index].get_b()].b == -1 ? original_drawing[index].get_b() : effect[original_drawing[index].get_b()].b;
+	// 		// unsigned char bright = effect[original_drawing[index].get_a()].a == -1 ? original_drawing[index].get_a() : effect[original_drawing[index].get_a()].a;
 
-			// drawing[index].set_a(bright);
-			// drawing[index].set_r(red);
-			// drawing[index].set_g(green);
-			// drawing[index].set_b(blue);
-		}
+	// 		// drawing[index].set_a(bright);
+	// 		// drawing[index].set_r(red);
+	// 		// drawing[index].set_g(green);
+	// 		// drawing[index].set_b(blue);
+	// 	}
 	// Affected::tick();
 
 	// get_texture()->set_texture(drawing, get_width(), get_height());

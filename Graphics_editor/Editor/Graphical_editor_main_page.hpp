@@ -20,6 +20,7 @@
 #include "Brush_size_selection.hpp"
 #include "Effects_window.hpp"
 #include "Thickness_window.hpp"
+#include "Tools_window.hpp"
 
 #include "Pencil.hpp"
 
@@ -52,6 +53,7 @@ public:
 	Thickness_window *create_thickness_slider(const Vector_ll &position, const size_t width, const size_t height, Pencil *pencil);
 	Effects_window *create_effects_window(const Vector_ll &position, const size_t width, const size_t height, Canvas *active_canvas);
 
+	Tools_window *create_tools_window(const Vector_ll &position, const size_t width, const size_t height);
 	Button_manager *create_button_panel(const Vector_ll &position, const size_t width, const size_t height);
 	Canvas_manager_manager *create_canvas_manager(const Vector_ll &position, const size_t width, const size_t height);
 	Button *create_restore_button(Button_manager *panel, Visual_object *to_restore, const char *text, const size_t width, const size_t height);

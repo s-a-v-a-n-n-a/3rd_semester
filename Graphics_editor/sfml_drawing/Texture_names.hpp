@@ -40,5 +40,6 @@ const char PENCIL_TEXTURE[] = "graphical_attributes/Textures/Brush.png";
 
 extern const char *COLORED_BUTTONS[];
 extern const char *TOOLS_BUTTONS[];
+extern const char *ACTIVE_TOOLS_BUTTONS[];
 
 #endif // TEXTURE_NAMES_H

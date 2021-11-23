@@ -27,10 +27,7 @@ public:
 
 	void set_main_color(const Color &par_main);
 
-	void set_pencil_color()
-	{
-		pencil->set_color(color_array[current_position.get_y() * MAX_COLOR_VALUE + current_position.get_x()]);
-	}
+	void set_pencil_color();
 
 	bool on_mouse_click(const bool state, const size_t par_x, const size_t par_y) override;
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;

@@ -24,7 +24,7 @@ public:
 	
 	void apply(Canvas *to_apply, const Vector_ll &position) override
 	{
-		size_t pencil_size = get_size();
+		size_t pencil_size = get_size() / 2;
 		Color pencil_color = get_color();
 
 		size_t width = to_apply->get_width();

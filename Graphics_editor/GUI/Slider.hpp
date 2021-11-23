@@ -29,6 +29,8 @@ public:
 	void count_intermediate_state() const;
 	void check_slider_state();
 
+	Magnetic *get_slider() { return slider; }
+
 	bool on_mouse_click(const bool state, const size_t par_x, const size_t par_y) override;
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
 };

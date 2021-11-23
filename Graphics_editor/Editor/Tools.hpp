@@ -7,7 +7,7 @@
 
 #include "Canvas.hpp"
 
-const Color DEFAULT_TOOL_COLOR = BLACK;
+const Color DEFAULT_TOOL_COLOR = RED;
 const size_t DEFAULT_TOOL_SIZE = 20;
 
 class Tool
@@ -25,11 +25,11 @@ public:
 		size = DEFAULT_TOOL_SIZE;
 	}
 
-	void set_color(const Color &par_color) { color = par_color; }
-	void set_size(const size_t par_size) { size = par_size; }
+	virtual void set_color(const Color &par_color) { color = par_color; }
+	virtual void set_size(const size_t par_size) { size = par_size; }
 
-	Color get_color() { return color; }
-	size_t get_size() { return size; }
+	virtual Color get_color() { return color; }
+	virtual size_t get_size() { return size; }
 
 	virtual void apply(Canvas *to_apply, const Vector_ll &position) = 0;
 };

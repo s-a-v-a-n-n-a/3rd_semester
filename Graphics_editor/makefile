@@ -1,8 +1,8 @@
 COMPILATOR = g++
 CFLAGS = -g -masm=intel -no-pie -march=native -O3 -std=c++17
 
-link: screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o slider.o toolbar.o main.o
-	$(COMPILATOR) screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o slider.o toolbar.o main.o -o main -lsfml-graphics -lsfml-window -lsfml-system
+link: screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o gradient_bar.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o slider.o toolbar.o main.o
+	$(COMPILATOR) screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o gradient_bar.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o slider.o toolbar.o main.o -o main -lsfml-graphics -lsfml-window -lsfml-system
 
 main.o : main.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o main.o main.cpp
@@ -77,6 +77,9 @@ editor_delegate.o: Editor/Editor_delegates.cpp
 
 graphical_delegate.o: Editor/Graphical_delegates.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o graphical_delegate.o Editor/Graphical_delegates.cpp
+
+gradient_bar.o: Editor/Gradient_bar.cpp
+	$(COMPILATOR) $(CFLAGS) -c -o gradient_bar.o Editor/Gradient_bar.cpp
 
 color_picker.o: Editor/Color_picker.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o color_picker.o Editor/Color_picker.cpp

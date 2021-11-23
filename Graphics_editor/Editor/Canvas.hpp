@@ -5,13 +5,15 @@
 
 #include "../Utilities/Affected.hpp"
 
-struct RGBA_effect
-{
-	int r;
-	int g;
-	int b;
-	int a;
-};
+// struct RGBA_effect
+// {
+// 	int r;
+// 	int g;
+// 	int b;
+// 	int a;
+// };
+
+extern const Color DEFAULT_BACKGROUND_COLOR;
 
 class Canvas;
 
@@ -26,7 +28,7 @@ protected:
 	Color *original_drawing;
 	Color *drawing;
 
-	RGBA_effect effect[MAX_COLOR_VALUE + 1];
+	// RGBA_effect effect[MAX_COLOR_VALUE + 1];
 
 	bool drawing_state;
 

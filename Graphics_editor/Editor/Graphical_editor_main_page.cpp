@@ -28,6 +28,7 @@ const char COLOR_TEXT[]      = " Color ";
 const char SIZE_TEXT[]       = " Size ";
 const char SPLINE_TEXT[]     = " Filter ";
 const char SLIDER_TEXT[]     = " Slider ";
+const char TOOLS_TEXT[]      = " Tools ";
 
 Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Config &par_base)
 : Visual_object(par_base), pencil()
@@ -52,6 +53,8 @@ Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Conf
 	
 	Thickness_window *slider = create_thickness_slider(par_position + Vector_ll(THICKNESS_WINDOW_POS_X, THICKNESS_WINDOW_POS_Y), THICKNESS_WINDOW_WIDTH, THICKNESS_WINDOW_HEIGHT, &pencil);
 
+	Tools_window *tools = create_tools_window(par_position + Vector_ll(1000, INCREASED_BUTTON_HEIGHT), 300, 600);
+
 	size_t current_button_size = get_text_length(GHOST_TYPE, CANVAS_TEXT, INCREASED_BUTTON_HEIGHT / 2);
 	create_restore_button(panel, canvas, CANVAS_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
 
@@ -70,11 +73,26 @@ Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Conf
 	current_button_size = get_text_length(GHOST_TYPE, SLIDER_TEXT, INCREASED_BUTTON_HEIGHT / 2);
 	create_restore_button(panel, slider, SLIDER_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
 
+    current_button_size = get_text_length(GHOST_TYPE, TOOLS_TEXT, INCREASED_BUTTON_HEIGHT / 2);
+	create_restore_button(panel, tools, TOOLS_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
+
     // test
     // create_test_button(par_position + Vector_ll(0, 1000), "", 300, 300);
 
 	set_active(canvas);
 }
+
+
+Tools_window *Graphical_editor_main_page::create_tools_window(const Vector_ll &position, const size_t width, const size_t height)
+{
+	Full_texture *background = Resources::get_instance()->create_texture(WINDOW_BACKGROUND, width, height);// new Full_texture(WINDOW_BACKGROUND, DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
+
+	Tools_window *tools = new Tools_window({(size_t)Vidget_type::MANAGER, position, background, TRANSPARENT, width, height});
+	add_visual_object(tools);
+
+	return tools;
+}
+
 
 Thickness_window *Graphical_editor_main_page::create_thickness_slider(const Vector_ll &position, const size_t width, const size_t height, Pencil *pencil)
 {

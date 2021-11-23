@@ -385,7 +385,6 @@ bool Change_thickness_non_fixedly::on_mouse_click(const size_t par_x, const size
 
 	// // pencil->set_size(current_size);
 	Tool *current_tool = Toolbar::get_instance()->get_active_tool();
-	printf("current_tool %p\n", current_tool);
 	current_tool->set_size(current_size);
 
 	return true;
@@ -560,9 +559,13 @@ bool Change_fixedly::on_mouse_click(const size_t par_x, const size_t par_y)
 	Vector_ll last_position = to_control->get_position();
 	
 	if (change_x)
+	{
 		to_control->set_position(last_position + Vector_ll(delta, 0));
+	}
 	else
+	{
 		to_control->set_position(last_position + Vector_ll(0, delta));
+	}
 
 	return true;
 }

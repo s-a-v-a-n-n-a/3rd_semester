@@ -3,6 +3,36 @@
 
 const unsigned char MAX_COLOR_VALUE = 255;
 
+struct HSV
+{
+	int h;
+	int s;
+	int v;
+
+	int get_h() const { return h; }
+	int get_s() const { return s; }
+	int get_v() const { return v; }
+
+	void set_h(int par_h) { h = par_h; }
+	void set_s(int par_s) { s = par_s; }
+	void set_v(int par_v) { v = par_v; }
+};
+
+struct HSV_d
+{
+	double h;
+	double s;
+	double v;
+};
+
+
+struct Color_d
+{
+	double r;
+	double g;
+	double b;
+};
+
 struct Color 
 {
 	unsigned char r;
