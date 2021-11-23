@@ -1,8 +1,8 @@
 COMPILATOR = g++
 CFLAGS = -g -masm=intel -no-pie -march=native -O3 -std=c++17
 
-link: screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o gradient_bar.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o slider.o toolbar.o main.o
-	$(COMPILATOR) screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o gradient_bar.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o slider.o toolbar.o main.o -o main -lsfml-graphics -lsfml-window -lsfml-system
+link: screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o gradient_bar.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o slider.o toolbar.o app.o main.o
+	$(COMPILATOR) screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o gradient_bar.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o slider.o toolbar.o app.o main.o -o main -lsfml-graphics -lsfml-window -lsfml-system
 
 main.o : main.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o main.o main.cpp
@@ -58,8 +58,9 @@ animations.o: GUI/Animations.cpp
 # -----------------------------------------------------------------------------------
 # Editor/%.o: Editor/%.cpp
 # 	$(COMPILATOR) $(CFLAGS) -c -o canvas Editor/Canvas.cpp
-# app.o: Editor/Application.cpp
-# 	$(COMPILATOR) $(CFLAGS) -c -o app.o Editor/Application.cpp
+app.o: Editor/Application.cpp
+	$(COMPILATOR) $(CFLAGS) -c -o app.o Editor/Application.cpp
+
 toolbar.o: Editor/Toolbar.cpp 
 	$(COMPILATOR) $(CFLAGS) -c -o toolbar.o Editor/Toolbar.cpp
 

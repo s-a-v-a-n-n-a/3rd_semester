@@ -40,6 +40,7 @@ protected:
 	friend class Toolbar_destroyer;
 
 public:
+	~Toolbar();
 	static Toolbar *get_instance();
 
 	void add_tool(Tool *tool);

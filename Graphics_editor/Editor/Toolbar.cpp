@@ -16,6 +16,14 @@ Toolbar::Toolbar()
 	set_active_tool(pencil);
 }
 
+Toolbar::~Toolbar()
+{
+	for (size_t i = 0; i < tools_amount; ++i)
+	{
+		delete tools[i];
+	}
+}
+
 Toolbar *Toolbar::get_instance()
 {
 	if (toolbar == nullptr)
