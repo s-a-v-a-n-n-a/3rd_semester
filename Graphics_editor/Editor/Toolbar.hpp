@@ -1,6 +1,8 @@
 #ifndef TOOLBAR_H
 #define TOOLBAR_H
 
+#include <vector>
+
 #include "Pencil.hpp"
 #include "Eraser.hpp"
 
@@ -24,7 +26,8 @@ private:
 	static Toolbar *toolbar;
 	static Toolbar_destroyer destroyer;
 
-	List<Tool*> tools;
+	// List<Tool*> tools;
+	std::vector<Tool*> tools;
 	size_t tools_amount;
 
 	Tool *active_tool;
@@ -45,7 +48,7 @@ public:
 	
 	Tool *get_active_tool();
 	size_t get_tools_amount() const;
-	List<Tool*> *get_tools();
+	const std::vector<Tool*> &get_tools();
 
 	void set_color(const Color &color);
 	Color get_color() const;

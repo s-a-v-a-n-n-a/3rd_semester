@@ -359,7 +359,7 @@ bool Gradient_bar::on_mouse_click(const bool state, const size_t par_x, const si
 		double value = (double)current_position;
 		// Color color = get_color();
 		// HSV_d hsv = { (360.0 * (255.0 - value)) / 255.0, 1.0, 1.0 };
-		HSV hsv = { 255 - current_position, 255, 255 };
+		HSV hsv = { (int)(255 - current_position), 255, 255 };
 		Color main_color = get_rgb(hsv);
 		
 		to_control->set_main_color(main_color);
@@ -384,7 +384,7 @@ bool Gradient_bar::on_mouse_move(const Vector_ll from, const Vector_ll to)
 		current_position = to.get_x() - get_position().get_x();
 		// Color color = get_color();
 		// HSV_d hsv = { (360.0 * (1.0 - ((double)current_position/255.0))), 1.0, 1.0 };
-		HSV hsv = { 255 - current_position, 255, 255 };
+		HSV hsv = { (int)(255 - current_position), 255, 255 };
 		Color main_color = get_rgb(hsv);
 
 		to_control->set_main_color(main_color);

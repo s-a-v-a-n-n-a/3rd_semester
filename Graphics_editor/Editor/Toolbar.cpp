@@ -12,7 +12,7 @@ Toolbar::Toolbar()
 	Eraser *eraser = new Eraser();
 	add_tool(eraser);
 
-	tools_amount = tools.get_length();
+	tools_amount = tools.size();
 	set_active_tool(pencil);
 }
 
@@ -29,7 +29,7 @@ Toolbar *Toolbar::get_instance()
 
 void Toolbar::add_tool(Tool *tool)
 {
-	tools.add_to_end(tool);
+	tools.push_back(tool);
 }
 
 void Toolbar::set_active_tool(Tool *tool)
@@ -42,9 +42,9 @@ Tool *Toolbar::get_active_tool()
 	return active_tool;
 }
 
-List<Tool*> *Toolbar::get_tools()
+const std::vector<Tool*> &Toolbar::get_tools()
 {
-	return &tools;	
+	return tools;	
 }
 
 void Toolbar::set_color(const Color &color)

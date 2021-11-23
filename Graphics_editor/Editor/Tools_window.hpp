@@ -17,7 +17,7 @@ public:
 	: Window(par_base)
 	{
 		size_t tools_amount = Toolbar::get_instance()->get_tools_amount();
-		Tool **tools = Toolbar::get_instance()->get_tools()->get_array();
+		std::vector<Tool*> tools = Toolbar::get_instance()->get_tools();
 
 		size_t y_offset = DEFAULT_BUTTON_HEIGHT;
 		for (size_t i = 0; i < tools_amount; i += 2)

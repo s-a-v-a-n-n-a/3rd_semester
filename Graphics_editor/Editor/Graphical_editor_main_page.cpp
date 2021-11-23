@@ -8,15 +8,15 @@ const size_t DEFAULT_CANVAS_POS_Y = 400;
 const size_t DEFAULT_COLOR_VIDGET_WIDTH = MAX_COLOR_VALUE + 20;
 const size_t DEFAULT_COLOR_VIDGET_HEIGHT = MAX_COLOR_VALUE + 20 + 90; //  + DEFAULT_BUTTON_HEIGHT
 const size_t DEFAULT_COLOR_VIDGET_POS_X = 0;
-const size_t DEFAULT_COLOR_VIDGET_POS_Y = 100;
+const size_t DEFAULT_COLOR_VIDGET_POS_Y = INCREASED_BUTTON_HEIGHT;
 
 const size_t DEFAULT_SIZE_VIDGET_POS_X = 0;
-const size_t DEFAULT_SIZE_VIDGET_POS_Y = 400;
+const size_t DEFAULT_SIZE_VIDGET_POS_Y = DEFAULT_COLOR_VIDGET_HEIGHT + DEFAULT_COLOR_VIDGET_POS_Y;
 
 const size_t THICKNESS_WINDOW_WIDTH = 400;
 const size_t THICKNESS_WINDOW_HEIGHT = 100;
 const size_t THICKNESS_WINDOW_POS_X = 0;
-const size_t THICKNESS_WINDOW_POS_Y = 600;
+const size_t THICKNESS_WINDOW_POS_Y = DEFAULT_SIZE_VIDGET_POS_Y + THICK_PALETTE_HEIGHT;
 
 const size_t DEFAULT_BUTTON_WIDTH = 200;
 
@@ -53,7 +53,7 @@ Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Conf
 	
 	Thickness_window *slider = create_thickness_slider(par_position + Vector_ll(THICKNESS_WINDOW_POS_X, THICKNESS_WINDOW_POS_Y), THICKNESS_WINDOW_WIDTH, THICKNESS_WINDOW_HEIGHT, &pencil);
 
-	Tools_window *tools = create_tools_window(par_position + Vector_ll(1000, INCREASED_BUTTON_HEIGHT), 300, 600);
+	Tools_window *tools = create_tools_window(par_position + Vector_ll(par_width - 300, INCREASED_BUTTON_HEIGHT), 300, 600);
 
 	size_t current_button_size = get_text_length(GHOST_TYPE, CANVAS_TEXT, INCREASED_BUTTON_HEIGHT / 2);
 	create_restore_button(panel, canvas, CANVAS_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
