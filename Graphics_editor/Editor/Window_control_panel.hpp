@@ -22,4 +22,11 @@ public:
 	// bool on_mouse(const double par_x, const double par_y) override;
 };
 
+class Closing_window_control_panel : public Visual_object
+{
+public:
+	Closing_window_control_panel(const Visual_object::Config &par_base, Visual_object *whose);
+	~Closing_window_control_panel();
+};
+
 #endif // WINDOW_CONTROL_PANEL_VIDGET

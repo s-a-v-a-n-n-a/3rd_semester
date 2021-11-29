@@ -11,8 +11,6 @@
 #include "Vidget_types.hpp"
 
 // #include "Editor_control_panel.hpp"
-#include "Editor_delegates.hpp"
-#include "Graphical_delegates.hpp"
 
 // #include "Canvases_list.hpp"
 #include "Canvas_manager_manager.hpp"
@@ -21,6 +19,7 @@
 #include "Effects_window.hpp"
 #include "Thickness_window.hpp"
 #include "Tools_window.hpp"
+#include "../GUI/Input_string.hpp"
 
 #include "Pencil.hpp"
 
@@ -48,7 +47,7 @@ public:
 
 	// void draw(Screen_information *screen) override;
 	// bool on_mouse(const double par_x, const double par_y) override;
-	bool on_key_pressed(const unsigned key_state) override;
+	bool on_key_pressed(const bool pressed_state, const unsigned key_state) override;
 
 	Thickness_window *create_thickness_slider(const Vector_ll &position, const size_t width, const size_t height, Pencil *pencil);
 	Effects_window *create_effects_window(const Vector_ll &position, const size_t width, const size_t height, Canvas *active_canvas);

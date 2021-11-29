@@ -91,7 +91,7 @@ void Screen_information::draw_line(const Vector_ll &left, const Vector_ll &right
 }
 
 
-void Screen_information::draw_text(const char *par_text, const Vector_ll &par_position, const Color &par_color, const size_t par_text_size)
+void Screen_information::draw_text(const char *par_text, const Vector_ll &par_position, const Color &par_color, const size_t par_text_size, const bool centered)
 {
 	sf::Font font = {};
 	if (!font.loadFromFile("graphical_attributes/Fonts/OpenGostTypeA-Regular.ttf"))
@@ -108,7 +108,10 @@ void Screen_information::draw_text(const char *par_text, const Vector_ll &par_po
 		drawable_text.setCharacterSize(par_text_size);
 		drawable_text.setFillColor(color);
 		
-		drawable_text.setPosition(par_position.get_x() - drawable_text.getGlobalBounds().width / 2, par_position.get_y() - (drawable_text.getGlobalBounds().height));
+		if (centered)
+			drawable_text.setPosition(par_position.get_x() - drawable_text.getGlobalBounds().width / 2, par_position.get_y() - (drawable_text.getGlobalBounds().height));
+		else
+			drawable_text.setPosition(par_position.get_x(), par_position.get_y());
 
 		window.draw(drawable_text);
 	}

@@ -1,11 +1,14 @@
 #include "Gradient_bar.hpp"
 
-Gradient_bar::Gradient_bar(const Visual_object::Config &par_base, Pencil *par_pencil, Color_picker *par_to_control)
-: Visual_object(par_base), pencil(par_pencil), current_position(0), to_control(par_to_control)
+Gradient_bar::Gradient_bar(const Visual_object::Config &par_base, Color_picker *par_to_control, const HSV &position_hsv)
+: Visual_object(par_base), current_position(0), to_control(par_to_control)
 {
 	Full_texture *rect = Resources::get_instance()->create_texture(PICKING_RECT_TEXTURE, 5, get_height());// new Full_texture(WINDOW_BACKGROUND, DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
 	
-	Visual_object::Config buttton_base = { (size_t)Vidget_type::BUTTON, get_position(), rect, TRANSPARENT, 5, get_height() };
+	size_t width = get_width();
+	current_position = (size_t)((double)(255 - position_hsv.h) / 255.0 * (double)width);
+
+	Visual_object::Config buttton_base = { (size_t)Vidget_type::BUTTON, get_position() + Vector_ll(current_position, 0), rect, TRANSPARENT, 5, get_height() };
 	picker = new Magnetic(buttton_base, this, get_position(), get_position() + Vector_ll(get_width() - 5, 0), get_height());
 
 	add_visual_object(picker);
@@ -68,7 +71,7 @@ void Gradient_bar::set_current_position(const Color &main_color)
 
 			return;
 		}
-		position.set_x(2 * MAX_COLOR_VALUE - (long long)((double)gap * ((double)blue / (double)MAX_COLOR_VALUE)));
+		position.set_x(2 * gap - (long long)((double)gap * ((double)blue / (double)MAX_COLOR_VALUE)));
 		picker->set_position(position);
 
 		return;
@@ -78,12 +81,12 @@ void Gradient_bar::set_current_position(const Color &main_color)
 	{
 		if (blue == MAX_COLOR_VALUE)
 		{
-			position.set_x(2 * MAX_COLOR_VALUE + (long long)((double)(gap) * ((double)blue / (double)MAX_COLOR_VALUE)));
+			position.set_x(2 * gap + (long long)((double)(gap) * ((double)blue / (double)MAX_COLOR_VALUE)));
 			picker->set_position(position);
 
 			return;
 		}
-		position.set_x(3 * MAX_COLOR_VALUE - (long long)((double)(gap) * ((double)blue / (double)MAX_COLOR_VALUE)));
+		position.set_x(3 * gap - (long long)((double)(gap) * ((double)blue / (double)MAX_COLOR_VALUE)));
 		picker->set_position(position);
 
 		return;
@@ -91,14 +94,17 @@ void Gradient_bar::set_current_position(const Color &main_color)
 
 	if (green = MAX_COLOR_VALUE)
 	{
-		position.set_x(4 * MAX_COLOR_VALUE + (long long)((double)(gap) * ((double)blue / (double)MAX_COLOR_VALUE)));
+		position.set_x(4 * gap + (long long)((double)(gap) * ((double)blue / (double)MAX_COLOR_VALUE)));
 		picker->set_position(position);
 
 		return;
 	}
 
-	position.set_x(5 * MAX_COLOR_VALUE - (long long)((double)(gap) * ((double)blue / (double)MAX_COLOR_VALUE)));
+	position.set_x(5 * gap - (long long)((double)(gap) * ((double)blue / (double)MAX_COLOR_VALUE)));
 	picker->set_position(position);
+
+	to_control->set_main_color(main_color);
+	to_control->set_color();
 }
 
 HSV Gradient_bar::get_hsv(const Color &rgb)
@@ -354,16 +360,18 @@ bool Gradient_bar::on_mouse_click(const bool state, const size_t par_x, const si
 {
 	if (point_inside(par_x, par_y) && state)
 	{
+		size_t width = get_width();
+
 		current_position = par_x - get_position().get_x();
 
 		double value = (double)current_position;
 		// Color color = get_color();
 		// HSV_d hsv = { (360.0 * (255.0 - value)) / 255.0, 1.0, 1.0 };
-		HSV hsv = { (int)(255 - current_position), 255, 255 };
+		HSV hsv = { (int)(((double)(width - current_position) / (double)width) * 255.0), 255, 255 };
 		Color main_color = get_rgb(hsv);
 		
 		to_control->set_main_color(main_color);
-		to_control->set_pencil_color();
+		to_control->set_color();
 
 		picker->on_mouse_click(state, par_x, par_y);
 		
@@ -381,14 +389,16 @@ bool Gradient_bar::on_mouse_move(const Vector_ll from, const Vector_ll to)
 
 	if (change)
 	{
+		size_t width = get_width();
+
 		current_position = to.get_x() - get_position().get_x();
 		// Color color = get_color();
 		// HSV_d hsv = { (360.0 * (1.0 - ((double)current_position/255.0))), 1.0, 1.0 };
-		HSV hsv = { (int)(255 - current_position), 255, 255 };
+		HSV hsv = { (int)(((double)(width - current_position) / (double)width) * 255.0), 255, 255 };
 		Color main_color = get_rgb(hsv);
 
 		to_control->set_main_color(main_color);
-		to_control->set_pencil_color();
+		to_control->set_color();
 
 		return true;
 	}

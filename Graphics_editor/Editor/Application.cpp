@@ -57,7 +57,15 @@ void Application::tick()
 	default_main->tick(graphics_wrapper, 0.05);
 
 	if (current_main != default_main)
-		current_main->tick(graphics_wrapper, 0.05);
+    {
+		if (!(current_main->get_alive()))
+        {
+            delete current_main;
+            set_default();
+            return;
+        }
+        current_main->tick(graphics_wrapper, 0.05);
+    }
 }
 
 void Application::launch()
@@ -70,65 +78,63 @@ void Application::launch()
         unsigned key_state = 0;
         graphics_wrapper->reset();
         
-        Sfml_events result = graphics_wrapper->event_handler.detect_event(graphics_wrapper->window, graphics_wrapper->event);
+        // Sfml_events result = graphics_wrapper->event_handler.detect_event(graphics_wrapper->window, graphics_wrapper->event);
+        Event result = graphics_wrapper->event_handler.detect_event(graphics_wrapper->window, graphics_wrapper->event);
         
-        switch (result)
+        switch (result.type)
         {
-        case Sfml_events::WINDOW_CLOSED:
+        case Event_type::WINDOW:
             graphics_wrapper->window.close();
             open = false;
             break;
 
-        case Sfml_events::MOUSE_CLICKED:
+        case Event_type::MOUSE:
         {
-            click_place = graphics_wrapper->get_mouse_position();
-            current_main->on_mouse_click(true, click_place.get_x(), click_place.get_y());
+            switch (result.event)
+            {
+            case (size_t)Mouse_state::CLICKED:
+                click_place = graphics_wrapper->get_mouse_position();
+                current_main->on_mouse_click(true, click_place.get_x(), click_place.get_y());
 
-            break;
-        }
-
-        case Sfml_events::MOUSE_RELEASED:
-        {
-            click_place = graphics_wrapper->get_mouse_position();
-
-            current_main->on_mouse_click(false, click_place.get_x(), click_place.get_y());
-
-            break;
-        }
-
-        case Sfml_events::MOUSE_MOVED:
-        {
-            Vector_ll move_place(graphics_wrapper->get_mouse_position());
-            current_main->on_mouse_move(click_place, move_place);
-            click_place = move_place;
-
-            break;
-        }
-
-        case Sfml_events::KEY_U:
-            key_state |= (unsigned)Key_state::KEY_U;
-            current_main->on_key_pressed(key_state);
-
-            break;
-
-        case Sfml_events::KEY_R:
-            key_state |= (unsigned)Key_state::KEY_R;
-            current_main->on_key_pressed(key_state);
-
-            break;
-
-        case Sfml_events::KEY_G:
-            key_state |= (unsigned)Key_state::KEY_G;
-            current_main->on_key_pressed(key_state);
-
-            break;
-
-        case Sfml_events::KEY_B:
-            key_state |= (unsigned)Key_state::KEY_B;
+                break;
             
-            current_main->on_key_pressed(key_state);
+            case (size_t)Mouse_state::RELEASED:
+                click_place = graphics_wrapper->get_mouse_position();
+                current_main->on_mouse_click(false, click_place.get_x(), click_place.get_y());
 
+                break;
+            case (size_t)Mouse_state::MOVED:
+            {
+                Vector_ll move_place(graphics_wrapper->get_mouse_position());
+                current_main->on_mouse_move(click_place, move_place);
+                click_place = move_place;
+
+                break;
+            }
+            default:
+                break;
+            }
+            
             break;
+        }
+        case Event_type::KEYBOARD:
+            switch (result.event)
+            {
+            case (size_t)Key_state::PRESSED:
+                key_state |= result.sender;
+                current_main->on_key_pressed(true, key_state);
+
+                break;
+
+            case (size_t)Key_state::RELEASED:
+                key_state |= result.sender;
+                current_main->on_key_pressed(false, key_state);
+
+                break;
+
+            default:
+                break;
+            }
 
         default:
             break;

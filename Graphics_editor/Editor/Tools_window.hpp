@@ -8,6 +8,20 @@
 #include "Toolbar.hpp"
 #include "Tools.hpp"
 
+class Color_button : public Button 
+{
+public:
+	Color_button(const Visual_object::Config &par_base, Button_delegate *par_click, const char *par_text)
+	: Button(par_base, par_click, par_text) {}
+
+	void tick(Screen_information *screen, const double delta_time) override
+	{
+		set_color(Toolbar::get_instance()->get_color());
+		
+		Button::tick(screen, delta_time);
+	}
+};
+
 class Tools_window : public Window
 {
 private:
@@ -28,6 +42,13 @@ public:
 		
 			y_offset += get_width()/2;
 		}	
+
+		Animating_texture *color_texture = Resources::get_instance()->create_texture(COLOR_BUTTON, get_width()/2, get_width()/2, ACTIVE_COLOR_BUTTON, NULL);
+
+		Color_button *color_button = new Color_button({(size_t)Vidget_type::BUTTON, get_position() + Vector_ll(0, y_offset), color_texture, Toolbar::get_instance()->get_color(), get_width()/2, get_width()/2}, NULL, "");
+		Animating_color_picker_creator *color_creator = new Animating_color_picker_creator({300, 300}, color_button);
+		color_button->set_delegate(color_creator);
+		add_visual_object(color_button);
 	}
 
 	Button *create_pick_button(const Vector_ll &position, const size_t width, const size_t height, const char *texture_name, const char *move_texture_name, Tool *tool)

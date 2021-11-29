@@ -1,4 +1,5 @@
 #include "Graphical_delegates.hpp"
+#include "Application.hpp"
 
 // Interactive
 // ---------------------------------------------------------------------------------------------------------
@@ -298,9 +299,14 @@ Close_delegate::Close_delegate(Visual_object *par_to_close)
 
 bool Close_delegate::on_mouse_click(const size_t par_x, const size_t par_y)
 {
+	return true;
+}
+
+bool Close_delegate::on_mouse_release()
+{
 	to_close->set_alive(false);
 
-	return false;
+	return true;
 }
 // ---------------------------------------------------------------------------------------------------------
 
@@ -332,6 +338,25 @@ bool Close_interactive_delegate::on_mouse_move(const Vector_ll from, const Vecto
 	return true;
 }
 // ---------------------------------------------------------------------------------------------------------
+
+Animating_close_delegate::Animating_close_delegate(Visual_object *par_to_close, Visual_object *par_to_interact)
+: Close_delegate(par_to_close), Animating(par_to_interact)
+{}
+
+bool Animating_close_delegate::on_mouse_click(const size_t par_x, const size_t par_y)
+{
+	Close_delegate::on_mouse_click(par_x, par_y);
+	return Animating::on_mouse_click(par_x, par_y);
+}
+bool Animating_close_delegate::on_mouse_release()
+{
+	Animating::reset();
+	return Close_delegate::on_mouse_release();
+}
+bool Animating_close_delegate::on_mouse_move(const Vector_ll from, const Vector_ll to)
+{
+	return Animating::on_mouse_move(from, to);
+}
 
 // Change_color 
 // ---------------------------------------------------------------------------------------------------------
@@ -568,4 +593,68 @@ bool Change_fixedly::on_mouse_click(const size_t par_x, const size_t par_y)
 	}
 
 	return true;
+}
+
+// Pick tool
+// ----------------------------------------------------------------------------------------------------------------------------
+
+Pick_tool::Pick_tool(Tool *par_tool) // Toolbar *par_toolbar, 
+: tool(par_tool) //  toolbar(par_toolbar),
+{}
+
+bool Pick_tool::on_mouse_click(const size_t par_x, const size_t par_y)
+{
+	return true;
+}
+
+bool Pick_tool::on_mouse_release()
+{
+	// toolbar->set_active_tool(tool);
+	Toolbar::get_instance()->set_active_tool(tool);
+
+	return true;
+}
+
+// Animating_pick_tool
+// ----------------------------------------------------------------------------------------------------------------------------
+
+Animating_pick_tool::Animating_pick_tool(Tool *par_tool, Visual_object *par_to_animate)
+: Pick_tool(par_tool), Animating(par_to_animate)
+{}
+
+bool Animating_pick_tool::on_mouse_click(const size_t par_x, const size_t par_y)
+{
+	Pick_tool::on_mouse_click(par_x, par_y);
+	return Animating::on_mouse_click(par_x, par_y);
+}
+
+bool Animating_pick_tool::on_mouse_release()
+{
+	Pick_tool::on_mouse_release();
+	return Animating::on_mouse_release();
+}
+
+bool Animating_pick_tool::on_mouse_move(const Vector_ll from, const Vector_ll to)
+{
+	return Animating::on_mouse_move(from, to);
+}
+
+// Roll_up_confirmation
+// ----------------------------------------------------------------------------------------------------------------------------
+
+Roll_up_confirmation::Roll_up_confirmation(Visual_object *par_roll_up)
+: to_roll_up(par_roll_up)
+{}
+
+bool Roll_up_confirmation::on_mouse_click(const size_t par_x, const size_t par_y)
+{
+	return false;
+}
+bool Roll_up_confirmation::on_mouse_release()
+{
+	// delete to_roll_up;
+	to_roll_up->set_alive(false);
+	// Application::get_app()->set_default();
+	
+	return false;
 }

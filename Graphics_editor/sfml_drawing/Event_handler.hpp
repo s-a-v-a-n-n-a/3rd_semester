@@ -3,6 +3,21 @@
 
 #include <SFML/Graphics.hpp>
 
+enum class Event_type
+{
+	NO_EVENT,
+	WINDOW,
+	MOUSE,
+	KEYBOARD
+};
+
+struct Event
+{
+	Event_type type;
+	size_t event;
+	size_t sender;
+};
+
 enum class Sfml_events
 {
 	NOTHING,
@@ -10,81 +25,194 @@ enum class Sfml_events
 	MOUSE_CLICKED,
 	MOUSE_RELEASED,
 	MOUSE_MOVED,
-	KEY_U,
-	KEY_R,
+	KEY_A,
+	KEY_B,
+	KEY_C,
+	KEY_D,
+	KEY_E,
+	KEY_F,
 	KEY_G,
-	KEY_B
+	KEY_H,
+	KEY_I,
+	KEY_J,
+	KEY_K,
+	KEY_L,
+	KEY_M,
+	KEY_N,
+	KEY_O,
+	KEY_P,
+	KEY_Q,
+	KEY_R,
+	KEY_S,
+	KEY_T,
+	KEY_U,
+	KEY_V,
+	KEY_W,
+	KEY_X,
+	KEY_Y,
+	KEY_Z,
+	KEY_0,
+	KEY_1,
+	KEY_2,
+	KEY_3,
+	KEY_4,
+	KEY_5,
+	KEY_6,
+	KEY_7,
+	KEY_8,
+	KEY_9,
+	KEY_ESC,
+	KEY_LCTRL,
+	KEY_LSHIFT,
+	BACKSPACE
+};
+
+enum class Window_state
+{
+	CLOSED,
+	OPEN
 };
 
 enum class Mouse_state
 {
-	RELEASED,
 	CLICKED,
+	RELEASED,
 	MOVED
 };
 
 enum class Key_state
 {
-	KEY_U,
-	KEY_R,
-	KEY_G,
-	KEY_B
+	PRESSED,
+	RELEASED
+};
+
+enum class Mouse
+{
+	LEFT,
+	RIGHT,
+	MIDDLE
+};
+
+enum class Key
+{
+	A,
+	B,
+	C,
+	D,
+	E,
+	F,
+	G,
+	H,
+	I,
+	J,
+	K,
+	L,
+	M,
+	N,
+	O,
+	P,
+	Q,
+	R,
+	S,
+	T,
+	U,
+	V,
+	W,
+	X,
+	Y,
+	Z,
+	NUM0,
+	NUM1,
+	NUM2,
+	NUM3,
+	NUM4,
+	NUM5,
+	NUM6,
+	NUM7,
+	NUM8,
+	NUM9,
+	ESC,
+	LCTRL,
+	LSHIFT,
+	LSYSTEM, 
+	RCTRL, 
+	RSHIFT,
+  	RALT, 
+  	RSYSTEM, 
+  	MENU, 
+  	LBRACKET,
+    RBRACKET, 
+    SEMICOLON, 
+    COMMA, 
+    PERIOD,
+  	QUOTE, 
+  	SLASH, 
+  	BACKSLASH, 
+  	TILDE,
+    EQUAL, 
+    HYPHEN, 
+    SPACE, 
+    ENTER,
+    BACKSPACE = sf::Keyboard::Backspace,
+	TAB, 
+	PAGE_UP, 
+	PAGE_DOWN,
+    INSERT, 
+    DELETE,
+  	ADD, 
+  	SUB, 
+  	MULT, 
+  	DIV,
+  	LEFT, 
+  	RIGHT, 
+  	UP, 
+  	DOWN
 };
 
 class Event_handler
 {
 public:
-	Sfml_events detect_event(sf::RenderWindow &window, sf::Event &event)
+	Event detect_event(sf::RenderWindow &window, sf::Event &event)
 	{
 		if(window.pollEvent(event)) 
 		{
 			if (event.type == sf::Event::Closed)
 	        {
-	           return Sfml_events::WINDOW_CLOSED;
+	           // return Sfml_events::WINDOW_CLOSED;
+	        	return { Event_type::WINDOW, (size_t)Window_state::CLOSED, 0 };
 	        }
 
 	        if (event.type == sf::Event::MouseButtonPressed)
 	        {
-	        	return Sfml_events::MOUSE_CLICKED;
+	        	// return Sfml_events::MOUSE_CLICKED;
+	        	return { Event_type::MOUSE, (size_t)Mouse_state::CLICKED, (size_t)Mouse::LEFT };
 	        }
 
 	        if (event.type == sf::Event::MouseButtonReleased)
 	        {
-	        	return Sfml_events::MOUSE_RELEASED;
+	        	// return Sfml_events::MOUSE_RELEASED;
+	        	return { Event_type::MOUSE, (size_t)Mouse_state::RELEASED, (size_t)Mouse::LEFT };
 	        }
 
 	        if (event.type == sf::Event::MouseMoved)
 	        {
-	        	return Sfml_events::MOUSE_MOVED;
+	        	// return Sfml_events::MOUSE_MOVED;
+	        	return { Event_type::MOUSE, (size_t)Mouse_state::MOVED, (size_t)Mouse::LEFT };
 	        }
 
 	        if (event.type == sf::Event::KeyPressed)
 	        {
-	        	switch(event.key.code)
-	        	{
-	        	case sf::Keyboard::U:
-	        		return Sfml_events::KEY_U;
-	        		break;
+	        	return { Event_type::KEYBOARD, (size_t)Key_state::PRESSED, (size_t)Key::A + (size_t)event.key.code };
+	        }
 
-	        	case sf::Keyboard::R:
-	        		return Sfml_events::KEY_R;
-	        		break;
-
-	        	case sf::Keyboard::G:
-	        		return Sfml_events::KEY_G;
-	        		break;
-
-	        	case sf::Keyboard::B:
-	        		return Sfml_events::KEY_B;
-	        		break;
-
-	        	default:
-	        		break;
-	        	}
+	        if (event.type == sf::Event::KeyReleased)
+	        {
+	        	return { Event_type::KEYBOARD, (size_t)Key_state::RELEASED, (size_t)Key::A + (size_t)event.key.code };
 	        }
 	    }
 
-        return Sfml_events::NOTHING;
+        // return Sfml_events::NOTHING;
+        return { Event_type::NO_EVENT, 0 };
 	}
 };
 

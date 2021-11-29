@@ -32,14 +32,14 @@ Button::~Button()
 
 void Button::draw(Screen_information *screen)
 {
-	if(get_texture())
-	{
-		screen->draw_texture(get_position(), get_texture()->get_texture(), get_width(), get_height());
-	}
-	else	
-	{
+	// if(get_texture())
+	// {
+	// 	screen->draw_texture(get_position(), get_texture()->get_texture(), get_width(), get_height());
+	// }
+	// else	
+	// {
 		Visual_object::draw(screen);
-	}
+	// }
 
 	size_t objects_amount = get_objects()->get_length();
 	for (size_t i = 0; i < objects_amount; ++i)

@@ -5,8 +5,8 @@ class Create_canvas;
 class Canvas_keeper;
 
 #include "../GUI/Button_delegate.hpp"
-#include "Canvas_manager_manager.hpp"
 #include "Graphical_delegates.hpp"
+#include "Canvas_manager_manager.hpp"
 
 #include "Effects/Canvas_effects.hpp"
 
@@ -130,6 +130,32 @@ public:
 	}
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
+};
+
+// -------------------------------------------------------------------------------------------------
+
+class Color_picker_creator : virtual public Button_delegate
+{
+private:
+	Vector_ll position;
+
+public:
+	Color_picker_creator(const Vector_ll &par_position);
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+	bool on_mouse_release() override;
+};
+
+// -------------------------------------------------------------------------------------------------
+
+class Animating_color_picker_creator : public Color_picker_creator, public Animating
+{
+public:
+	Animating_color_picker_creator(const Vector_ll &par_position, Visual_object *par_to_interact);
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+	bool on_mouse_release() override;
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
 };
 

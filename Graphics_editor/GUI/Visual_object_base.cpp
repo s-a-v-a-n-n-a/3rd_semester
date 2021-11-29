@@ -54,29 +54,10 @@ void Visual_object::draw(Screen_information *screen)
 {
 	assert(screen);
 
+	screen->draw_rectangle(get_position(), get_color(), get_width(), get_height());
 	if (base.texture)
-	{
-		screen->draw_texture(get_position(), base.texture->get_texture(), get_width(), get_height()); // пока нету такой функции
+		screen->draw_texture(get_position(), base.texture->get_texture(), get_width(), get_height());
 
-		// sf::Sprite sprite;
-
-		// size_t texture_width = texture->getSize().x;
-		// size_t texture_height = texture->getSize().y;
-
-		// sprite.setPosition(position.get_x(), position.get_y());
-
-		// double scale_x = (double)width / (double)texture_width;
-		// double scale_y = (double)height / (double)texture_height;
-
-		// sprite.setTexture(*texture);
-		// sprite.setScale(scale_x, scale_y);
-
-		// window.draw(sprite);
-	}
-	else
-	{
-		screen->draw_rectangle(get_position(), get_color(), get_width(), get_height());
-	}
 
 	// if (get_reactive())
 	// {
@@ -180,13 +161,13 @@ bool Visual_object::on_mouse_move(const Vector_ll from, const Vector_ll to)
 	return move;
 }
 
-bool Visual_object::on_key_pressed(const unsigned key_mask)
+bool Visual_object::on_key_pressed(const bool pressed_state, const unsigned key_mask)
 {
 	size_t objects_amount = objects.get_length();
 	
 	for (long long i = (long long)objects_amount - 1; i >= 0; --i)
 	{
-		if ((get_objects()->get_array()[i])->get_reactive() && (get_objects()->get_array()[i])->on_key_pressed(key_mask)) // ??????
+		if ((get_objects()->get_array()[i])->get_reactive() && (get_objects()->get_array()[i])->on_key_pressed(pressed_state, key_mask)) // ??????
 		{
 			// set_active(get_objects()->get_array()[i]);
 			

@@ -14,7 +14,7 @@ class Color_selection_window : public Window
 {
 public:
 	Color_selection_window() = delete;
-	Color_selection_window(const Visual_object::Config &par_base, Pencil *par_pencil);
+	Color_selection_window(const Visual_object::Config &par_base);
 	~Color_selection_window() = default;
 };
 

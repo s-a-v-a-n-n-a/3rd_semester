@@ -133,7 +133,7 @@ public:
 
 // --------------------------------------------------------------------------------------------------------------------------
 
-class Close_delegate : public Button_delegate
+class Close_delegate : virtual public Button_delegate
 {
 private: 
 	Visual_object *to_close;
@@ -142,6 +142,7 @@ public:
 	Close_delegate(Visual_object *par_to_close);
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+	bool on_mouse_release() override;
 };
 
 class Close_interactive_delegate : public Close_delegate
@@ -152,6 +153,19 @@ private:
 public:
 	Close_interactive_delegate(Visual_object *par_to_close, Visual_object *par_to_interact);
 
+	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
+};
+
+class Animating_close_delegate : public Close_delegate, public Animating
+{
+private:
+	Visual_object *to_interact;
+
+public:
+	Animating_close_delegate(Visual_object *par_to_close, Visual_object *par_to_interact);
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+	bool on_mouse_release() override;
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
 };
 
@@ -286,19 +300,6 @@ public:
 
 // --------------------------------------------------------------------------------------------------------------------------
 
-// class Change_on_relation : public Button_delegate
-// {
-// private:
-// 	Visual_object *to_control;
-
-// 	bool x_coord;
-
-// public:
-// 	Change_on_relation(Visual_object *par_to_control, const bool par_x_coord);
-
-// 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
-// };
-
 class Pick_tool : virtual public Button_delegate
 {
 private:
@@ -306,44 +307,62 @@ private:
 	// Toolbar *toolbar;
 
 public:
-	Pick_tool(Tool *par_tool) // Toolbar *par_toolbar, 
-	: tool(par_tool) //  toolbar(par_toolbar),
-	{}
+	Pick_tool(Tool *par_tool);
 
-	bool on_mouse_click(const size_t par_x, const size_t par_y) override
-	{
-		return true;
-	}
-
-	bool on_mouse_release() override
-	{
-		// toolbar->set_active_tool(tool);
-		Toolbar::get_instance()->set_active_tool(tool);
-
-		return true;
-	}
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+	bool on_mouse_release() override;
 };
+
+// --------------------------------------------------------------------------------------------------------------------------
 
 class Animating_pick_tool : public Pick_tool, public Animating
 {
 public:
-	Animating_pick_tool(Tool *par_tool, Visual_object *par_to_animate)
-	: Pick_tool(par_tool), Animating(par_to_animate)
+	Animating_pick_tool(Tool *par_tool, Visual_object *par_to_animate);
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+	bool on_mouse_release() override;
+	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
+};
+
+// --------------------------------------------------------------------------------------------------------------------------
+
+class Roll_up_confirmation : virtual public Button_delegate
+{
+private:
+	Visual_object *to_roll_up;
+
+public:
+	Roll_up_confirmation(Visual_object *par_roll_up);
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+	bool on_mouse_release() override;
+};
+
+// --------------------------------------------------------------------------------------------------------------------------
+
+class Popup_color_confirmation : public Roll_up_confirmation
+{
+private:
+	Color *color;
+
+public:
+	Popup_color_confirmation(Visual_object *par_roll_up, Color *to_set)
+	: Roll_up_confirmation(par_roll_up), color(to_set)
 	{}
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override
 	{
-		Pick_tool::on_mouse_click(par_x, par_y);
-		return Animating::on_mouse_click(par_x, par_y);
+		Roll_up_confirmation::on_mouse_click(par_x, par_y);
+
+		return true;
 	}
 	bool on_mouse_release() override
 	{
-		Pick_tool::on_mouse_release();
-		return Animating::on_mouse_release();
-	}
-	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override
-	{
-		return Animating::on_mouse_move(from, to);
+		Roll_up_confirmation::on_mouse_release();
+		Toolbar::get_instance()->set_color(*color);
+		
+		return true;
 	}
 };
 

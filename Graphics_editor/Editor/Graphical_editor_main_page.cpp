@@ -1,12 +1,14 @@
 #include "Graphical_editor_main_page.hpp"
+#include "Editor_delegates.hpp"
+#include "Graphical_delegates.hpp"
 
 const size_t DEFAULT_CANVAS_SIZE = 300;
 
 const size_t DEFAULT_CANVAS_POS_X = 400;
 const size_t DEFAULT_CANVAS_POS_Y = 400;
 
-const size_t DEFAULT_COLOR_VIDGET_WIDTH = MAX_COLOR_VALUE + 20;
-const size_t DEFAULT_COLOR_VIDGET_HEIGHT = MAX_COLOR_VALUE + 20 + 90; //  + DEFAULT_BUTTON_HEIGHT
+const size_t DEFAULT_COLOR_VIDGET_WIDTH = 400 + 20;
+const size_t DEFAULT_COLOR_VIDGET_HEIGHT = 400 + 20 + 90; //  + DEFAULT_BUTTON_HEIGHT
 const size_t DEFAULT_COLOR_VIDGET_POS_X = 0;
 const size_t DEFAULT_COLOR_VIDGET_POS_Y = INCREASED_BUTTON_HEIGHT;
 
@@ -41,9 +43,12 @@ Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Conf
 	Canvas_manager_manager *canvas = create_canvas_manager(par_position + Vector_ll(DEFAULT_CANVAS_POS_X, DEFAULT_CANVAS_POS_Y), DEFAULT_CANVAS_SIZE, DEFAULT_CANVAS_SIZE + DEFAULT_BUTTON_HEIGHT);
 	// canvas->set_visible(false);
 
-	Color_selection_window *tools_vidget = create_color_vidget(par_position + Vector_ll(DEFAULT_COLOR_VIDGET_POS_X, DEFAULT_COLOR_VIDGET_POS_Y), DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
-	tools_vidget->set_visible(false);
-	tools_vidget->set_reactive(false);
+	Animating_texture *text_field_texture = Resources::get_instance()->create_texture(TEXT_FIELD, 400, 40, TEXT_FIELD_ACTIVE, NULL);
+	Input_string *text_field = new Input_string({ (size_t)Vidget_type::INPUT_STRING, par_position + Vector_ll(DEFAULT_COLOR_VIDGET_POS_X, DEFAULT_COLOR_VIDGET_POS_Y), text_field_texture, TRANSPARENT, 400, 40 });
+	add_visual_object(text_field);
+	// Color_selection_window *tools_vidget = create_color_vidget(par_position + Vector_ll(DEFAULT_COLOR_VIDGET_POS_X, DEFAULT_COLOR_VIDGET_POS_Y), DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
+	// tools_vidget->set_visible(false);
+	// tools_vidget->set_reactive(false);
 
 	Brush_size_selection_window *brushes_vidget = create_size_vidget(par_position + Vector_ll(DEFAULT_SIZE_VIDGET_POS_X, DEFAULT_SIZE_VIDGET_POS_Y), THICK_PALETTE_WIDTH, THICK_PALETTE_HEIGHT);
 	brushes_vidget->set_visible(false);
@@ -61,8 +66,8 @@ Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Conf
     current_button_size = get_text_length(GHOST_TYPE, NEW_CANVAS_TEXT, INCREASED_BUTTON_HEIGHT / 2);
 	create_canvas_creator(panel, canvas, NEW_CANVAS_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
 
-    current_button_size = get_text_length(GHOST_TYPE, COLOR_TEXT, INCREASED_BUTTON_HEIGHT / 2);
-	create_restore_button(panel, tools_vidget, COLOR_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
+ //    current_button_size = get_text_length(GHOST_TYPE, COLOR_TEXT, INCREASED_BUTTON_HEIGHT / 2);
+	// create_restore_button(panel, tools_vidget, COLOR_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
 
     current_button_size = get_text_length(GHOST_TYPE, SIZE_TEXT, INCREASED_BUTTON_HEIGHT / 2);
 	create_restore_button(panel, brushes_vidget, SIZE_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
@@ -138,7 +143,7 @@ Color_selection_window *Graphical_editor_main_page::create_color_vidget(const Ve
 	// Full_texture *tools_background = Resources::get_instance()->create_texture(WINDOW_BACKGROUND, width, height);// new Full_texture(WINDOW_BACKGROUND, DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
 	Full_texture *tools_background = Resources::get_instance()->create_texture(WINDOW_BACKGROUND, width, height);// new Full_texture(WINDOW_BACKGROUND, DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
 	
-	Color_selection_window *tools_vidget = new Color_selection_window({(size_t)Vidget_type::PALETTE, position, tools_background, TRANSPARENT, width, height}, &pencil);
+	Color_selection_window *tools_vidget = new Color_selection_window({(size_t)Vidget_type::PALETTE, position, tools_background, TRANSPARENT, width, height});
 	add_visual_object(tools_vidget);
 
 	return tools_vidget;
@@ -214,24 +219,26 @@ Graphical_editor_main_page::~Graphical_editor_main_page()
 	}
 }
 
-bool Graphical_editor_main_page::on_key_pressed(const unsigned key_mask)
+bool Graphical_editor_main_page::on_key_pressed(const bool pressed_state, const unsigned key_mask)
 {
-	if (key_mask == (unsigned)Key_state::KEY_U)
+	Visual_object::on_key_pressed(pressed_state, key_mask);
+
+	if (key_mask == (unsigned)Key::U)
 	{
 		pencil.set_color(BLACK);
 		return true;
 	}
-	else if (key_mask == (unsigned)Key_state::KEY_R)
+	else if (key_mask == (unsigned)Key::R)
 	{
 		pencil.set_color(RED);
 		return true;
 	}
-	else if (key_mask == (unsigned)Key_state::KEY_G)
+	else if (key_mask == (unsigned)Key::G)
 	{
 		pencil.set_color(GREEN);
 		return true;
 	}
-	else if (key_mask == (unsigned)Key_state::KEY_B)
+	else if (key_mask == (unsigned)Key::B)
 	{
 		pencil.set_color(BLUE);
 		return true;

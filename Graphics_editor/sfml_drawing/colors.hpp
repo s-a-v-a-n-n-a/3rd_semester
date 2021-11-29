@@ -93,6 +93,8 @@ struct Color
 	// }
 };
 
+
+
 const Color BLACK  = { 0, 0, 0, 255 };
 const Color WHITE  = { 255, 255, 255, 255 };
 const Color RED    = { 255, 0, 0, 255 };
@@ -107,5 +109,9 @@ const Color DARK_GREY = { 32, 32, 32, 255 };
 const Color MEDIUM_GREY = { 100, 100, 100, 255 };
 const Color GREY = { 182, 182, 182, 255 };
 const Color TRANSPARENT = {0, 0, 0, 0};
+
+
+HSV get_hsv(const Color &rgb);
+Color get_rgb(const HSV &hsv);
 
 #endif // COLORS_USED

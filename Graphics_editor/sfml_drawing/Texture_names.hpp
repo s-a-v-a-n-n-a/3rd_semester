@@ -19,6 +19,7 @@ const char SIMPLE_BUTTON[] = "graphical_attributes/Textures/Simple_button_textur
 const char SIMPLE_BUTTON_MOVE[] = "graphical_attributes/Textures/Simple_button_move_texture.png";
 
 const char GRADIENT_BAR_TEXTURE[] = "graphical_attributes/Textures/Gradient_bar.png";
+const char GRADIENT_TEXTURE[] = "graphical_attributes/Textures/Other_gradient_bar.png";
 
 const char PICKING_CIRCLE_TEXTURE[] = "graphical_attributes/Textures/circle.png";
 const char PICKING_RECT_TEXTURE[] = "graphical_attributes/Textures/rectangle.png";
@@ -37,6 +38,12 @@ const char SLIDER_UP[] = "graphical_attributes/Textures/Arrow_right.png";
 const char SLIDER[] = "graphical_attributes/Textures/Magnet.png";
 
 const char PENCIL_TEXTURE[] = "graphical_attributes/Textures/Brush.png";
+
+const char COLOR_BUTTON[] = "graphical_attributes/Textures/Color_button.png";
+const char ACTIVE_COLOR_BUTTON[] = "graphical_attributes/Textures/Color_button_active.png";
+
+const char TEXT_FIELD[] = "graphical_attributes/Textures/Text_field.png";
+const char TEXT_FIELD_ACTIVE[] = "graphical_attributes/Textures/Text_field_active.png";
 
 extern const char *COLORED_BUTTONS[];
 extern const char *TOOLS_BUTTONS[];

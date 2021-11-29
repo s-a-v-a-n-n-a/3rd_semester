@@ -2,17 +2,21 @@
 
 const size_t DEFAULT_POINTER_RADIUS = 5;
 
-Color_picker::Color_picker(const Visual_object::Config &par_base, Pencil *par_pencil)
-: Visual_object(par_base), pencil(par_pencil), main_color(RED), current_position(0, get_height())
+Color_picker::Color_picker(const Visual_object::Config &par_base, const Color &par_main_color, Color *par_to_set)
+: Visual_object(par_base), main_color(par_main_color), current_position(0, get_height()), to_set(par_to_set)
 {
-	set_main_color(RED);
+	color_array = new Color[get_width() * get_height()];
+	set_main_color(par_main_color);
 
 	Full_texture *circle = Resources::get_instance()->create_texture(PICKING_CIRCLE_TEXTURE, 18, 18);// new Full_texture(WINDOW_BACKGROUND, DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
 	
 	size_t circle_width = circle->get_width();
 	size_t circle_height = circle->get_height();
 
-	Visual_object::Config buttton_base = { (size_t)Vidget_type::BUTTON, get_position() + Vector_ll(0, get_height()) - Vector_ll(0, circle_height), circle, TRANSPARENT, circle_width, circle_height };
+    HSV hsv = get_hsv(*par_to_set);
+	current_position = Vector_ll(((double)(hsv.s))/255.0 * ((double)get_width()), (255.0 - (double)hsv.v)/255.0 * ((double)get_height()));
+
+	Visual_object::Config buttton_base = { (size_t)Vidget_type::BUTTON, get_position() + current_position - Vector_ll(0, circle_height), circle, TRANSPARENT, circle_width, circle_height };
 	picker = new Magnetic(buttton_base, this, get_position(), get_position() + Vector_ll(get_width(), get_height()) - Vector_ll(circle_width, circle_height));
 	
 	// Drag_and_drop_delegate *dnd = new Drag_and_drop_delegate(picker);
@@ -22,32 +26,43 @@ Color_picker::Color_picker(const Visual_object::Config &par_base, Pencil *par_pe
 	add_visual_object(picker);
 }
 
+Color_picker::~Color_picker()
+{
+	delete [] color_array;
+}
+
 void Color_picker::set_main_color(const Color &par_main)
 {
 	main_color = par_main;
 
-	int red_component   = main_color.get_r();
-	int green_component = main_color.get_g();
-	int blue_component  = main_color.get_b();
+	HSV hsv = get_hsv(main_color);
 
-	for (int i = 0; i < MAX_COLOR_VALUE; ++i)
+	size_t width = get_width();
+	size_t height = get_height();
+	for (size_t i = 0; i < width; ++i)
 	{
-		for (int j = 0; j < MAX_COLOR_VALUE; ++j)
+		int value = (int)(255.0 - ((double)i / (double)height) * 255.0);
+		for (size_t j = 0; j < height; ++j)
 		{
-			color_array[i * MAX_COLOR_VALUE + j] = { 
-									  (unsigned char)(((MAX_COLOR_VALUE - red_component) * (MAX_COLOR_VALUE - j) / MAX_COLOR_VALUE + red_component) * (MAX_COLOR_VALUE - i) / MAX_COLOR_VALUE),
-									  (unsigned char)(((MAX_COLOR_VALUE - green_component) * (MAX_COLOR_VALUE - j) / MAX_COLOR_VALUE + green_component) * (MAX_COLOR_VALUE - i) / MAX_COLOR_VALUE), 
-									  (unsigned char)(((MAX_COLOR_VALUE - blue_component) * (MAX_COLOR_VALUE - j) / MAX_COLOR_VALUE + blue_component) * (MAX_COLOR_VALUE - i) / MAX_COLOR_VALUE),
-									  MAX_COLOR_VALUE};
+			int saturation = (int)(((double)j / (double)width) * 255.0);
+
+			Color pixel_color = get_rgb({ hsv.h, saturation, value });
+			color_array[i * height + j] = pixel_color;
 		}
 	}
 }
 
-void Color_picker::set_pencil_color()
+void Color_picker::set_color()
 {
 	// pencil->set_color(color_array[current_position.get_y() * MAX_COLOR_VALUE + current_position.get_x()]);
 	// Toolbar::get_instance()->get_tools()->get_array()[0]->set_color(color_array[current_position.get_y() * MAX_COLOR_VALUE + current_position.get_x()]);
-	Toolbar::get_instance()->set_color(color_array[current_position.get_y() * MAX_COLOR_VALUE + current_position.get_x()]);
+	// Toolbar::get_instance()->set_color(color_array[current_position.get_y() * get_height() + current_position.get_x()]);
+	(*to_set) = color_array[current_position.get_y() * get_height() + current_position.get_x()];
+}
+
+Color Color_picker::get_color()
+{
+	return color_array[current_position.get_y() * get_height() + current_position.get_x()];
 }
 
 bool Color_picker::on_mouse_click(const bool state, const size_t par_x, const size_t par_y)
@@ -62,7 +77,7 @@ bool Color_picker::on_mouse_click(const bool state, const size_t par_x, const si
 			// picker->set_position(picker->get_position() + current_position - last_position);
 			picker->on_mouse_click(state, par_x - picker->get_width()/2, par_y - picker->get_height()/2);
 			
-			set_pencil_color();
+			set_color();
 
 			return true;
 		}
@@ -81,6 +96,7 @@ bool Color_picker::on_mouse_move(const Vector_ll from, const Vector_ll to)
 	// picker->set_position(picker->get_position() + to - last);
 
 	return picker->on_mouse_move(from, to - Vector_ll(picker->get_width()/2, picker->get_height()/2));
+	// return true;
 }
 
 void Color_picker::draw(Screen_information *screen)

@@ -1,4 +1,6 @@
 #include "Editor_delegates.hpp"
+#include "Application.hpp"
+#include "Palette.hpp"
 
 Create_canvas::Create_canvas(Canvas_manager_manager *par_manager)
 {
@@ -114,3 +116,41 @@ bool Blue_component_changer::on_mouse_move(const Vector_ll from, const Vector_ll
 
 	return true;
 }
+
+// ----------------------------------------------------------------------------------------------------------------
+
+Color_picker_creator::Color_picker_creator(const Vector_ll &par_position) : position(par_position) {}
+
+bool Color_picker_creator::on_mouse_click(const size_t par_x, const size_t par_y)
+{
+	return true;
+}
+bool Color_picker_creator::on_mouse_release()
+{
+	Palette *palette = new Palette({(size_t)Vidget_type::PALETTE, position, nullptr, DARK_GREY, 600, 600}, Toolbar::get_instance()->get_color());
+
+	Application::get_app()->set_main(palette);
+
+	return true;
+}
+
+Animating_color_picker_creator::Animating_color_picker_creator(const Vector_ll &par_position, Visual_object *par_to_interact)
+: Color_picker_creator(par_position), Animating(par_to_interact) {}
+
+bool Animating_color_picker_creator::on_mouse_click(const size_t par_x, const size_t par_y)
+{
+	Color_picker_creator::on_mouse_click(par_x, par_y);
+	return Animating::on_mouse_click(par_x, par_y);
+}
+
+bool Animating_color_picker_creator::on_mouse_release()
+{
+	Animating::reset();
+	return Color_picker_creator::on_mouse_release();
+}
+
+bool Animating_color_picker_creator::on_mouse_move(const Vector_ll from, const Vector_ll to)
+{
+	return Animating::on_mouse_move(from, to);
+}
+

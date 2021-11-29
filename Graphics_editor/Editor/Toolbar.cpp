@@ -1,16 +1,21 @@
 #include "Toolbar.hpp"
 
+#include "Pipette.hpp"
+
 Toolbar *Toolbar::toolbar = nullptr;
 Toolbar_destroyer Toolbar::destroyer;
 
 Toolbar::Toolbar()
-: tools(), active_tool(nullptr) 
+: tools(), active_tool(nullptr), current_color(BLACK) 
 {
 	Pencil *pencil = new Pencil();
 	add_tool(pencil);
 
 	Eraser *eraser = new Eraser();
 	add_tool(eraser);
+
+	Pipette *pipette = new Pipette();
+	add_tool(pipette);
 
 	tools_amount = tools.size();
 	set_active_tool(pencil);
@@ -59,7 +64,10 @@ void Toolbar::set_color(const Color &color)
 {
 	current_color = color;
 
-	active_tool->set_color(color);
+	for (size_t i = 0; i < tools_amount; ++i)
+	{
+		tools[i]->set_color(color);
+	}
 }
 
 Color Toolbar::get_color() const

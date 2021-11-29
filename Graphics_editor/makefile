@@ -1,8 +1,8 @@
 COMPILATOR = g++
 CFLAGS = -g -masm=intel -no-pie -march=native -O3 -std=c++17
 
-link: screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o gradient_bar.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o slider.o toolbar.o app.o main.o
-	$(COMPILATOR) screen_functions.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o palette.o canvas_mm.o tab.o editor_delegate.o color_picker.o gradient_bar.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o slider.o toolbar.o app.o main.o -o main -lsfml-graphics -lsfml-window -lsfml-system
+link: screen_functions.o colors.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o canvas_mm.o tab.o editor_delegate.o palette.o color_picker.o gradient_bar.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o slider.o toolbar.o input_string.o app.o main.o
+	$(COMPILATOR) screen_functions.o colors.o sfml_text.o visual_base.o button.o canvas.o canvas_manager.o window_control_panel.o graphical_editor.o canvas_mm.o tab.o editor_delegate.o palette.o color_picker.o gradient_bar.o color_selection.o button_manager.o texture_names.o animations.o resource_manager.o graphical_delegate.o interpolation.o spline.o slider.o toolbar.o input_string.o app.o main.o -o main -lsfml-graphics -lsfml-window -lsfml-system
 
 main.o : main.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o main.o main.cpp
@@ -11,6 +11,9 @@ main.o : main.cpp
 # -----------------------------------------------------------------------------------
 screen_functions.o: sfml_drawing/screen_functions.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o screen_functions.o sfml_drawing/screen_functions.cpp
+
+colors.o: sfml_drawing/colors.cpp
+	$(COMPILATOR) $(CFLAGS) -c -o colors.o sfml_drawing/colors.cpp
 
 texture_names.o: sfml_drawing/Texture_names.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o texture_names.o sfml_drawing/Texture_names.cpp
@@ -46,6 +49,9 @@ spline.o: GUI/Spline.cpp
 slider.o: GUI/Slider.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o slider.o GUI/Slider.cpp
 
+input_string.o: GUI/Input_string.cpp
+	$(COMPILATOR) $(CFLAGS) -c -o input_string.o GUI/Input_string.cpp
+
 resource_manager.o: GUI/Resource_manager.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o resource_manager.o GUI/Resource_manager.cpp
 
@@ -67,9 +73,6 @@ toolbar.o: Editor/Toolbar.cpp
 canvas.o: Editor/Canvas.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o canvas.o Editor/Canvas.cpp
 
-palette.o: Editor/Palette.cpp
-	$(COMPILATOR) $(CFLAGS) -c -o palette.o Editor/Palette.cpp
-
 tab.o: Editor/Tab.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o tab.o Editor/Tab.cpp
 
@@ -78,6 +81,9 @@ editor_delegate.o: Editor/Editor_delegates.cpp
 
 graphical_delegate.o: Editor/Graphical_delegates.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o graphical_delegate.o Editor/Graphical_delegates.cpp
+
+palette.o: Editor/Palette.cpp 
+	$(COMPILATOR) $(CFLAGS) -c -o palette.o Editor/Palette.cpp
 
 gradient_bar.o: Editor/Gradient_bar.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o gradient_bar.o Editor/Gradient_bar.cpp
