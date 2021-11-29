@@ -8,7 +8,6 @@
 
 #include "Graphical_delegates.hpp"
 #include "Color_picker.hpp"
-#include "Pencil.hpp"
 #include "Window.hpp"
 
 #include "Gradient_bar.hpp"

@@ -1,7 +1,6 @@
 #include "Canvas.hpp"
 
-#include "Pencil.hpp"
-#include "Toolbar.hpp"
+#include "../Tools/Toolbar.hpp"
 
 const Color DEFAULT_BACKGROUND_COLOR = WHITE;
 
@@ -37,7 +36,7 @@ void Canvas::draw_point(const size_t par_x, const size_t par_y)
 	Tool *current_tool = Toolbar::get_instance()->get_active_tool();
 	size_t tool_size = current_tool->get_size() / 2;
 	
-	current_tool->apply(this, Vector_ll(par_x, par_y));
+	current_tool->apply(get_drawing(), Vector_ll(get_width(), get_height()), Vector_ll(par_x, par_y) - get_position());
 	// size_t begin_x = par_x - position_x > tool_size ? par_x - position_x - tool_size : par_x - position_x;
 	// size_t begin_y = par_y - position_y > tool_size ? par_y - position_y - tool_size : par_y - position_y;
 

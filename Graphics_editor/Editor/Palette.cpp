@@ -13,7 +13,7 @@ Palette::Palette(const Visual_object::Config &par_base, const Color &par_chosen_
     size_t button_size = get_width() / DEFAULT_COLORS_AMOUNT;
     // for (size_t i = 0; i < DEFAULT_COLORS_AMOUNT; ++i)
     // {
-    // 	Change_color *change_color = new Change_color(par_pencil, COLOR_SEQUENCE[i]);
+    // 	Change_color *change_color = new Change_color(COLOR_SEQUENCE[i]);
     // 	Full_texture *texture = new Full_texture(COLORED_BUTTONS[i]);
     // 	offset = texture->get_width();
     // 	panel->add_button(change_color, " ", texture, button_size, button_size);

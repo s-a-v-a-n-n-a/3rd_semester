@@ -4,9 +4,7 @@
 #include "../GUI/Button_delegate.hpp"
 #include "../sfml_drawing/Animating_texture.hpp"
 #include "../GUI/Animations.hpp"
-
-#include "Toolbar.hpp"
-#include "Pencil.hpp"
+#include "../Tools/Toolbar.hpp"
 // #include "Canvas_manager.hpp"
 
 // create cpp version
@@ -175,11 +173,10 @@ public:
 class Change_color : public Button_delegate
 {
 private:
-	Pencil *pencil;
 	Color color;
 
 public:
-	Change_color(Pencil *par_pencil, const Color &par_color);
+	Change_color(const Color &par_color);
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
 };
@@ -189,11 +186,10 @@ public:
 class Change_thickness : public Button_delegate
 {
 private:
-	Pencil *pencil;
 	size_t size;
 
 public:
-	Change_thickness(Pencil *par_pencil, const size_t par_size);
+	Change_thickness(const size_t par_size);
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
 };
@@ -203,11 +199,10 @@ public:
 class Change_thickness_non_fixedly : public Button_delegate
 {
 private:
-	Pencil *pencil;
 	size_t current_size;
 
 public:
-	Change_thickness_non_fixedly(Pencil *par_pencil, const size_t par_size);
+	Change_thickness_non_fixedly(const size_t par_size);
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
 	bool on_mouse_release() override;

@@ -5,7 +5,7 @@
 #include "../sfml_drawing/colors.hpp"
 #include "../sfml_drawing/screen_functions.hpp"
 
-#include "Canvas.hpp"
+// #include "../EditorCanvas.hpp"
 
 const Color DEFAULT_TOOL_COLOR = RED;
 const size_t DEFAULT_TOOL_SIZE = 20;
@@ -13,8 +13,6 @@ const size_t DEFAULT_TOOL_SIZE = 20;
 class Tool
 {
 protected:
-	Canvas *to_apply;
-
 	Color color;
 	size_t size;
 
@@ -31,7 +29,8 @@ public:
 	virtual Color get_color() { return color; }
 	virtual size_t get_size() { return size; }
 
-	virtual void apply(Canvas *to_apply, const Vector_ll &position) = 0;
+	// virtual void apply(Canvas *to_apply, const Vector_ll &position) = 0;
+	virtual void apply(Color *to_apply, const Vector_ll &parameters, const Vector_ll &position) = 0;
 };
 
 #endif // TOOLS_H

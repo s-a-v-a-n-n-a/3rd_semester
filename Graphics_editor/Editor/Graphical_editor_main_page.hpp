@@ -21,8 +21,6 @@
 #include "Tools_window.hpp"
 #include "../GUI/Input_string.hpp"
 
-#include "Pencil.hpp"
-
 #include "Test.hpp"
 
 class Editor_control_panel;
@@ -32,7 +30,6 @@ class Canvas_manager_manager;
 class Graphical_editor_main_page : public Visual_object
 {
 private:
-	Pencil pencil;
 
 public:
 	Graphical_editor_main_page(const Visual_object::Config &par_base);
@@ -40,16 +37,15 @@ public:
 	// Graphical_editor_main_page(const size_t par_type, const Vector_ll &par_position, Texture *texture, const size_t par_width = 0, const size_t par_height = 0);
 	~Graphical_editor_main_page();
 
-	Color get_pencil_color() { return pencil.get_color(); }
-	Pencil *get_pencil() { return &pencil; }
-
-	void set_pencil_color(const Color &par_color) { pencil.set_color(par_color); }
+	// Color get_pencil_color() { return pencil.get_color(); }
+	
+	void set_pencil_color(const Color &par_color) { Toolbar::get_instance()->set_color(par_color); }
 
 	// void draw(Screen_information *screen) override;
 	// bool on_mouse(const double par_x, const double par_y) override;
 	bool on_key_pressed(const bool pressed_state, const unsigned key_state) override;
 
-	Thickness_window *create_thickness_slider(const Vector_ll &position, const size_t width, const size_t height, Pencil *pencil);
+	Thickness_window *create_thickness_slider(const Vector_ll &position, const size_t width, const size_t height);
 	Effects_window *create_effects_window(const Vector_ll &position, const size_t width, const size_t height, Canvas *active_canvas);
 
 	Tools_window *create_tools_window(const Vector_ll &position, const size_t width, const size_t height);

@@ -9,7 +9,7 @@ class Thickness_palette : public Visual_object
 private:
 
 public:
-	Thickness_palette(const Visual_object::Config &par_base, Pencil *par_pencil)
+	Thickness_palette(const Visual_object::Config &par_base)
 	: Visual_object(par_base)
 	{
 		// create BLACK button 
@@ -20,19 +20,19 @@ public:
 		Button_manager *panel = new Button_manager(panel_base);
 
 	    size_t offset = 0;
-	    Change_thickness *change_thickness_1 = new Change_thickness(par_pencil, 1);
+	    Change_thickness *change_thickness_1 = new Change_thickness(1);
     	Full_texture *texture = Resources::get_instance()->create_texture(TEXT_TEXTURE, DEFAULT_BUTTON_HEIGHT, DEFAULT_BUTTON_HEIGHT);
     	// offset += texture->get_width();
 
     	panel->add_button(change_thickness_1, "1", texture, get_width()/4, get_width()/4);
 
-    	Change_thickness *change_thickness_5 = new Change_thickness(par_pencil, 5);
+    	Change_thickness *change_thickness_5 = new Change_thickness(5);
     	panel->add_button(change_thickness_5, "5", texture, get_width()/4, get_width()/4);
 
-    	Change_thickness *change_thickness_10 = new Change_thickness(par_pencil, 10);
+    	Change_thickness *change_thickness_10 = new Change_thickness(10);
     	panel->add_button(change_thickness_10, "10", texture, get_width()/4, get_width()/4);
 
-    	Change_thickness *change_thickness_20 = new Change_thickness(par_pencil, 20);
+    	Change_thickness *change_thickness_20 = new Change_thickness(20);
     	panel->add_button(change_thickness_20, "20", texture, get_width()/4, get_width()/4);
 		
 		add_visual_object(panel);

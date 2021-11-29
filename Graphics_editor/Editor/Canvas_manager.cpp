@@ -1,6 +1,6 @@
 #include "Canvas_manager.hpp"
 
-Canvas_manager::Canvas_manager(const Visual_object::Config &par_base, Pencil *par_pencil, const size_t predecessors_amount)
+Canvas_manager::Canvas_manager(const Visual_object::Config &par_base, const size_t predecessors_amount)
 : Visual_object(par_base), tab(nullptr), canvas(nullptr)
 {
 	// create Canvas
@@ -22,7 +22,7 @@ Canvas_manager::Canvas_manager(const Visual_object::Config &par_base, Pencil *pa
 	add_visual_object(tab);
 }
 
-// Canvas_manager::Canvas_manager(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil, const size_t predecessors_amount)
+// Canvas_manager::Canvas_manager(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, const size_t predecessors_amount)
 // : Visual_object(par_type, par_position, par_color, par_width, par_height), tab(nullptr), canvas(nullptr)
 // {
 // 	// create Canvas

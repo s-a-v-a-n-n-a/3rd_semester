@@ -1,7 +1,7 @@
 #include "Canvas_manager_manager.hpp"
 
-Canvas_manager_manager::Canvas_manager_manager(const Visual_object::Config &par_base, Pencil *par_pencil)
-: Visual_object(par_base), pencil(par_pencil), active_canvas(nullptr)
+Canvas_manager_manager::Canvas_manager_manager(const Visual_object::Config &par_base)
+: Visual_object(par_base), active_canvas(nullptr)
 {
 	// size_t button_height = 80;
 
@@ -15,7 +15,7 @@ Canvas_manager_manager::Canvas_manager_manager(const Visual_object::Config &par_
 
 	// создаёт начальный объект
 	// ------------------------------------------------------------------------------
-	Canvas_manager *canvas = new Canvas_manager({ (size_t)Vidget_type::CANVAS_MANAGER, get_position() + Vector_ll(0.0, DEFAULT_BUTTON_HEIGHT), nullptr, WHITE, get_width(), get_height() - DEFAULT_BUTTON_HEIGHT }, pencil, 0);
+	Canvas_manager *canvas = new Canvas_manager({ (size_t)Vidget_type::CANVAS_MANAGER, get_position() + Vector_ll(0.0, DEFAULT_BUTTON_HEIGHT), nullptr, WHITE, get_width(), get_height() - DEFAULT_BUTTON_HEIGHT }, 0);
 
 	active_canvas = canvas;
 
@@ -81,7 +81,7 @@ void Canvas_manager_manager::add_canvas()
 	}
 
 	Visual_object::Config canvas_base = { (size_t)Vidget_type::CANVAS_MANAGER, get_position() + Vector_ll(0.0, DEFAULT_BUTTON_HEIGHT), nullptr, WHITE, get_width(), get_height() - DEFAULT_BUTTON_HEIGHT };
-	Canvas_manager *canvas = new Canvas_manager(canvas_base, pencil, get_objects()->get_length() - 2);
+	Canvas_manager *canvas = new Canvas_manager(canvas_base, get_objects()->get_length() - 2);
 
 	active_canvas = canvas;
 

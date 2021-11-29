@@ -3,10 +3,9 @@
 
 #include "../GUI/Visual_object_base.hpp"
 #include "../GUI/Button.hpp"
+#include "../Tools/Toolbar.hpp"
 
 #include "Graphical_delegates.hpp"
-#include "Toolbar.hpp"
-#include "Tools.hpp"
 
 class Color_button : public Button 
 {

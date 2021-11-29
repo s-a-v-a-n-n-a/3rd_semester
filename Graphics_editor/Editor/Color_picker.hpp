@@ -6,7 +6,6 @@
 #include "../GUI/Resource_manager.hpp"
 
 #include "Graphical_delegates.hpp"
-#include "Pencil.hpp"
 
 extern const size_t DEFAULT_POINTER_RADIUS;
 

@@ -6,7 +6,6 @@
 #include "Window_control_panel.hpp"
 #include "Palette.hpp"
 #include "Thickness_palette.hpp"
-#include "Pencil.hpp"
 
 #include "Window.hpp"
 

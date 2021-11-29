@@ -4,7 +4,6 @@
 #include "../GUI/Slider.hpp"
 
 #include "Graphical_delegates.hpp"
-#include "Pencil.hpp"
 #include "Window.hpp"
 
 const size_t INDENT_SIZE = 10;
@@ -15,10 +14,10 @@ private:
 	Slider *slider;
 
 public:
-	Thickness_window(const Visual_object::Config &par_base, Pencil *pencil)
+	Thickness_window(const Visual_object::Config &par_base)
 	: Window(par_base)
 	{
-		Change_thickness_non_fixedly *delegate = new Change_thickness_non_fixedly(pencil, DEFAULT_PENCIL_SIZE);
+		Change_thickness_non_fixedly *delegate = new Change_thickness_non_fixedly(DEFAULT_PENCIL_SIZE);
 		slider = create_slider(get_position() + Vector_ll(0, DEFAULT_BUTTON_HEIGHT), get_width(), get_height() - DEFAULT_BUTTON_HEIGHT, delegate);
 	}
 

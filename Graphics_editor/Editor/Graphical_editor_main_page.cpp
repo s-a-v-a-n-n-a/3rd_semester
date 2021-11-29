@@ -33,7 +33,7 @@ const char SLIDER_TEXT[]     = " Slider ";
 const char TOOLS_TEXT[]      = " Tools ";
 
 Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Config &par_base)
-: Visual_object(par_base), pencil()
+: Visual_object(par_base)
 {
 	Vector_ll par_position = get_position();
 	size_t par_width = get_width();
@@ -56,7 +56,7 @@ Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Conf
 
     Effects_window *spline = create_effects_window(par_position + Vector_ll(0, 700), 400, 400 + DEFAULT_BUTTON_HEIGHT, canvas->get_active_canvas());
 	
-	Thickness_window *slider = create_thickness_slider(par_position + Vector_ll(THICKNESS_WINDOW_POS_X, THICKNESS_WINDOW_POS_Y), THICKNESS_WINDOW_WIDTH, THICKNESS_WINDOW_HEIGHT, &pencil);
+	Thickness_window *slider = create_thickness_slider(par_position + Vector_ll(THICKNESS_WINDOW_POS_X, THICKNESS_WINDOW_POS_Y), THICKNESS_WINDOW_WIDTH, THICKNESS_WINDOW_HEIGHT);
 
 	Tools_window *tools = create_tools_window(par_position + Vector_ll(par_width - 300, INCREASED_BUTTON_HEIGHT), 300, 600);
 
@@ -99,12 +99,12 @@ Tools_window *Graphical_editor_main_page::create_tools_window(const Vector_ll &p
 }
 
 
-Thickness_window *Graphical_editor_main_page::create_thickness_slider(const Vector_ll &position, const size_t width, const size_t height, Pencil *pencil)
+Thickness_window *Graphical_editor_main_page::create_thickness_slider(const Vector_ll &position, const size_t width, const size_t height)
 {
 	// Full_texture *slider_background = Resources::get_instance()->create_texture(WINDOW_BACKGROUND, width, height);// new Full_texture(WINDOW_BACKGROUND, DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
 	Full_texture *slider_background = Resources::get_instance()->create_texture(WINDOW_BACKGROUND, width, height);// new Full_texture(WINDOW_BACKGROUND, DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
 
-	Thickness_window *slider = new Thickness_window({(size_t)Vidget_type::MANAGER, position, slider_background, TRANSPARENT, width, height}, pencil);
+	Thickness_window *slider = new Thickness_window({(size_t)Vidget_type::MANAGER, position, slider_background, TRANSPARENT, width, height});
 	add_visual_object(slider);
 
 	return slider;
@@ -132,7 +132,7 @@ Button_manager *Graphical_editor_main_page::create_button_panel(const Vector_ll 
 
 Canvas_manager_manager *Graphical_editor_main_page::create_canvas_manager(const Vector_ll &position, const size_t width, const size_t height)
 {
-	Canvas_manager_manager *canvas = new Canvas_manager_manager({(size_t)Vidget_type::CANVAS_MANAGER_MANAGER, position, nullptr, TRANSPARENT, width, height}, &pencil);
+	Canvas_manager_manager *canvas = new Canvas_manager_manager({(size_t)Vidget_type::CANVAS_MANAGER_MANAGER, position, nullptr, TRANSPARENT, width, height});
 	add_visual_object(canvas);
 
 	return canvas;
@@ -155,7 +155,7 @@ Brush_size_selection_window *Graphical_editor_main_page::create_size_vidget(cons
 	// Full_texture *brushes_background = Resources::get_instance()->create_texture(WINDOW_BACKGROUND, width, height);// new Full_texture(WINDOW_BACKGROUND, THICK_PALETTE_WIDTH, THICK_PALETTE_HEIGHT);
 	Full_texture *brushes_background = Resources::get_instance()->create_texture(WINDOW_BACKGROUND, width, height);// new Full_texture(WINDOW_BACKGROUND, THICK_PALETTE_WIDTH, THICK_PALETTE_HEIGHT);
 	
-	Brush_size_selection_window *tools_vidget = new Brush_size_selection_window({(size_t)Vidget_type::PALETTE, position, brushes_background, TRANSPARENT, width, height}, &pencil);
+	Brush_size_selection_window *tools_vidget = new Brush_size_selection_window({(size_t)Vidget_type::PALETTE, position, brushes_background, TRANSPARENT, width, height});
 	add_visual_object(tools_vidget);
 
 	return tools_vidget;
@@ -225,22 +225,26 @@ bool Graphical_editor_main_page::on_key_pressed(const bool pressed_state, const 
 
 	if (key_mask == (unsigned)Key::U)
 	{
-		pencil.set_color(BLACK);
+		// pencil.set_color(BLACK);
+		Toolbar::get_instance()->set_color(BLACK);
 		return true;
 	}
 	else if (key_mask == (unsigned)Key::R)
 	{
-		pencil.set_color(RED);
+		// pencil.set_color(RED);
+		Toolbar::get_instance()->set_color(RED);
 		return true;
 	}
 	else if (key_mask == (unsigned)Key::G)
 	{
-		pencil.set_color(GREEN);
+		// pencil.set_color(GREEN);
+		Toolbar::get_instance()->set_color(GREEN);
 		return true;
 	}
 	else if (key_mask == (unsigned)Key::B)
 	{
-		pencil.set_color(BLUE);
+		// pencil.set_color(BLUE);
+		Toolbar::get_instance()->set_color(BLUE);
 		return true;
 	}
 

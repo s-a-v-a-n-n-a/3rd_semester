@@ -360,12 +360,9 @@ bool Animating_close_delegate::on_mouse_move(const Vector_ll from, const Vector_
 
 // Change_color 
 // ---------------------------------------------------------------------------------------------------------
-Change_color::Change_color(Pencil *par_pencil, const Color &par_color)
-: pencil(nullptr), color(WHITE)
-{
-	pencil = par_pencil;
-	color = par_color;
-}
+Change_color::Change_color(const Color &par_color)
+: color(par_color)
+{}
 
 bool Change_color::on_mouse_click(const size_t par_x, const size_t par_y)
 {
@@ -379,8 +376,8 @@ bool Change_color::on_mouse_click(const size_t par_x, const size_t par_y)
 
 // Change_thickness
 // ---------------------------------------------------------------------------------------------------------
-Change_thickness::Change_thickness(Pencil *par_pencil, const size_t par_size)
-: pencil(par_pencil), size(par_size)
+Change_thickness::Change_thickness(const size_t par_size)
+: size(par_size)
 {
 	;
 }
@@ -397,8 +394,8 @@ bool Change_thickness::on_mouse_click(const size_t par_x, const size_t par_y)
 
 // Change thickness in dynamics
 // ---------------------------------------------------------------------------------------------------------
-Change_thickness_non_fixedly::Change_thickness_non_fixedly(Pencil *par_pencil, const size_t par_size)
-: pencil(par_pencil), current_size(par_size)
+Change_thickness_non_fixedly::Change_thickness_non_fixedly(const size_t par_size)
+: current_size(par_size)
 {
 	;
 }

@@ -59,6 +59,10 @@ animations.o: GUI/Animations.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o animations.o GUI/Animations.cpp
 # -----------------------------------------------------------------------------------
 
+# tools
+# -----------------------------------------------------------------------------------
+toolbar.o: Tools/Toolbar.cpp 
+	$(COMPILATOR) $(CFLAGS) -c -o toolbar.o Tools/Toolbar.cpp
 
 # editor part
 # -----------------------------------------------------------------------------------
@@ -66,9 +70,6 @@ animations.o: GUI/Animations.cpp
 # 	$(COMPILATOR) $(CFLAGS) -c -o canvas Editor/Canvas.cpp
 app.o: Editor/Application.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o app.o Editor/Application.cpp
-
-toolbar.o: Editor/Toolbar.cpp 
-	$(COMPILATOR) $(CFLAGS) -c -o toolbar.o Editor/Toolbar.cpp
 
 canvas.o: Editor/Canvas.cpp
 	$(COMPILATOR) $(CFLAGS) -c -o canvas.o Editor/Canvas.cpp

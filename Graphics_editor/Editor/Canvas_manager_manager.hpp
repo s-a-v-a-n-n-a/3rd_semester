@@ -8,19 +8,17 @@ class Canvas_manager_manager;
 
 #include "Window_control_panel.hpp"
 #include "Canvas_manager.hpp"
-#include "Pencil.hpp"
 
 // #include "Drop_down_menu.hpp"
 
 class Canvas_manager_manager : public Visual_object
 {
 private:
-	Pencil *pencil;
 	Canvas_manager *active_canvas;
 	// Drop_down_menu *drop_and_down_menu;
 
 public:
-	Canvas_manager_manager(const Visual_object::Config &par_base, Pencil *par_pencil);
+	Canvas_manager_manager(const Visual_object::Config &par_base);
 	// Canvas_manager_manager(const size_t par_type, const Vector_ll &par_position, const Color &par_color, const size_t par_width, const size_t par_height, Pencil *par_pencil);
 	// Canvas_manager_manager(const size_t par_type, const Vector_ll &par_position, Texture *par_texture, const size_t par_width, const size_t par_height, Pencil *par_pencil);
 	~Canvas_manager_manager() = default;
