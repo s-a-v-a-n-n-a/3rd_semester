@@ -6,6 +6,9 @@
 
 #include "Graphical_editor_main_page.hpp"
 
+// ?????????????
+#include "../Plugin/plugin_std.hpp"
+
 extern const size_t DEFAULT_SIZE;
 
 class Application;
@@ -39,6 +42,8 @@ protected:
 public:
 	~Application();
 	static Application *get_app();
+
+	
 
 	void set_default();
 	void set_main(Visual_object *object);

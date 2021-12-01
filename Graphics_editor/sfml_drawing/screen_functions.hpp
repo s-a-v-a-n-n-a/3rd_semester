@@ -76,8 +76,9 @@ public:
 	
 	// drawings
 	// ---------------------------------------------------------------------
-	void draw_circle(const Vector_ll &par_position, const Color &par_color, const double par_radius, const Color &par_fill_color = TRANSPARENT);
-	void draw_rectangle(const Vector_ll &par_position, const Color &par_color, const double par_width, const double par_height);
+	void draw_circle(const Vector_ll &par_position, const double par_radius, const Color &par_color, const Color &par_fill_color = TRANSPARENT);
+	void draw_rectangle(const Vector_ll &par_position, const double par_width, const double par_height, const Color &par_color, const Color &par_fill_color = TRANSPARENT);
+	void draw_triangle(const Vector_ll &point1, const Vector_ll &point2, const Vector_ll &point3, const Color &par_color, const Color &par_fill_color = TRANSPARENT);
 	void draw_point(const Vector_ll &point, const Color &par_color);
 	void draw_line(const Vector_ll &left, const Vector_ll &right, const Color &par_color);
 	void draw_text(const char *par_text, const Vector_ll &par_position, const Color &par_color, const size_t text_size, const bool centered = true);

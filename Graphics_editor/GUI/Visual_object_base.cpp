@@ -54,7 +54,7 @@ void Visual_object::draw(Screen_information *screen)
 {
 	assert(screen);
 
-	screen->draw_rectangle(get_position(), get_color(), get_width(), get_height());
+	screen->draw_rectangle(get_position(), get_width(), get_height(), get_color(), get_color());
 	if (base.texture)
 		screen->draw_texture(get_position(), base.texture->get_texture(), get_width(), get_height());
 

@@ -47,7 +47,7 @@ size_t Screen_information::get_height()
 	return height;
 }
 
-void Screen_information::draw_circle(const Vector_ll &par_position, const Color &par_color, const double par_radius, const Color &par_fill_color)
+void Screen_information::draw_circle(const Vector_ll &par_position, const double par_radius, const Color &par_color, const Color &par_fill_color)
 {
 	sf::CircleShape circle(par_radius);
 
@@ -61,17 +61,40 @@ void Screen_information::draw_circle(const Vector_ll &par_position, const Color 
 	window.draw(circle);
 }
 
-void Screen_information::draw_rectangle(const Vector_ll &par_position, const Color &par_color, const double par_width, const double par_height)
+void Screen_information::draw_rectangle(const Vector_ll &par_position, const double par_width, const double par_height, const Color &par_color, const Color &par_fill_color)
 {
 	sf::RectangleShape rectangle(sf::Vector2f(par_width, par_height));
 
 	rectangle.setPosition(sf::Vector2f(par_position.get_x(), par_position.get_y()));
 
 	sf::Color color(par_color.r, par_color.g, par_color.b, par_color.a);
-	rectangle.setFillColor(color);
+	rectangle.setOutlineColor(color);
+
+	sf::Color fill_color(par_fill_color.r, par_fill_color.g, par_fill_color.b, par_fill_color.a);
+	rectangle.setFillColor(fill_color);
 
 	window.draw(rectangle);
 }
+
+void Screen_information::draw_triangle(const Vector_ll &point1, const Vector_ll &point2, const Vector_ll &point3, const Color &par_color, const Color &par_fill_color)
+{
+	sf::ConvexShape convex;
+
+	convex.setPointCount(3);
+	
+	convex.setPoint(0, sf::Vector2f(point1.get_x(), point1.get_y()));
+	convex.setPoint(1, sf::Vector2f(point2.get_x(), point2.get_y()));
+	convex.setPoint(2, sf::Vector2f(point3.get_x(), point3.get_y()));
+
+	sf::Color color(par_color.r, par_color.g, par_color.b, par_color.a);
+	convex.setOutlineColor(color);
+
+	sf::Color fill_color(par_fill_color.r, par_fill_color.g, par_fill_color.b, par_fill_color.a);
+	convex.setFillColor(fill_color);
+
+	window.draw(convex);
+}
+
 
 void Screen_information::draw_point(const Vector_ll &par_point, const Color &par_color)
 {

@@ -33,10 +33,11 @@ void Canvas::draw_point(const size_t par_x, const size_t par_y)
 
 	// size_t y_coord = position_y + get_height() - (par_y - position_y);
 
-	Tool *current_tool = Toolbar::get_instance()->get_active_tool();
-	size_t tool_size = current_tool->get_size() / 2;
+	// Tool *current_tool = Toolbar::get_instance()->get_active_tool();
+	// size_t tool_size = current_tool->get_size() / 2;
 	
-	current_tool->apply(get_drawing(), Vector_ll(get_width(), get_height()), Vector_ll(par_x, par_y) - get_position());
+	// current_tool->apply(get_drawing(), Vector_ll(get_width(), get_height()), Vector_ll(par_x, par_y) - get_position());
+	
 	// size_t begin_x = par_x - position_x > tool_size ? par_x - position_x - tool_size : par_x - position_x;
 	// size_t begin_y = par_y - position_y > tool_size ? par_y - position_y - tool_size : par_y - position_y;
 
@@ -156,10 +157,14 @@ bool Canvas::on_mouse_click (const bool state, const size_t par_x, const size_t 
 		drawing_state = true;
 
 		draw_point(par_x, par_y);
+
+		current_tool->on_mouse_press(get_drawing(), Vector_ll(get_width(), get_height()), Vector_ll(par_x, par_y) - get_position());
 	}
 	else if (!state)
 	{
 		drawing_state = false;
+		
+		current_tool->on_mouse_release(Vector_ll(par_x, par_y) - get_position());
 
 		return true;
 	}
@@ -174,6 +179,8 @@ bool Canvas::on_mouse_move(const Vector_ll from, const Vector_ll to)
 		if (drawing_state)
 		{
 			draw_point(to.get_x(), to.get_y());
+			Tool *current_tool = Toolbar::get_instance()->get_active_tool();
+			current_tool->on_mouse_move(from - get_position(), to - get_position());
 		}
 
 		return true;
