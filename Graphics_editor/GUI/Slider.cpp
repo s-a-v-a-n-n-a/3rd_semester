@@ -1,5 +1,8 @@
 #include "Slider.hpp"
 
+const size_t COSMETIC_OFFSET = 10;
+const size_t SLIDER_SIZE = 20;
+
 Slider::Slider(const Visual_object::Config &par_base, Button_delegate *par_delegate, const long long par_high_limit, const long long par_low_limit, const bool par_horizontal)
 : Visual_object(par_base), delegate(par_delegate), high_limit(par_high_limit), low_limit(par_low_limit), horizontal(par_horizontal)
 {
@@ -15,12 +18,12 @@ Slider::Slider(const Visual_object::Config &par_base, Button_delegate *par_deleg
 	// ползунок
 	if (horizontal)
 	{
-		slider = create_sliding_button(get_position() + Vector_ll(height + 10, 0), 20, height, get_position() + Vector_ll(height + 10, 0), get_position() + Vector_ll(line_length + height - 25, 0), this);
+		slider = create_sliding_button(get_position() + Vector_ll(height + COSMETIC_OFFSET, 0), SLIDER_SIZE, height, get_position() + Vector_ll(height + COSMETIC_OFFSET, 0), get_position() + Vector_ll(line_length + height - COSMETIC_OFFSET, 0), this);
 		current_relation = slider->get_x_relation();
 	}
 	else
 	{
-		slider = create_sliding_button(get_position() + Vector_ll(0, width), width, 20, get_position() + Vector_ll(0, width + 10), get_position() + Vector_ll(0, line_length + width - 10), this);
+		slider = create_sliding_button(get_position() + Vector_ll(0, width + COSMETIC_OFFSET), width, SLIDER_SIZE, get_position() + Vector_ll(0, width + COSMETIC_OFFSET), get_position() + Vector_ll(0, line_length + width - COSMETIC_OFFSET), this);
 		current_relation = slider->get_y_relation();
 	}
 
@@ -28,17 +31,17 @@ Slider::Slider(const Visual_object::Config &par_base, Button_delegate *par_deleg
 	// magic !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Button *left = NULL;
 	if (horizontal)
-		left = create_control_button(get_position(), height, height, SLIDER_LEFT, -10, true, slider);
+		left = create_control_button(get_position(), height, height, SLIDER_LEFT, -1 * (line_length / 10), true, slider);
 	else
-		left = create_control_button(get_position(), width, width, SLIDER_DOWN, -10, false, slider);
+		left = create_control_button(get_position(), width, width, SLIDER_DOWN,  -1 * (line_length / 10), false, slider);
 	
 	// кнопка вправо
 	// magic !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Button *right = NULL;
 	if (horizontal)
-		right = create_control_button(get_position() + Vector_ll(width - height, 0), height, height, SLIDER_RIGHT, 10, true, slider);
+		right = create_control_button(get_position() + Vector_ll(width - height, 0), height, height, SLIDER_RIGHT, (line_length / 10), true, slider);
 	else
-		right = create_control_button(get_position() + Vector_ll(height - width, 0), width, width, SLIDER_UP, 10, false, slider);
+		right = create_control_button(get_position() + Vector_ll(height - width, 0), width, width, SLIDER_UP, (line_length / 10), false, slider);
 	
 	// полосочка, по которой ездят
 	// а кто он и что он будет уметь? Светиться? Фон рисовать?
@@ -78,10 +81,12 @@ void Slider::count_intermediate_state() const
 
 	if (horizontal)
 	{
-		delegate->on_mouse_click(new_point, 0);
+		if (delegate)
+			delegate->on_mouse_click(new_point, 0);
 	}
 	else
-		delegate->on_mouse_click(0, new_point);
+		if (delegate)
+			delegate->on_mouse_click(0, new_point);
 }
 
 void Slider::check_slider_state()

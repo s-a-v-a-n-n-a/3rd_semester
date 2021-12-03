@@ -7,7 +7,7 @@
 
 // #include "../EditorCanvas.hpp"
 
-const Color DEFAULT_TOOL_COLOR = RED;
+const Color DEFAULT_TOOL_COLOR = BLACK;
 const size_t DEFAULT_TOOL_SIZE = 20;
 
 class Tool
@@ -31,7 +31,6 @@ public:
 	virtual size_t get_size() { return size; }
 	virtual Color *get_pixels() { return data; }
 	virtual Vector_ll get_params() { return data_params; }
-	bool get_blend_mode() { return blend_mode; }
 
 	// virtual void apply(Canvas *to_apply, const Vector_ll &position) = 0;
 	virtual void apply(Color *to_apply, const Vector_ll &parameters, const Vector_ll &position) = 0;

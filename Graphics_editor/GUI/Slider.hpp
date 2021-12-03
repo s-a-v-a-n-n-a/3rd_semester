@@ -7,6 +7,9 @@
 #include "Visual_object_base.hpp"
 #include "Button.hpp"
 
+extern const size_t COSMETIC_OFFSET;
+extern const size_t SLIDER_SIZE;
+
 class Slider : public Visual_object
 {
 protected:

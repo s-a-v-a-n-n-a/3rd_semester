@@ -30,7 +30,7 @@ void Tool::on_mouse_press(Color *to_apply, const Vector_ll &parameters, const Ve
 
 void Tool::on_mouse_release(const Vector_ll &position)
 {
-	if (presssed)
+	if (pressed)
 		apply(data, data_params, position);
 	pressed = false;
 }

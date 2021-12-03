@@ -6,7 +6,7 @@ Toolbar *Toolbar::toolbar = nullptr;
 Toolbar_destroyer Toolbar::destroyer;
 
 Toolbar::Toolbar()
-: tools(), active_tool(nullptr), current_color(BLACK) 
+: tools(), active_tool(nullptr), current_color(DEFAULT_TOOL_COLOR) 
 {
 	Pencil *pencil = new Pencil();
 	add_tool(pencil);

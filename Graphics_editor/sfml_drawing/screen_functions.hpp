@@ -26,13 +26,12 @@ typedef enum Screen_information_code_errors
     SCREEN_SEGMENT_FAULT
 } screen_code;
 
-enum class Wall_type
+enum class Blend_mode
 {
-	NO,
-	LEFT,
-	UP,
-	RIGHT,
-	DOWN
+	ALPHA, 
+	ADD, 
+	MULTIPLY,
+	COPY
 };
 
 extern const char *screen_state_text[];
@@ -74,17 +73,19 @@ public:
 	void set_mouse_state(const bool par_state) { mouse_clicked = par_state; }
 	// ---------------------------------------------------------------------
 	
+	sf::BlendMode blending_mode(const Blend_mode mode);
+
 	// drawings
 	// ---------------------------------------------------------------------
-	void draw_circle(const Vector_ll &par_position, const double par_radius, const Color &par_color, const Color &par_fill_color = TRANSPARENT);
-	void draw_rectangle(const Vector_ll &par_position, const double par_width, const double par_height, const Color &par_color, const Color &par_fill_color = TRANSPARENT);
-	void draw_triangle(const Vector_ll &point1, const Vector_ll &point2, const Vector_ll &point3, const Color &par_color, const Color &par_fill_color = TRANSPARENT);
-	void draw_point(const Vector_ll &point, const Color &par_color);
-	void draw_line(const Vector_ll &left, const Vector_ll &right, const Color &par_color);
+	void draw_circle(const Vector_ll &par_position, const double par_radius, const Color &par_color, const Color &par_fill_color = TRANSPARENT, const Blend_mode mode = Blend_mode::ALPHA);
+	void draw_rectangle(const Vector_ll &par_position, const double par_width, const double par_height, const Color &par_color, const Color &par_fill_color = TRANSPARENT, const Blend_mode mode = Blend_mode::ALPHA);
+	void draw_triangle(const Vector_ll &point1, const Vector_ll &point2, const Vector_ll &point3, const Color &par_color, const Color &par_fill_color = TRANSPARENT, const Blend_mode mode = Blend_mode::ALPHA);
+	void draw_point(const Vector_ll &point, const Color &par_color, const Blend_mode mode = Blend_mode::ALPHA);
+	void draw_line(const Vector_ll &left, const Vector_ll &right, const Color &par_color, const Blend_mode mode = Blend_mode::ALPHA);
 	void draw_text(const char *par_text, const Vector_ll &par_position, const Color &par_color, const size_t text_size, const bool centered = true);
-	void draw_image(const Color *array, const Vector_ll &position, const size_t width, const size_t height);
-	void draw_texture(const Vector_ll &position, const char *texture_name);
-	void draw_texture(const Vector_ll &position, const sf::Texture *texture, const size_t width, const size_t height, const double transperancy = 1.0);
+	void draw_image(const Color *array, const Vector_ll &position, const size_t width, const size_t height, const Blend_mode mode = Blend_mode::ALPHA);
+	void draw_texture(const Vector_ll &position, const char *texture_name, const Blend_mode mode = Blend_mode::ALPHA);
+	void draw_texture(const Vector_ll &position, const sf::Texture *texture, const size_t width, const size_t height, const double transperancy = 1.0, const Blend_mode mode = Blend_mode::ALPHA);
 	// ---------------------------------------------------------------------
 	
 	void reset();

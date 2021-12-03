@@ -6,7 +6,7 @@ Application *Application::app = nullptr;
 Application_destroyer Application::destroyer;
 
 Application::Application()
-: graphics_wrapper(nullptr), default_main(nullptr), current_main(nullptr)
+: graphics_wrapper(nullptr), default_main(nullptr), current_main(nullptr), timer()
 {
 	graphics_wrapper = new Screen_information(DEFAULT_SIZE, DEFAULT_SIZE);
 
@@ -32,6 +32,21 @@ Application *Application::get_app()
 	return app;
 }
 
+size_t Application::get_time()
+{
+    return timer.get_passed_time();
+}
+
+Visual_object * Application::get_default()
+{
+    return default_main;
+}
+
+Visual_object * Application::get_main()
+{
+    return current_main;
+}
+
 void Application::set_default()
 {
 	current_main = default_main;
@@ -40,6 +55,11 @@ void Application::set_default()
 void Application::set_main(Visual_object *object)
 {
 	current_main = object;
+}
+
+void Application::add_visual_object(Visual_object *object)
+{
+    default_main->add_visual_object(object);
 }
 
 void Application::draw()

@@ -1,5 +1,18 @@
 #include "Plugin_manager.hpp"
 
+static Blend_mode Plugin_manager::translate_mode(PBlendMode mode);
+{
+	switch(mode)
+	{
+	case PPBM_COPY:
+		return Blend_mode::COPY;
+	case PPBM_ALPHA_BLEND:
+		return Blend_mode::ALPHA;
+	default:
+		return Blend_mode::ALPHA;
+	}
+}
+
 static PRGBA *Plugin_manager::get_pixels()
 {
 	return (PRGBA*)Toolbar::get_instance()->get_active_tool()->get_data();
@@ -11,6 +24,21 @@ static void Plugin_manager::get_size(size_t *width, size_t *height)
 
 	(*width) = (size_t)params.get_x(); 
 	(*height) = (size_t)params.get_y(); 
+}
+
+static double Plugin_manager::get_absolute_time()
+{
+	return Application::get_app()->get_time();
+}
+
+static void Plugin_manager::log(const char *fmt, ...)
+{
+	va_list arg;
+	va_start(arg, fmt);
+
+	printf(fmt, ard);
+
+	va_end(arg);
 }
 
 // ????????????????????????????????/
@@ -34,7 +62,8 @@ static void Plugin_manager::circle(PVec2f position, float radius, PRGBA color, c
 	Vector_ll position = Vector_ll((long long)position.x, (long long)position.y);
 	Color color = { color.r, color.g, color.b, color.a };
 
-	draw_circle(position, (double)radius, color, color);
+	Blend_mode mode = translate_mode(*render_mode);
+	draw_circle(position, (double)radius, color, color, mode);
 }
 
 static void Plugin_manager::rectangle(PVec2f p1, PVec2f p2, PRGBA color, const PRenderMode *render_mode)
@@ -49,7 +78,8 @@ static void Plugin_manager::rectangle(PVec2f p1, PVec2f p2, PRGBA color, const P
 	size_t width = (size_t)((fabs)(p2.x - p1.x));
 	size_t height = (size_t)((fabs)(p2.y - p1.y));
 
-	draw_rectangle(position, width, height, color, color);
+	Blend_mode mode = translate_mode(*render_mode);
+	draw_rectangle(position, width, height, color, color, mode);
 }
 
 static void Plugin_manager::triangle(PVec2f p1, PVec2f p2, PVec2f p3, PRGBA color, const PRenderMode *render_mode)
@@ -60,7 +90,8 @@ static void Plugin_manager::triangle(PVec2f p1, PVec2f p2, PVec2f p3, PRGBA colo
 
 	Color color = { color.r, color.g, color.b, color.a };
 
-	draw_triangle(point1, point2, point3, color, color);
+	Blend_mode mode = translate_mode(*render_mode);
+	draw_triangle(point1, point2, point3, color, color, mode);
 }
 
 static void line(PVec2f start, PVec2f end, PRGBA color, const PRenderMode *render_mode)
@@ -70,13 +101,31 @@ static void line(PVec2f start, PVec2f end, PRGBA color, const PRenderMode *rende
 
 	Color color = { color.r, color.g, color.b, color.a };
 
-	draw_line(point1, point2, color);
+	Blend_mode mode = translate_mode(*render_mode);
+	draw_line(point1, point2, color, mode);
 }
 
 static void pixels(PVec2f position, const PRGBA *data, size_t width, size_t height, const PRenderMode *render_mode)
 {
 	Vector_ll position = Vector_ll(x_pos, y_pos);
 
-	draw_image((Color*)data, position, (size_t)width, (size_t)height);
+	Blend_mode mode = translate_mode(*render_mode);
+	draw_image((Color*)data, position, (size_t)width, (size_t)height, mode);
 }
 
+static void create_surface(const PPluginInterface *self, size_t width, size_t height)
+{
+	// запомнить, какому плагину принадлежит это диалоговое окно
+
+	surface = create_dialog_window(width, height);
+}
+
+static void destroy_surface(const PPluginInterface *self)
+{
+	destroy_dialog_window((Dialog*)surface);
+}
+
+void *add(const PPluginInterface *self, PSettingType type, const char *name)
+{
+	;
+}

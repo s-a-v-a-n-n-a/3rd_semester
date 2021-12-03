@@ -31,8 +31,10 @@ Palette::Palette(const Visual_object::Config &par_base, const Color &par_chosen_
 	size_t button_width = (get_width() - 20) / 4;
 	size_t buttin_height = get_height() / 6;
 
-	picker = create_color_picker(get_position() + Vector_ll(10, (offset + 30)), picker_size, picker_size, picker_color);// new Color_picker((size_t)Vidget_type::COLOR_PICKER, par_position + Vector_ll(10, (offset + 30)), TRANSPARENT, MAX_COLOR_VALUE, MAX_COLOR_VALUE, par_pencil);
-    gradient_bar = create_gradient_bar(get_position() + Vector_ll(10, offset + 10), picker_size, 20, picker, hsv);// new Gradient_bar((size_t)Vidget_type::GRADIENT_BAR, par_position + Vector_ll(10, offset + 10), texture, MAX_COLOR_VALUE, 20, par_pencil, picker);
+	// picker = create_color_picker(get_position() + Vector_ll(10, (offset + 30)), picker_size, picker_size, picker_color);// new Color_picker((size_t)Vidget_type::COLOR_PICKER, par_position + Vector_ll(10, (offset + 30)), TRANSPARENT, MAX_COLOR_VALUE, MAX_COLOR_VALUE, par_pencil);
+ //    gradient_bar = create_gradient_bar(get_position() + Vector_ll(10, offset + 10), picker_size, 20, picker, hsv);// new Gradient_bar((size_t)Vidget_type::GRADIENT_BAR, par_position + Vector_ll(10, offset + 10), texture, MAX_COLOR_VALUE, 20, par_pencil, picker);
+   	
+    color_picker = create_color_selection_widget(get_position() + Vector_ll(0, offset), get_width(), get_height() - DEFAULT_BUTTON_HEIGHT, picker_color);
    	// add_visual_object(panel);
    	old_color = new Button({(size_t)Vidget_type::BUTTON, get_position() + Vector_ll(picker_size + 20, (offset + 30)), nullptr, par_chosen_color, button_width, buttin_height}, NULL, "");
    	new_color = new Button({(size_t)Vidget_type::BUTTON, get_position() + Vector_ll(picker_size + 20, (offset + 30 + buttin_height)), nullptr, par_chosen_color, button_width, buttin_height}, NULL, "");
@@ -45,25 +47,14 @@ Palette::Palette(const Visual_object::Config &par_base, const Color &par_chosen_
    	add_visual_object(ok_button);
 }
 
-Color_picker *Palette::create_color_picker(const Vector_ll &position, const size_t width, const size_t height, const Color &color)
+Color_selection_window *Palette::create_color_selection_widget(const Vector_ll &position, const size_t width, const size_t height, const Color &color)
 {
-	Visual_object::Config picker_base = { (size_t)Vidget_type::COLOR_PICKER, position, nullptr, TRANSPARENT, width, height };
+	Visual_object::Config picker_base = { (size_t)Vidget_type::COLOR_SELECTION, position, NULL, TRANSPARENT, width, height};
 
-	Color_picker *picker = new Color_picker(picker_base, color, &chosen_color);
+	Color_selection_window *picker = new Color_selection_window(picker_base, color);
 	add_visual_object(picker);
 
 	return picker;
-}
-
-Gradient_bar *Palette::create_gradient_bar(const Vector_ll &position, const size_t width, const size_t height, Color_picker *picker, const HSV &hsv)
-{
-	Full_texture *texture = Resources::get_instance()->create_texture(GRADIENT_BAR_TEXTURE, width, height);
-	Visual_object::Config gradient_base = { (size_t)Vidget_type::GRADIENT_BAR, position, texture, TRANSPARENT, width, height };
-
-    Gradient_bar *gradient = new Gradient_bar(gradient_base, picker, hsv);
-	add_visual_object(gradient);
-
-	return gradient;
 }
 
 void Palette::draw(Screen_information *screen)
@@ -88,9 +79,12 @@ bool Palette::on_mouse_click(const bool state, const size_t par_x, const size_t 
 	{
 		bool result = Visual_object::on_mouse_click(state, par_x, par_y);
 
-		if ((result = picker->on_mouse_click(state, par_x, par_y)) || (result = gradient_bar->on_mouse_click(state, par_x, par_y)))
+		if ((result = color_picker->get_color_picker()->on_mouse_click(state, par_x, par_y)) || 
+			(result = color_picker->get_gradient_bar()->on_mouse_click(state, par_x, par_y)))
 		{
-			new_color->set_color(chosen_color); 
+			new_color->set_color(color_picker->get_color()); 
+			chosen_color = color_picker->get_color();
+			printf("here\n");
 		}
 		if (!result)
 		{

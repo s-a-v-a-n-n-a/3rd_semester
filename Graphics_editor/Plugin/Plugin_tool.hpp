@@ -9,10 +9,11 @@ class Plugin_tool : public Plugin, public Tool
 {
 private:
 	PPluginInterface *plugin;
+	Visual_object *surface;
 
 public:
 	Plugin_tool(const char *dll_name, const PAppInterface *interface)
-	: Tool(), Plugin(dll_name)
+	: Tool(), Plugin(dll_name), plugin(nullptr), surface(nullptr)
 	{
 		get_plugin_interface = (PPluginInterface *(*)())dlsym(handle, "PGET_INTERFACE_FUNC");
 		plugin = get_plugin_interface();
@@ -51,6 +52,21 @@ public:
 
 			pressed = false;
 		}
+	}
+
+	void set_surface(Visual_object *par_surface)
+	{
+		surface = par_surface;
+	}
+
+	Visual_object *get_surface()
+	{
+		return surface;
+	}
+
+	PPluginInterface *get_plugin()
+	{
+		return plugin;
 	}
 };
 

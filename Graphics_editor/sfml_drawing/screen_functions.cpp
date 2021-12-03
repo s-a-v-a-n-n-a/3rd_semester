@@ -47,7 +47,28 @@ size_t Screen_information::get_height()
 	return height;
 }
 
-void Screen_information::draw_circle(const Vector_ll &par_position, const double par_radius, const Color &par_color, const Color &par_fill_color)
+sf::BlendMode Screen_information::blending_mode(const Blend_mode mode)
+{
+	switch (mode)
+	{
+	case Blend_mode::ALPHA:
+		return sf::BlendAlpha;
+	
+	case Blend_mode::ADD:
+		return sf::BlendAdd;
+
+	case Blend_mode::MULTIPLY:
+		return sf::BlendMultiply;
+
+	case Blend_mode::COPY:
+		return sf::BlendNone;
+
+	default:
+		return sf::BlendAlpha;
+	}
+}
+
+void Screen_information::draw_circle(const Vector_ll &par_position, const double par_radius, const Color &par_color, const Color &par_fill_color, const Blend_mode mode)
 {
 	sf::CircleShape circle(par_radius);
 
@@ -58,10 +79,11 @@ void Screen_information::draw_circle(const Vector_ll &par_position, const double
 	circle.setOutlineColor(color);
 	circle.setFillColor(fill_color);
 
-	window.draw(circle);
+	sf::BlendMode blend = blending_mode(mode);
+	window.draw(circle, blend);
 }
 
-void Screen_information::draw_rectangle(const Vector_ll &par_position, const double par_width, const double par_height, const Color &par_color, const Color &par_fill_color)
+void Screen_information::draw_rectangle(const Vector_ll &par_position, const double par_width, const double par_height, const Color &par_color, const Color &par_fill_color, const Blend_mode mode)
 {
 	sf::RectangleShape rectangle(sf::Vector2f(par_width, par_height));
 
@@ -73,10 +95,11 @@ void Screen_information::draw_rectangle(const Vector_ll &par_position, const dou
 	sf::Color fill_color(par_fill_color.r, par_fill_color.g, par_fill_color.b, par_fill_color.a);
 	rectangle.setFillColor(fill_color);
 
+	sf::BlendMode blend = blending_mode(mode);
 	window.draw(rectangle);
 }
 
-void Screen_information::draw_triangle(const Vector_ll &point1, const Vector_ll &point2, const Vector_ll &point3, const Color &par_color, const Color &par_fill_color)
+void Screen_information::draw_triangle(const Vector_ll &point1, const Vector_ll &point2, const Vector_ll &point3, const Color &par_color, const Color &par_fill_color, const Blend_mode mode)
 {
 	sf::ConvexShape convex;
 
@@ -92,25 +115,28 @@ void Screen_information::draw_triangle(const Vector_ll &point1, const Vector_ll 
 	sf::Color fill_color(par_fill_color.r, par_fill_color.g, par_fill_color.b, par_fill_color.a);
 	convex.setFillColor(fill_color);
 
-	window.draw(convex);
+	sf::BlendMode blend = blending_mode(mode);
+	window.draw(convex, blend);
 }
 
 
-void Screen_information::draw_point(const Vector_ll &par_point, const Color &par_color)
+void Screen_information::draw_point(const Vector_ll &par_point, const Color &par_color, const Blend_mode mode)
 {
 	sf::Color color(par_color.r, par_color.g, par_color.b, par_color.a);
 	sf::Vertex sfml_point(sf::Vector2f(par_point.get_x(), par_point.get_y()), color);
 
-	window.draw(&sfml_point, 1, sf::Points);
+	sf::BlendMode blend = blending_mode(mode);
+	window.draw(&sfml_point, 1, sf::Points, blend);
 }
 
-void Screen_information::draw_line(const Vector_ll &left, const Vector_ll &right, const Color &par_color)
+void Screen_information::draw_line(const Vector_ll &left, const Vector_ll &right, const Color &par_color, const Blend_mode mode)
 {
 	sf::Color color(par_color.r, par_color.g, par_color.b, par_color.a);
 	sf::Vertex sfml_line[] = {  sf::Vertex(sf::Vector2f(left.get_x(), left.get_y()), color), 
 								sf::Vertex(sf::Vector2f(right.get_x(), right.get_y()), color) };
 	
-	window.draw(sfml_line, 2, sf::Lines);
+	sf::BlendMode blend = blending_mode(mode);
+	window.draw(sfml_line, 2, sf::Lines, blend);
 }
 
 
@@ -140,17 +166,17 @@ void Screen_information::draw_text(const char *par_text, const Vector_ll &par_po
 	}
 }
 
-void Screen_information::draw_image(const Color *array, const Vector_ll &position, const size_t width, const size_t height)
+void Screen_information::draw_image(const Color *array, const Vector_ll &position, const size_t width, const size_t height, const Blend_mode mode)
 {
 	sf::Texture texture;
 	texture.create(width, height);
 
 	texture_load(&texture, array, width, height);
 
-	draw_texture(position, &texture, width, height);
+	draw_texture(position, &texture, width, height, 1, mode);
 }
 
-void Screen_information::draw_texture(const Vector_ll &position, const char *texture_name)
+void Screen_information::draw_texture(const Vector_ll &position, const char *texture_name, const Blend_mode mode)
 {
 	sf::Sprite sprite;
 	sf::Texture texture;
@@ -160,10 +186,11 @@ void Screen_information::draw_texture(const Vector_ll &position, const char *tex
 
 	sprite.setPosition(position.get_x(), position.get_y());
 
-	window.draw(sprite);
+	sf::BlendMode blend = blending_mode(mode);
+	window.draw(sprite, blend);
 }
 
-void Screen_information::draw_texture(const Vector_ll &position, const sf::Texture *texture, const size_t width, const size_t height, const double transperancy)
+void Screen_information::draw_texture(const Vector_ll &position, const sf::Texture *texture, const size_t width, const size_t height, const double transperancy, const Blend_mode mode)
 {
 	sf::Sprite sprite;
 
@@ -193,7 +220,8 @@ void Screen_information::draw_texture(const Vector_ll &position, const sf::Textu
 	// // printf("brightness %lg\n", max_color);
 	// sprite.setColor(sf::Color(255, 255, 255, (unsigned char)max_color));
 
-	window.draw(sprite);
+	sf::BlendMode blend = blending_mode(mode);
+	window.draw(sprite, blend);
 }
 
 void Screen_information::reset()

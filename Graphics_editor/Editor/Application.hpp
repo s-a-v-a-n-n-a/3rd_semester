@@ -1,6 +1,8 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+#include "../Utilities/Timer.hpp"
+
 #include "../sfml_drawing/screen_functions.hpp"
 #include "../GUI/Visual_object_base.hpp"
 
@@ -35,6 +37,8 @@ private:
 	Visual_object *current_main;
 	Visual_object *default_main;
 
+	Timer timer;
+
 protected:
 	Application();
 	friend class Application_destroyer;
@@ -43,10 +47,15 @@ public:
 	~Application();
 	static Application *get_app();
 
+	size_t get_time();
 	
+	Visual_object *get_default();
+	Visual_object *get_main();
 
 	void set_default();
 	void set_main(Visual_object *object);
+
+	void add_visual_object(Visual_object *object);
 
 	void draw();
 	void tick();
