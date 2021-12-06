@@ -655,3 +655,24 @@ bool Roll_up_confirmation::on_mouse_release()
 	
 	return false;
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------
+
+Popup_text_confirmation::Popup_text_confirmation(Visual_object *par_roll_up, char **par_text)
+: Roll_up_confirmation(par_roll_up), text(par_text)
+{}
+
+bool Popup_text_confirmation::on_mouse_click(const size_t par_x, const size_t par_y)
+{
+	Roll_up_confirmation::on_mouse_click(par_x, par_y);
+
+	return true;
+}
+
+bool Popup_text_confirmation::on_mouse_release()
+{
+	Roll_up_confirmation::on_mouse_release();
+	Application::get_app()->add_plugin(*text);
+	
+	return true;
+}

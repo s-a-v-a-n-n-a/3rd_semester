@@ -55,6 +55,7 @@ public:
 	Button *create_canvas_creator(Button_manager *panel, Canvas_manager_manager *canvas_manager, const char *text, const size_t width, const size_t height);
 	Color_selection_window *create_color_vidget(const Vector_ll &position, const size_t width, const size_t height);
 	Brush_size_selection_window *create_size_vidget(const Vector_ll &position, const size_t width, const size_t height);
+	Button *create_plugin_info_button(Button_manager *panel, const char *text, const size_t width, const size_t height);
 
 	// test
 	Test_button *create_test_button(const Vector_ll &position, const char *text, const size_t width, const size_t height);

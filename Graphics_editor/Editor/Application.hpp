@@ -9,7 +9,8 @@
 #include "Graphical_editor_main_page.hpp"
 
 // ?????????????
-#include "../Plugin/plugin_std.hpp"
+#include "../Plugin/Plugin_manager.hpp"
+// #include "../Plugin/plugin_std.hpp"
 
 extern const size_t DEFAULT_SIZE;
 
@@ -31,9 +32,9 @@ class Application
 private:
 	static Application *app;
 	static Application_destroyer destroyer;
-	
-	Screen_information *graphics_wrapper;
 
+	Plugin_manager *plugins;
+	
 	Visual_object *current_main;
 	Visual_object *default_main;
 
@@ -44,8 +45,13 @@ protected:
 	friend class Application_destroyer;
 
 public:
+	Screen_information *graphics_wrapper;
+
 	~Application();
 	static Application *get_app();
+
+	void add_plugin(const char *plugin_name);
+	Plugin_manager *get_plugins();
 
 	size_t get_time();
 	

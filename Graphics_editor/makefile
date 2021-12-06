@@ -12,7 +12,8 @@ INC     	=
 SFML    	= -lsfml-graphics -lsfml-window -lsfml-system
 OPT     	= -O3
 DEF     	= -DNDEBUG
-CFLAGS  	= $(OPT) $(DEF) $(ASAN) -g $(INC)
+CFLAGS  	= $(OPT) $(DEF) $(ASAN) -g $(INC) 
+DLL			= -ldl -lm -lpthread -pthread
 OBJ     	= obj/
 EXE     	= main
  
@@ -45,6 +46,11 @@ FILES   	= $(OBJ)main.o \
 			$(OBJ)Editor/Canvas_manager_manager.o \
 			$(OBJ)Editor/Window_control_panel.o \
 			$(OBJ)Editor/Graphical_editor_main_page.o \
+			$(OBJ)Editor/Dialog_window.o \
+			$(OBJ)Editor/Tools_window.o \
+			$(OBJ)Editor/Search_box.o \
+			$(OBJ)Plugin/Plugin_manager.o \
+			$(OBJ)Plugin/Plugin_tool.o \
 
           # остальные файлы по правилу a.cpp -> $(OBJ)a.o (a может содержать путь)
  
@@ -57,7 +63,7 @@ all: $(FILES)
 	$(GREEN)
 	@echo 'Linking $@ (changed $?)';
 	$(DFLT)
-	@$(COMPILATOR) $(CFLAGS) $(FILES) $(SFML) -o $(EXE)
+	@$(COMPILATOR) $(CFLAGS) $(FILES) $(SFML) $(DLL) -o $(EXE)
 	
 obj/%.o: %.cpp
 	$(GREEN)

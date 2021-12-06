@@ -36,6 +36,19 @@ Animating_texture *Resources::create_texture(const char *texture_name, const siz
 	return new_texture;
 }
 
+void Resources::delete_texture(Texture *texture)
+{
+	long long textures_amount = (long long)textures.get_length();
+	for (long long i = 0; i < textures_amount; ++i)
+	{
+		if (textures.get_array()[i] == texture)
+		{
+			textures.slow_delete(i);
+			break;
+		}
+	}
+}
+
 Resources * Resources::get_instance() 
 {
 	if (resources == nullptr)

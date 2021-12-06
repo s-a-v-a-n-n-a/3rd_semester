@@ -1,6 +1,7 @@
 #include "Visual_object_base.hpp"
 
 // const size_t VIDGETS_AMOUNT = 9;
+
 Visual_object::Visual_object(const Visual_object::Config &par_base)
 : objects(), base(par_base),
   current_active(nullptr), active(false), visible(true), reactive(true), alive(true)
@@ -15,6 +16,7 @@ void Visual_object::add_visual_object(Visual_object *par_object)
 
 void Visual_object::slow_delete_visual_object(size_t index) 
 { 
+	Resources::get_instance()->delete_texture(objects.get_array()[index]->get_texture());
 	objects.slow_delete(index); 
 }
 

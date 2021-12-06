@@ -34,5 +34,7 @@ public:
 
 	Full_texture *create_texture(const char *texture_name, const size_t texture_width, const size_t texture_height);
 	Animating_texture *create_texture(const char *texture_name, const size_t texture_width, const size_t texture_height, const char *move_texture_name, const char *inactive_texture_name);
+
+	void delete_texture(Texture *texture);
 };
 #endif // RESOURCE_MANAGER_H

@@ -9,6 +9,7 @@ class Canvas_keeper;
 #include "Canvas_manager_manager.hpp"
 
 #include "Effects/Canvas_effects.hpp"
+#include "Search_box.hpp"
 
 class Create_canvas : virtual public Button_delegate
 {
@@ -149,10 +150,36 @@ public:
 
 // -------------------------------------------------------------------------------------------------
 
+class Plugin_input_creator : virtual public Button_delegate
+{
+private:
+	Vector_ll position;
+
+public:
+	Plugin_input_creator(const Vector_ll &par_position);
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+	bool on_mouse_release() override;
+};
+
+// -------------------------------------------------------------------------------------------------
+
 class Animating_color_picker_creator : public Color_picker_creator, public Animating
 {
 public:
 	Animating_color_picker_creator(const Vector_ll &par_position, Visual_object *par_to_interact);
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+	bool on_mouse_release() override;
+	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
+};
+
+// -------------------------------------------------------------------------------------------------
+
+class Animating_plugin_input_creator : public Plugin_input_creator, public Animating
+{
+public:
+	Animating_plugin_input_creator(const Vector_ll &par_position, Visual_object *par_to_interact);
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
 	bool on_mouse_release() override;

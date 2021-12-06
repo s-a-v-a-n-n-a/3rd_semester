@@ -8,7 +8,9 @@ Application_destroyer Application::destroyer;
 Application::Application()
 : graphics_wrapper(nullptr), default_main(nullptr), current_main(nullptr), timer()
 {
-	graphics_wrapper = new Screen_information(DEFAULT_SIZE, DEFAULT_SIZE);
+	plugins = new Plugin_manager();
+
+    graphics_wrapper = new Screen_information(DEFAULT_SIZE, DEFAULT_SIZE);
 
 	Graphical_editor_main_page *editor = new Graphical_editor_main_page({(size_t)Vidget_type::EDITOR, Vector_ll(0, 0), nullptr, DARK_GREY, DEFAULT_SIZE, DEFAULT_SIZE});
 	default_main = editor;
@@ -17,7 +19,9 @@ Application::Application()
 
 Application::~Application()
 {
-	delete graphics_wrapper;
+	delete plugins;
+
+    delete graphics_wrapper;
 	delete default_main;
 }
 
@@ -57,6 +61,16 @@ void Application::set_main(Visual_object *object)
 	current_main = object;
 }
 
+void Application::add_plugin(const char *plugin_name)
+{
+    plugins->add_plugin(plugin_name);
+}
+
+Plugin_manager *Application::get_plugins()
+{
+    return plugins;
+}
+
 void Application::add_visual_object(Visual_object *object)
 {
     default_main->add_visual_object(object);
@@ -67,7 +81,10 @@ void Application::draw()
 	default_main->draw(graphics_wrapper);
 
 	if (current_main != default_main)
-		current_main->draw(graphics_wrapper);
+    {
+		graphics_wrapper->draw_rectangle({0, 0}, default_main->get_width(), default_main->get_height(), {100, 100, 100, 150}, {100, 100, 100, 150});
+        current_main->draw(graphics_wrapper);
+    }
 }
 
 void Application::tick()

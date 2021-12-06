@@ -70,6 +70,8 @@ sf::BlendMode Screen_information::blending_mode(const Blend_mode mode)
 
 void Screen_information::draw_circle(const Vector_ll &par_position, const double par_radius, const Color &par_color, const Color &par_fill_color, const Blend_mode mode)
 {
+	printf("I was asked to draw circle: of size %lg, of Color %u %u %u %u, at position %lld %lld, mode %d\n", par_radius, par_color.r, par_color.g, par_color.b, par_color.a, par_position.get_x(), par_position.get_y(), mode);
+
 	sf::CircleShape circle(par_radius);
 
 	circle.setPosition(sf::Vector2f(par_position.get_x(), par_position.get_y()));

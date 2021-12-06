@@ -1,8 +1,6 @@
 #include <cstdio>
 #include <cstdlib>
 
-#include <crand>
-
 #include "Editor/Application.hpp"
 
 int main()

@@ -12,6 +12,8 @@
 
 #include "../Editor/Vidget_types.hpp"
 
+#include "Resource_manager.hpp"
+
 class Visual_object
 {
 protected:

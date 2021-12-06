@@ -3,6 +3,11 @@
 Input_string::Input_string(const Visual_object::Config &base)
 : Visual_object(base), string(get_width()), uppercase(false), pressed(false) {}
 
+char *Input_string::get_message()
+{
+	return string.get_string();
+}
+
 bool Input_string::on_key_pressed(const bool pressed_state, const unsigned key_mask)
 {
 	if (pressed)

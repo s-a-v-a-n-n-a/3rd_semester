@@ -134,6 +134,27 @@ bool Color_picker_creator::on_mouse_release()
 	return true;
 }
 
+// ---------------------------------------------------------------------------------------------------------------
+
+Plugin_input_creator::Plugin_input_creator(const Vector_ll &par_position)
+: position(par_position) {}
+
+bool Plugin_input_creator::on_mouse_click(const size_t par_x, const size_t par_y)
+{
+	return true;
+}
+
+bool Plugin_input_creator::on_mouse_release()
+{
+	Search_box *input = new Search_box({(size_t)Vidget_type::SEARCH_BOX, position, nullptr, DARK_GREY, 600, 300});
+
+	Application::get_app()->set_main(input);
+
+	return true;
+}
+
+// --------------------------------------------------------------------------------------------------------------
+
 Animating_color_picker_creator::Animating_color_picker_creator(const Vector_ll &par_position, Visual_object *par_to_interact)
 : Color_picker_creator(par_position), Animating(par_to_interact) {}
 
@@ -153,4 +174,27 @@ bool Animating_color_picker_creator::on_mouse_move(const Vector_ll from, const V
 {
 	return Animating::on_mouse_move(from, to);
 }
+
+// ---------------------------------------------------------------------------------------------------------------
+
+Animating_plugin_input_creator::Animating_plugin_input_creator(const Vector_ll &par_position, Visual_object *par_to_interact)
+: Plugin_input_creator(par_position), Animating(par_to_interact) {}
+
+bool Animating_plugin_input_creator::on_mouse_click(const size_t par_x, const size_t par_y)
+{
+	Plugin_input_creator::on_mouse_click(par_x, par_y);
+	return Animating::on_mouse_click(par_x, par_y);
+}
+
+bool Animating_plugin_input_creator::on_mouse_release()
+{
+	Animating::reset();
+	return Plugin_input_creator::on_mouse_release();
+}
+
+bool Animating_plugin_input_creator::on_mouse_move(const Vector_ll from, const Vector_ll to)
+{
+	return Animating::on_mouse_move(from, to);
+}
+
 

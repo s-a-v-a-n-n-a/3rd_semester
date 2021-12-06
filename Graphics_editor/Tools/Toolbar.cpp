@@ -43,6 +43,7 @@ Toolbar *Toolbar::get_instance()
 void Toolbar::add_tool(Tool *tool)
 {
 	tools.push_back(tool);
+	tools_amount = tools.size();
 }
 
 void Toolbar::set_active_tool(Tool *tool)

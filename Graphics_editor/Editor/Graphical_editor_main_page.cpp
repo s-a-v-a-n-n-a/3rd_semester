@@ -31,6 +31,7 @@ const char SIZE_TEXT[]       = " Size ";
 const char SPLINE_TEXT[]     = " Filter ";
 const char SLIDER_TEXT[]     = " Slider ";
 const char TOOLS_TEXT[]      = " Tools ";
+const char PLUGINS_TEXT[]      = " NEW PLUGIN ";
 
 Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Config &par_base)
 : Visual_object(par_base)
@@ -81,10 +82,23 @@ Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Conf
     current_button_size = get_text_length(GHOST_TYPE, TOOLS_TEXT, INCREASED_BUTTON_HEIGHT / 2);
 	create_restore_button(panel, tools, TOOLS_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
 
+    current_button_size = get_text_length(GHOST_TYPE, PLUGINS_TEXT, INCREASED_BUTTON_HEIGHT / 2);
+    create_plugin_info_button(panel, PLUGINS_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
     // test
     // create_test_button(par_position + Vector_ll(0, 1000), "", 300, 300);
 
 	set_active(canvas);
+}
+
+Button *Graphical_editor_main_page::create_plugin_info_button(Button_manager *panel, const char *text, const size_t width, const size_t height)
+{
+	Animating_texture *texture = Resources::get_instance()->create_texture(SIMPLE_BUTTON, width, height, SIMPLE_BUTTON_MOVE, nullptr);
+	
+	Button *button = panel->add_button(NULL, text, texture, width, height);
+	Animating_plugin_input_creator *delegate = new Animating_plugin_input_creator({300, 300}, button);
+	button->set_delegate(delegate);
+
+	return button;
 }
 
 

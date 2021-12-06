@@ -45,6 +45,9 @@ const char ACTIVE_COLOR_BUTTON[] = "graphical_attributes/Textures/Color_button_a
 const char TEXT_FIELD[] = "graphical_attributes/Textures/Text_field.png";
 const char TEXT_FIELD_ACTIVE[] = "graphical_attributes/Textures/Text_field_active.png";
 
+const char UNKNOWN_TOOL[] = "graphical_attributes/Textures/Question.png";
+const char UNKNOWN_TOOL_ACTIVE[] = "graphical_attributes/Textures/Question_active.png";
+
 extern const char *COLORED_BUTTONS[];
 extern const char *TOOLS_BUTTONS[];
 extern const char *ACTIVE_TOOLS_BUTTONS[];
