@@ -80,40 +80,40 @@ private:
 
 	// struct Target
 	// {
-		static PRGBA *(*get_pixels)();
-	    static void (*get_size)(size_t *width, size_t *height);
+	static PRGBA *(*get_pixels)();
+    static void (*get_size)(size_t *width, size_t *height);
 	// };
 
 	// struct General
 	// {	
-		static void (*log)(const char *fmt, ...);
-	    static double (*get_absolute_time)();
+	static void (*log)(const char *fmt, ...);
+    static double (*get_absolute_time)();
 
-		static void (*release_pixels)(PRGBA *pixels);
+	static void (*release_pixels)(PRGBA *pixels);
 
-		static PRGBA (*get_current_color)();
-	    static float (*get_current_size)();
+	static PRGBA (*get_current_color)();
+    static float (*get_current_size)();
 
 	// };
 
 	// struct Render
 	// {
-		static void (*circle)(PVec2f position, float radius, PRGBA color, const PRenderMode *render_mode);		
-		static void (*rectangle)(PVec2f p1, PVec2f p2, PRGBA color, const PRenderMode *render_mode);
-		static void (*triangle)(PVec2f p1, PVec2f p2, PVec2f p3, PRGBA color, const PRenderMode *render_mode);
-		static void (*line)(PVec2f start, PVec2f end, PRGBA color, const PRenderMode *render_mode);
+	static void (*circle)(PVec2f position, float radius, PRGBA color, const PRenderMode *render_mode);		
+	static void (*rectangle)(PVec2f p1, PVec2f p2, PRGBA color, const PRenderMode *render_mode);
+	static void (*triangle)(PVec2f p1, PVec2f p2, PVec2f p3, PRGBA color, const PRenderMode *render_mode);
+	static void (*line)(PVec2f start, PVec2f end, PRGBA color, const PRenderMode *render_mode);
 
-		static void (*pixels)(PVec2f position, const PRGBA *data, size_t width, size_t height, const PRenderMode *render_mode);
+	static void (*pixels)(PVec2f position, const PRGBA *data, size_t width, size_t height, const PRenderMode *render_mode);
 	// };
 
 // надо сделатб
 	// struct Settings
 	// {
-		static void  (*create_surface)(const PPluginInterface *self, size_t width, size_t height);
-	    static void  (*destroy_surface)(const PPluginInterface *self);
+	static void  (*create_surface)(const PPluginInterface *self, size_t width, size_t height);
+    static void  (*destroy_surface)(const PPluginInterface *self);
 
-	    static void *(*add)(const PPluginInterface *self, PSettingType type, const char *name);
-	    static void  (*get)(const PPluginInterface *self, void *handle, void *answer);
+    static void *(*add)(const PPluginInterface *self, PSettingType type, const char *name);
+    static void  (*get)(const PPluginInterface *self, void *handle, void *answer);
 	// };
 
 public:

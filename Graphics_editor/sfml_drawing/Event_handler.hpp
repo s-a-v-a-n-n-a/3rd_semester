@@ -191,6 +191,7 @@ public:
 	        if (event.type == sf::Event::MouseButtonReleased)
 	        {
 	        	// return Sfml_events::MOUSE_RELEASED;
+	        	printf("[Event handler] : Mouse released\n");
 	        	return { Event_type::MOUSE, (size_t)Mouse_state::RELEASED, (size_t)Mouse::LEFT };
 	        }
 

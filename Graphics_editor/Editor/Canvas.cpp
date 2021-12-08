@@ -184,10 +184,9 @@ bool Canvas::on_mouse_click (const bool state, const size_t par_x, const size_t 
 
 bool Canvas::on_mouse_move(const Vector_ll from, const Vector_ll to)
 {
+	Tool *current_tool = Toolbar::get_instance()->get_active_tool();
 	if (point_inside(to.get_x(), to.get_y()))
 	{
-		Tool *current_tool = Toolbar::get_instance()->get_active_tool();
-		
 		set_applied(false);
 		current_tool->on_mouse_move(from - get_position(), to - get_position());
 		make_drawing();
@@ -196,6 +195,7 @@ bool Canvas::on_mouse_move(const Vector_ll from, const Vector_ll to)
 	}
 	else
 	{
+		current_tool->on_mouse_release(from - get_position());
 		return false;
 	}
 }

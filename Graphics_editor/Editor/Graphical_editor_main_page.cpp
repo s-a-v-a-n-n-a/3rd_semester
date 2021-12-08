@@ -31,14 +31,15 @@ const size_t DEFAULT_BUTTON_WIDTH = 200;
 
 const size_t DEFAULT_TEXT_OFFSET = 20;
 
-const char CANVAS_TEXT[]     = " Canvas ";
-const char NEW_CANVAS_TEXT[] = " New canvas ";
-const char COLOR_TEXT[]      = " Color ";
-const char SIZE_TEXT[]       = " Size ";
-const char SPLINE_TEXT[]     = " Filter ";
-const char SLIDER_TEXT[]     = " Slider ";
-const char TOOLS_TEXT[]      = " Tools ";
+const char CANVAS_TEXT[]     = " CANVAS ";
+const char NEW_CANVAS_TEXT[] = " NEW CANVAS ";
+const char COLOR_TEXT[]      = " COLOR ";
+const char SIZE_TEXT[]       = " SIZE ";
+const char SPLINE_TEXT[]     = " FILTER ";
+const char SLIDER_TEXT[]     = " SLIDER ";
+const char TOOLS_TEXT[]      = " TOOLS ";
 const char PLUGINS_TEXT[]    = " NEW PLUGIN ";
+const char OPEN_IMAGE[]		 = " OPEN IMAGE ";
 
 Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Config &par_base)
 : Visual_object(par_base)
@@ -96,6 +97,10 @@ Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Conf
 
     current_button_size = get_text_length(GHOST_TYPE, PLUGINS_TEXT, INCREASED_BUTTON_HEIGHT / 2);
     create_plugin_info_button(panel, PLUGINS_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
+    
+    current_button_size = get_text_length(GHOST_TYPE, OPEN_IMAGE, INCREASED_BUTTON_HEIGHT / 2);
+    create_plugin_info_button(panel, OPEN_IMAGE, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
+
     // test
     // create_test_button(par_position + Vector_ll(0, 1000), "", 300, 300);
 

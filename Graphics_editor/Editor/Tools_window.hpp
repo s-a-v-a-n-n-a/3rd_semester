@@ -28,6 +28,7 @@ class Tools_window : public Window
 {
 private:
 	size_t icon_size;
+	size_t text_size;
 	long long icons_in_line;
 	long long tools_amount;
 

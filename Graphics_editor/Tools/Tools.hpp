@@ -21,15 +21,19 @@ protected:
 	Color color;
 	size_t size;
 
+	char *name;
+
 public:
 	Tool();
-	virtual ~Tool() = default;
+	Tool(const char *par_name);
+	virtual ~Tool();
 
 	virtual void set_color(const Color &par_color) { color = par_color; }
 	virtual void set_size(const size_t par_size) { size = par_size; }
 
 	virtual Color get_color() { return color; }
 	virtual size_t get_size() { return size; }
+	virtual char *get_name() { return name; }
 	virtual Color *get_pixels() { return data; }
 	virtual Vector_ll get_params() { return data_params; }
 

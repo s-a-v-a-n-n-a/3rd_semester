@@ -375,4 +375,15 @@ public:
 	bool on_mouse_release() override;
 };
 
+// --------------------------------------------------------------------------------------------------------------------------
+
+// class Open_file : public Button_delegate
+// {
+// public:
+// 	Popup_text_confirmation(const char *filename);
+
+// 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+// 	bool on_mouse_release() override;
+// };
+
 #endif // GRAPHICAL_DELEGATES

@@ -1,8 +1,11 @@
 #include "Tools_window.hpp"
 
+#include "../GUI/Text.hpp"
+
 Tools_window::Tools_window(const Visual_object::Config &par_base)
 : Window(par_base)
 {
+	text_size = 10;
 	icon_size = get_width()/3;
 	icons_in_line = 3;
 
@@ -15,7 +18,10 @@ Tools_window::Tools_window(const Visual_object::Config &par_base)
 		for (size_t j = 0; j < icons_in_line; ++j)
 		{
 			if (i + j < default_tools_amount)
+			{
 				create_pick_button(get_position() + Vector_ll(icon_size * j, y_offset), icon_size, icon_size, TOOLS_BUTTONS[i + j], ACTIVE_TOOLS_BUTTONS[i + j], tools[i + j]);
+				// maybe create plugin name?
+			}
 		}
 
 		y_offset += icon_size;
@@ -60,7 +66,6 @@ void Tools_window::add_tool(Tool *tool)
 	add_visual_object(pick_button);
 
 	tools_amount++;
-	// Toolbar::get_instance()->add_tool(tool);
 }
 
 void Tools_window::tick(Screen_information *screen, const double delta_time)
