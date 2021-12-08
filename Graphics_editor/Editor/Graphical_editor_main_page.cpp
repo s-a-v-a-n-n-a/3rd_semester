@@ -2,10 +2,11 @@
 #include "Editor_delegates.hpp"
 #include "Graphical_delegates.hpp"
 
+#ifdef WITH_SPLINE
 const size_t DEFAULT_CANVAS_SIZE = 300;
-
-const size_t DEFAULT_CANVAS_POS_X = 400;
-const size_t DEFAULT_CANVAS_POS_Y = 400;
+#else
+const size_t DEFAULT_CANVAS_SIZE = 1100;
+#endif
 
 const size_t DEFAULT_COLOR_VIDGET_WIDTH = 400 + 20;
 const size_t DEFAULT_COLOR_VIDGET_HEIGHT = 400 + 20 + 90; //  + DEFAULT_BUTTON_HEIGHT
@@ -18,7 +19,13 @@ const size_t DEFAULT_SIZE_VIDGET_POS_Y = DEFAULT_COLOR_VIDGET_HEIGHT + DEFAULT_C
 const size_t THICKNESS_WINDOW_WIDTH = 400;
 const size_t THICKNESS_WINDOW_HEIGHT = 100;
 const size_t THICKNESS_WINDOW_POS_X = 0;
-const size_t THICKNESS_WINDOW_POS_Y = DEFAULT_SIZE_VIDGET_POS_Y + THICK_PALETTE_HEIGHT;
+const size_t THICKNESS_WINDOW_POS_Y = INCREASED_BUTTON_HEIGHT;
+
+const size_t TOOLS_BAR_WIDTH = 300;
+const size_t TOOLS_BAR_HEIGHT = 600;
+
+const size_t DEFAULT_CANVAS_POS_X = THICKNESS_WINDOW_WIDTH;
+const size_t DEFAULT_CANVAS_POS_Y = INCREASED_BUTTON_HEIGHT;
 
 const size_t DEFAULT_BUTTON_WIDTH = 200;
 
@@ -31,7 +38,7 @@ const char SIZE_TEXT[]       = " Size ";
 const char SPLINE_TEXT[]     = " Filter ";
 const char SLIDER_TEXT[]     = " Slider ";
 const char TOOLS_TEXT[]      = " Tools ";
-const char PLUGINS_TEXT[]      = " NEW PLUGIN ";
+const char PLUGINS_TEXT[]    = " NEW PLUGIN ";
 
 Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Config &par_base)
 : Visual_object(par_base)
@@ -42,24 +49,27 @@ Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Conf
 	Button_manager *panel = create_button_panel(par_position, par_width, INCREASED_BUTTON_HEIGHT);
 	
 	Canvas_manager_manager *canvas = create_canvas_manager(par_position + Vector_ll(DEFAULT_CANVAS_POS_X, DEFAULT_CANVAS_POS_Y), DEFAULT_CANVAS_SIZE, DEFAULT_CANVAS_SIZE + DEFAULT_BUTTON_HEIGHT);
+	canvases = canvas;
 	// canvas->set_visible(false);
 
-	Animating_texture *text_field_texture = Resources::get_instance()->create_texture(TEXT_FIELD, 400, 40, TEXT_FIELD_ACTIVE, NULL);
-	Input_string *text_field = new Input_string({ (size_t)Vidget_type::INPUT_STRING, par_position + Vector_ll(DEFAULT_COLOR_VIDGET_POS_X, DEFAULT_COLOR_VIDGET_POS_Y), text_field_texture, TRANSPARENT, 400, 40 });
-	add_visual_object(text_field);
+	// Animating_texture *text_field_texture = Resources::get_instance()->create_texture(TEXT_FIELD, 400, 40, TEXT_FIELD_ACTIVE, NULL);
+	// Input_string *text_field = new Input_string({ (size_t)Vidget_type::INPUT_STRING, par_position + Vector_ll(DEFAULT_COLOR_VIDGET_POS_X, DEFAULT_COLOR_VIDGET_POS_Y), text_field_texture, TRANSPARENT, 400, 40 });
+	// add_visual_object(text_field);
 	// Color_selection_window *tools_vidget = create_color_vidget(par_position + Vector_ll(DEFAULT_COLOR_VIDGET_POS_X, DEFAULT_COLOR_VIDGET_POS_Y), DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
 	// tools_vidget->set_visible(false);
 	// tools_vidget->set_reactive(false);
 
-	Brush_size_selection_window *brushes_vidget = create_size_vidget(par_position + Vector_ll(DEFAULT_SIZE_VIDGET_POS_X, DEFAULT_SIZE_VIDGET_POS_Y), THICK_PALETTE_WIDTH, THICK_PALETTE_HEIGHT);
-	brushes_vidget->set_visible(false);
-	brushes_vidget->set_reactive(false);
+	// Brush_size_selection_window *brushes_vidget = create_size_vidget(par_position + Vector_ll(DEFAULT_SIZE_VIDGET_POS_X, DEFAULT_SIZE_VIDGET_POS_Y), THICK_PALETTE_WIDTH, THICK_PALETTE_HEIGHT);
+	// brushes_vidget->set_visible(false);
+	// brushes_vidget->set_reactive(false);
 
-    Effects_window *spline = create_effects_window(par_position + Vector_ll(0, 700), 400, 400 + DEFAULT_BUTTON_HEIGHT, canvas->get_active_canvas());
-	
+    #ifdef WITH_SPLINE
+    Effects_window *spline = create_effects_window(par_position + Vector_ll(0, INCREASED_BUTTON_HEIGHT + THICKNESS_WINDOW_HEIGHT), 400, 400 + DEFAULT_BUTTON_HEIGHT, canvas->get_active_canvas());
+	#endif
+
 	Thickness_window *slider = create_thickness_slider(par_position + Vector_ll(THICKNESS_WINDOW_POS_X, THICKNESS_WINDOW_POS_Y), THICKNESS_WINDOW_WIDTH, THICKNESS_WINDOW_HEIGHT);
 
-	Tools_window *tools = create_tools_window(par_position + Vector_ll(par_width - 300, INCREASED_BUTTON_HEIGHT), 300, 600);
+	Tools_window *tools = create_tools_window(par_position + Vector_ll(par_width - 300, INCREASED_BUTTON_HEIGHT), TOOLS_BAR_WIDTH, TOOLS_BAR_HEIGHT);
 
 	size_t current_button_size = get_text_length(GHOST_TYPE, CANVAS_TEXT, INCREASED_BUTTON_HEIGHT / 2);
 	create_restore_button(panel, canvas, CANVAS_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
@@ -70,11 +80,13 @@ Graphical_editor_main_page::Graphical_editor_main_page(const Visual_object::Conf
  //    current_button_size = get_text_length(GHOST_TYPE, COLOR_TEXT, INCREASED_BUTTON_HEIGHT / 2);
 	// create_restore_button(panel, tools_vidget, COLOR_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
 
-    current_button_size = get_text_length(GHOST_TYPE, SIZE_TEXT, INCREASED_BUTTON_HEIGHT / 2);
-	create_restore_button(panel, brushes_vidget, SIZE_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
+ //    current_button_size = get_text_length(GHOST_TYPE, SIZE_TEXT, INCREASED_BUTTON_HEIGHT / 2);
+	// create_restore_button(panel, brushes_vidget, SIZE_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
 
+    #ifdef WITH_SPLINE
     current_button_size = get_text_length(GHOST_TYPE, SPLINE_TEXT, INCREASED_BUTTON_HEIGHT / 2);
 	create_restore_button(panel, spline, SPLINE_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
+	#endif
 
 	current_button_size = get_text_length(GHOST_TYPE, SLIDER_TEXT, INCREASED_BUTTON_HEIGHT / 2);
 	create_restore_button(panel, slider, SLIDER_TEXT, current_button_size + DEFAULT_TEXT_OFFSET * 2, INCREASED_BUTTON_HEIGHT);
@@ -220,6 +232,11 @@ Test_button *Graphical_editor_main_page::create_test_button(const Vector_ll &pos
 	add_visual_object(test_button);
 
 	return test_button;
+}
+
+Canvas *Graphical_editor_main_page::get_active_canvas()
+{
+	return canvases->get_active_canvas();
 }
 
 Graphical_editor_main_page::~Graphical_editor_main_page()

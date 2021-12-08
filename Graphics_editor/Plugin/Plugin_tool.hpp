@@ -20,12 +20,6 @@ public:
 	void on_mouse_release(const Vector_ll &position) override;
 
 	void apply(Color *to_apply, const Vector_ll &parameters, const Vector_ll &position) override;
-
-	void set_surface(Visual_object *par_surface);
-
-	Visual_object *get_surface();
-
-	const PPluginInterface *get_plugin();
 };
 
 #endif // PLUGIN_TOOL_H

@@ -7,10 +7,14 @@ const Color DEFAULT_BACKGROUND_COLOR = WHITE;
 Canvas::Canvas(const Visual_object::Config &par_base) //, Pencil *par_pencil
 : Visual_object(par_base), Affected(), current_drawing_color(BLACK), drawing_state(false) // pencil(par_pencil),
 {
-	drawing = new Color[get_width() * get_height()];
+	preview          = new Color[get_width() * get_height()];
+
+	drawing          = new Color[get_width() * get_height()];
 	original_drawing = new Color[get_width() * get_height()];
+	
 	for (size_t i = 0; i < get_width() * get_height(); ++i)
 	{
+		preview[i] = TRANSPARENT;
 		original_drawing[i] = DEFAULT_BACKGROUND_COLOR;
 		drawing[i] = DEFAULT_BACKGROUND_COLOR;
 	}
@@ -141,6 +145,16 @@ bool Canvas::point_inside (const size_t par_x, const size_t par_y)
 
 // 	get_texture()->set_texture(drawing, get_width(), get_height());
 // }
+void Canvas::make_drawing()
+{
+	for (size_t i = 0; i < get_width() * get_height(); ++i)
+	{
+		drawing[i] = original_drawing[i];
+	}
+
+	Affected::tick();
+	get_texture()->set_texture(drawing, get_width(), get_height());
+}
 
 bool Canvas::on_mouse_click (const bool state, const size_t par_x, const size_t par_y)
 {
@@ -154,19 +168,15 @@ bool Canvas::on_mouse_click (const bool state, const size_t par_x, const size_t 
 
 	if (state)
 	{
-		drawing_state = true;
-
-		draw_point(par_x, par_y);
-
+		set_applied(false);
 		current_tool->on_mouse_press(get_drawing(), Vector_ll(get_width(), get_height()), Vector_ll(par_x, par_y) - get_position());
+		make_drawing();
 	}
 	else if (!state)
 	{
-		drawing_state = false;
-		
+		set_applied(false);
 		current_tool->on_mouse_release(Vector_ll(par_x, par_y) - get_position());
-
-		return true;
+		make_drawing();
 	}
 
 	return true;
@@ -176,18 +186,16 @@ bool Canvas::on_mouse_move(const Vector_ll from, const Vector_ll to)
 {
 	if (point_inside(to.get_x(), to.get_y()))
 	{
-		if (drawing_state)
-		{
-			draw_point(to.get_x(), to.get_y());
-			Tool *current_tool = Toolbar::get_instance()->get_active_tool();
-			current_tool->on_mouse_move(from - get_position(), to - get_position());
-		}
+		Tool *current_tool = Toolbar::get_instance()->get_active_tool();
+		
+		set_applied(false);
+		current_tool->on_mouse_move(from - get_position(), to - get_position());
+		make_drawing();
 
 		return true;
 	}
 	else
 	{
-		drawing_state = false;
 		return false;
 	}
 }

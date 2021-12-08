@@ -30,4 +30,17 @@ inline double calculate_power(double value, int power)
 	return answer;
 }
 
+inline bool is_inside_triangle(const Vector_ll &p, const Vector_ll &p1, const Vector_ll &p2, const Vector_ll &p3)
+{
+	double cross1 = (p1.get_x() - p.get_x()) * (p2.get_y() - p1.get_y()) - (p2.get_x() - p1.get_x()) * (p1.get_y() - p.get_y());
+	double cross2 = (p2.get_x() - p.get_x()) * (p3.get_y() - p2.get_y()) - (p3.get_x() - p2.get_x()) * (p2.get_y() - p.get_y());
+	double cross3 = (p3.get_x() - p.get_x()) * (p1.get_y() - p3.get_y()) - (p1.get_x() - p3.get_x()) * (p3.get_y() - p.get_y());
+
+	if (cross1 <= 0 && cross2 <= 0 && cross3 <= 0 || cross1 >= 0 && cross2 >= 0 && cross3 >= 0)
+		return true;
+	else
+		return false;
+}
+
+
 #endif // MATH_FUNCTIONS

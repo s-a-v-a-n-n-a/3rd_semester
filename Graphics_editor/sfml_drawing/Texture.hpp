@@ -96,7 +96,7 @@ public:
 
 	~Full_texture() = default;
 
-	const Shelled_texture *get_texture()
+	const Shelled_texture *get_texture() override
 	{ 
 		return &(texture.getTexture()); 
 	}

@@ -68,9 +68,29 @@ sf::BlendMode Screen_information::blending_mode(const Blend_mode mode)
 	}
 }
 
-void Screen_information::draw_circle(const Vector_ll &par_position, const double par_radius, const Color &par_color, const Color &par_fill_color, const Blend_mode mode)
+// draw_to_pixels(Color *pixels, const size_t width, const size_t height, sf::Shape *shape)
+// {
+// 	sf::Texture texture;
+// 	texture.create(width, height);
+
+// 	texture_load(&texture, pixels, width, height);
+
+// 	sf::Sprite sprite;
+// 	sprite.setTexture(texture);
+
+// 	sf::RenderTexture render;
+// 	render.create(width, height);
+// 	render.clear(TRANSPARENT);
+
+// 	render.draw(sprite);
+// 	render.draw(*shape);
+
+// 	render.display();
+// }
+
+void Screen_information::draw_circle(const Vector_ll &par_position, const double par_radius, const Color &par_color, const Color &par_fill_color, const Blend_mode mode)//, Color *pixels, const Vector_ll params)
 {
-	printf("I was asked to draw circle: of size %lg, of Color %u %u %u %u, at position %lld %lld, mode %d\n", par_radius, par_color.r, par_color.g, par_color.b, par_color.a, par_position.get_x(), par_position.get_y(), mode);
+	printf("I was asked to draw circle: of size %lg, of Color %u %u %u %u, at position %lld %lld, mode %d\n", par_radius, par_color.r, par_color.g, par_color.b, par_color.a, par_position.get_x(), par_position.get_y(), (int)mode);
 
 	sf::CircleShape circle(par_radius);
 
@@ -85,7 +105,7 @@ void Screen_information::draw_circle(const Vector_ll &par_position, const double
 	window.draw(circle, blend);
 }
 
-void Screen_information::draw_rectangle(const Vector_ll &par_position, const double par_width, const double par_height, const Color &par_color, const Color &par_fill_color, const Blend_mode mode)
+void Screen_information::draw_rectangle(const Vector_ll &par_position, const double par_width, const double par_height, const Color &par_color, const Color &par_fill_color, const Blend_mode mode)//, Color *pixels, const Vector_ll params)
 {
 	sf::RectangleShape rectangle(sf::Vector2f(par_width, par_height));
 
@@ -98,10 +118,10 @@ void Screen_information::draw_rectangle(const Vector_ll &par_position, const dou
 	rectangle.setFillColor(fill_color);
 
 	sf::BlendMode blend = blending_mode(mode);
-	window.draw(rectangle);
+	window.draw(rectangle, blend);
 }
 
-void Screen_information::draw_triangle(const Vector_ll &point1, const Vector_ll &point2, const Vector_ll &point3, const Color &par_color, const Color &par_fill_color, const Blend_mode mode)
+void Screen_information::draw_triangle(const Vector_ll &point1, const Vector_ll &point2, const Vector_ll &point3, const Color &par_color, const Color &par_fill_color, const Blend_mode mode)//, Color *pixels, const Vector_ll params)
 {
 	sf::ConvexShape convex;
 
@@ -122,7 +142,7 @@ void Screen_information::draw_triangle(const Vector_ll &point1, const Vector_ll 
 }
 
 
-void Screen_information::draw_point(const Vector_ll &par_point, const Color &par_color, const Blend_mode mode)
+void Screen_information::draw_point(const Vector_ll &par_point, const Color &par_color, const Blend_mode mode)//, Color *pixels, const Vector_ll params)
 {
 	sf::Color color(par_color.r, par_color.g, par_color.b, par_color.a);
 	sf::Vertex sfml_point(sf::Vector2f(par_point.get_x(), par_point.get_y()), color);
@@ -131,7 +151,7 @@ void Screen_information::draw_point(const Vector_ll &par_point, const Color &par
 	window.draw(&sfml_point, 1, sf::Points, blend);
 }
 
-void Screen_information::draw_line(const Vector_ll &left, const Vector_ll &right, const Color &par_color, const Blend_mode mode)
+void Screen_information::draw_line(const Vector_ll &left, const Vector_ll &right, const Color &par_color, const Blend_mode mode)//, Color *pixels, const Vector_ll params)
 {
 	sf::Color color(par_color.r, par_color.g, par_color.b, par_color.a);
 	sf::Vertex sfml_line[] = {  sf::Vertex(sf::Vector2f(left.get_x(), left.get_y()), color), 

@@ -2,6 +2,7 @@
 
 #include "../Editor/Application.hpp"
 #include "../sfml_drawing/screen_functions.hpp"
+#include "../math_structures/math_functions.hpp"
 
 Blend_mode app_translate_mode(PBlendMode mode)
 {
@@ -40,6 +41,7 @@ void app_log(const char *fmt, ...)
 	va_start(arg, fmt);
 
 	printf(fmt, arg);
+	printf("\n");
 
 	va_end(arg);
 }
@@ -66,8 +68,34 @@ void app_circle(PVec2f position, float radius, PRGBA color, const PRenderMode *r
 	Vector_ll pos = Vector_ll((long long)position.x, (long long)position.y);
 	Color app_color = { color.r, color.g, color.b, color.a };
 
+	size_t pencil_size = Toolbar::get_instance()->get_active_tool()->get_size() / 2;
+	// Color pencil_color = Toolbar::get_instance()->get_color();
+
 	Blend_mode mode = app_translate_mode(render_mode->blend);
-	Application::get_app()->graphics_wrapper->draw_circle(pos, (double)radius, app_color, app_color, mode);
+
+	size_t begin_x = (pos.get_x() - radius) > 0 ? (pos.get_x() - radius) : 0;
+	size_t begin_y = (pos.get_y() - radius) > 0 ? (pos.get_y() - radius) : 0;
+
+	size_t width = Toolbar::get_instance()->get_active_tool()->get_params().get_x();
+	size_t height = Toolbar::get_instance()->get_active_tool()->get_params().get_y();
+
+	size_t end_x = (pos.get_x() + radius) < width ? (pos.get_x() + radius) : width;
+	size_t end_y = (pos.get_y() + radius) < height ? (pos.get_y() + radius) : height;
+
+	Vector_ll center = pos;
+	Color *to_apply = Toolbar::get_instance()->get_active_tool()->get_pixels();
+
+	for (size_t i = begin_y; i < end_y; ++i)
+		for (size_t j = begin_x; j < end_x; ++j)
+		{
+			if ((i - center.get_y()) * (i - center.get_y()) + (j - center.get_x()) * (j - center.get_x()) <= (long long)(radius * radius))
+			{
+				size_t index = i * width + j;
+
+				to_apply[index] = app_color;
+			}
+		}
+	// Application::get_app()->graphics_wrapper->draw_circle(pos, (double)radius, app_color, app_color, mode);
 }
 
 void app_rectangle(PVec2f p1, PVec2f p2, PRGBA color, const PRenderMode *render_mode)
@@ -78,11 +106,30 @@ void app_rectangle(PVec2f p1, PVec2f p2, PRGBA color, const PRenderMode *render_
 	Vector_ll position = Vector_ll(x_pos, y_pos);
 	Color local_color = { color.r, color.g, color.b, color.a };
 
+	size_t pencil_size = Toolbar::get_instance()->get_active_tool()->get_size() / 2;
+	Color pencil_color = Toolbar::get_instance()->get_color();
+
 	size_t width = (size_t)((fabs)(p2.x - p1.x));
 	size_t height = (size_t)((fabs)(p2.y - p1.y));
 
+	size_t begin_x = x_pos > pencil_size ? x_pos - pencil_size : x_pos;
+	size_t begin_y = y_pos > pencil_size ? y_pos - pencil_size : y_pos;
+
+	size_t end_x = x_pos + pencil_size < width ? x_pos + pencil_size : x_pos;
+	size_t end_y = y_pos + pencil_size < height ? y_pos + pencil_size : y_pos;
+
+	Color *to_apply = Toolbar::get_instance()->get_active_tool()->get_pixels();
+
+	for (size_t i = begin_y; i < end_y; ++i)
+		for (size_t j = begin_x; j < end_x; ++j)
+		{
+			size_t index = i * width + j;
+
+			to_apply[index] = local_color;
+		}
+
 	Blend_mode mode = app_translate_mode(render_mode->blend);
-	Application::get_app()->graphics_wrapper->draw_rectangle(position, width, height, local_color, local_color, mode);
+	// Application::get_app()->graphics_wrapper->draw_rectangle(position, width, height, local_color, local_color, mode);
 }
 
 void app_triangle(PVec2f p1, PVec2f p2, PVec2f p3, PRGBA color, const PRenderMode *render_mode)
@@ -93,8 +140,31 @@ void app_triangle(PVec2f p1, PVec2f p2, PVec2f p3, PRGBA color, const PRenderMod
 
 	Color local_color = { color.r, color.g, color.b, color.a };
 
+	size_t begin_x = p1.x < p2.x ? (p1.x < p3.x ? p1.x : p3.x) : (p2.x < p3.x ? p2.x : p3.x);
+	size_t begin_y = p1.y < p2.y ? (p1.y < p3.y ? p1.y : p3.y) : (p2.y < p3.y ? p2.y : p3.y);
+
+	size_t end_x = p1.x > p2.x ? (p1.x > p3.x ? p1.x : p3.x) : (p2.x > p3.x ? p2.x : p3.x);
+	size_t end_y = p1.y > p2.y ? (p1.y > p3.y ? p1.y : p3.y) : (p2.y > p3.y ? p2.y : p3.y);
+
+	size_t width = Toolbar::get_instance()->get_active_tool()->get_params().get_x();
+	size_t height = Toolbar::get_instance()->get_active_tool()->get_params().get_y();
+	Color *to_apply = Toolbar::get_instance()->get_active_tool()->get_pixels();
+
+	for (size_t i = begin_y; i < end_y; ++i)
+	{
+		for (size_t j = begin_x; j < end_x; ++j)
+		{
+			if (is_inside_triangle({(long long)j, (long long)i}, point1, point2, point3))
+			{
+				size_t index = i * width + j;
+
+				to_apply[index] = local_color;
+			}
+		}
+	}
+
 	Blend_mode mode = app_translate_mode(render_mode->blend);
-	Application::get_app()->graphics_wrapper->draw_triangle(point1, point2, point3, local_color, local_color, mode);
+	// Application::get_app()->graphics_wrapper->draw_triangle(point1, point2, point3, local_color, local_color, mode);
 }
 
 void app_line(PVec2f start, PVec2f end, PRGBA color, const PRenderMode *render_mode)
@@ -276,24 +346,20 @@ void Plugin_manager::add_plugin(const char *filename)
 	if (!handle)
 		return;
 	else
-		printf("I found it!!!!!!!\n");
+		printf("[Application message]: found plugin (congratulations!)\n");
 	delete_path(path);
 	
 	get_plugin_interface = (const PPluginInterface *(*)())dlsym(handle, PGET_INTERFACE_FUNC);
 	const PPluginInterface *plugin = get_plugin_interface();
 
-	printf("got plugin interface!\n");
-
-
 	PPluginType type = plugin->general.get_info()->type;
 	if (type == PPT_TOOL)
 	{
-		printf("adding tool!\n");
 		add_tool(plugin, app_interface, handle);
 	}
 	else if (type == PPT_EFFECT)
 	{
-		// add_effect(plugin, app_interface, handle);
+		add_effect(plugin, app_interface, handle);
 	}
 
 }
@@ -304,6 +370,14 @@ void Plugin_manager::add_tool(const PPluginInterface *plugin, const PAppInterfac
 	plugins.add_to_end(tool);
 
 	Toolbar::get_instance()->add_tool(tool);
+}
+
+void Plugin_manager::add_effect(const PPluginInterface *plugin, const PAppInterface *app_interface, void *par_handle)
+{
+	Plugin_effect *effect = new Plugin_effect(plugin, app_interface, par_handle, ((Graphical_editor_main_page*)(Application::get_app()->get_default()))->get_active_canvas());
+	plugins.add_to_end(effect);
+
+	effect->apply();
 }
 
 Plugin *Plugin_manager::get_plugin(const PPluginInterface *self)

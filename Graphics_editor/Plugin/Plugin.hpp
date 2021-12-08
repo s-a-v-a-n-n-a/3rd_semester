@@ -23,7 +23,7 @@ public:
 	~Plugin()
 	{
 		// Не забудь вызвать deinit
-		// dlclose(handle);
+		dlclose(handle);
 	}
 
 	const PPluginInterface *get_plugin() { return plugin; }

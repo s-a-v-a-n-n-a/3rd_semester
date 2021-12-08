@@ -16,13 +16,9 @@ Color_picker::Color_picker(const Visual_object::Config &par_base, const Color &p
     HSV hsv = get_hsv(*par_to_set);
 	current_position = Vector_ll(((double)(hsv.s))/255.0 * ((double)get_width()), (255.0 - (double)hsv.v)/255.0 * ((double)get_height()));
 
-	Visual_object::Config buttton_base = { (size_t)Vidget_type::BUTTON, get_position() + current_position - Vector_ll(0, circle_height), circle, TRANSPARENT, circle_width, circle_height };
+	Visual_object::Config buttton_base = { (size_t)Vidget_type::BUTTON, get_position() + current_position - Vector_ll(circle_width, 0), circle, TRANSPARENT, circle_width, circle_height };
 	picker = new Magnetic(buttton_base, this, get_position(), get_position() + Vector_ll(get_width(), get_height()) - Vector_ll(circle_width, circle_height));
 	
-	// Drag_and_drop_delegate *dnd = new Drag_and_drop_delegate(picker);
-	// Magnetic *magnit_delegate = new Magnetic(picker, get_position(), get_position() + Vector_ll(get_width(), get_height()));
-	// picker->set_delegate(magnit_delegate);
-
 	add_visual_object(picker);
 }
 
@@ -95,7 +91,14 @@ bool Color_picker::on_mouse_move(const Vector_ll from, const Vector_ll to)
 	// printf("move picker\n");
 	// picker->set_position(picker->get_position() + to - last);
 
-	return picker->on_mouse_move(from, to - Vector_ll(picker->get_width()/2, picker->get_height()/2));
+	bool result = picker->on_mouse_move(from, to - Vector_ll(picker->get_width()/2, picker->get_height()/2));
+	if (result)
+	{
+		current_position = to - get_position();
+		set_color();
+	}
+
+	return result;
 	// return true;
 }
 

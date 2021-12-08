@@ -29,6 +29,7 @@ long long Visual_object::very_slow_delete_visual_object(Visual_object *par_objec
 	{
 		if(objects_array[i] == par_object)
 		{
+			Resources::get_instance()->delete_texture(par_object->get_texture());
 			objects.slow_delete(i);
 			
 			return i;

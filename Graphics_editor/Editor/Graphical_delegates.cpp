@@ -645,7 +645,7 @@ Roll_up_confirmation::Roll_up_confirmation(Visual_object *par_roll_up)
 
 bool Roll_up_confirmation::on_mouse_click(const size_t par_x, const size_t par_y)
 {
-	return false;
+	return true;
 }
 bool Roll_up_confirmation::on_mouse_release()
 {
@@ -653,7 +653,7 @@ bool Roll_up_confirmation::on_mouse_release()
 	to_roll_up->set_alive(false);
 	// Application::get_app()->set_default();
 	
-	return false;
+	return true;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------

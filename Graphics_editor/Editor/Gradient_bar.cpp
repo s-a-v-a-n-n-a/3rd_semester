@@ -1,15 +1,17 @@
 #include "Gradient_bar.hpp"
 
+const size_t PICKER_SIZE = 5;
+
 Gradient_bar::Gradient_bar(const Visual_object::Config &par_base, Color_picker *par_to_control, const HSV &position_hsv)
 : Visual_object(par_base), current_position(0), to_control(par_to_control)
 {
-	Full_texture *rect = Resources::get_instance()->create_texture(PICKING_RECT_TEXTURE, 5, get_height());// new Full_texture(WINDOW_BACKGROUND, DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
+	Full_texture *rect = Resources::get_instance()->create_texture(PICKING_RECT_TEXTURE, PICKER_SIZE, get_height());// new Full_texture(WINDOW_BACKGROUND, DEFAULT_COLOR_VIDGET_WIDTH, DEFAULT_COLOR_VIDGET_HEIGHT);
 	
 	size_t width = get_width();
 	current_position = (size_t)((double)(255 - position_hsv.h) / 255.0 * (double)width);
 
-	Visual_object::Config buttton_base = { (size_t)Vidget_type::BUTTON, get_position() + Vector_ll(current_position, 0), rect, TRANSPARENT, 5, get_height() };
-	picker = new Magnetic(buttton_base, this, get_position(), get_position() + Vector_ll(get_width() - 5, 0), get_height());
+	Visual_object::Config buttton_base = { (size_t)Vidget_type::BUTTON, get_position() + Vector_ll(current_position, 0) - Vector_ll(5, 0), rect, TRANSPARENT, PICKER_SIZE, get_height() };
+	picker = new Magnetic(buttton_base, this, get_position(), get_position() + Vector_ll(get_width() - PICKER_SIZE, 0), get_height());
 
 	add_visual_object(picker);
 }
@@ -58,6 +60,7 @@ void Gradient_bar::set_current_position(const Color &main_color)
 	unsigned char blue = main_color.get_b();
 
 	size_t width = get_width();
+	
 	Vector_ll position = picker->get_position();
 
 	size_t gap = width / (DEFAULT_COLORS_AMOUNT - 1);
@@ -92,7 +95,7 @@ void Gradient_bar::set_current_position(const Color &main_color)
 		return;
 	}
 
-	if (green = MAX_COLOR_VALUE)
+	if (green == MAX_COLOR_VALUE)
 	{
 		position.set_x(4 * gap + (long long)((double)(gap) * ((double)blue / (double)MAX_COLOR_VALUE)));
 		picker->set_position(position);

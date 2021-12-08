@@ -4,6 +4,7 @@
 #include <stdarg.h>
 
 #include "Plugin_tool.hpp"
+#include "Plugin_effect.hpp"
 #include "plugin_std.hpp"
 
 #include "../Tools/Toolbar.hpp"
@@ -128,7 +129,7 @@ public:
 
 	void add_tool(const PPluginInterface *plugin, const PAppInterface *app_interface, void *par_handle);
 
-	// void add_effect(const PPluginInterface *plugin, const PAppInterface *app_interface, void *par_handle);
+	void add_effect(const PPluginInterface *plugin, const PAppInterface *app_interface, void *par_handle);
 
 	Plugin *get_plugin(const PPluginInterface *self);
 };

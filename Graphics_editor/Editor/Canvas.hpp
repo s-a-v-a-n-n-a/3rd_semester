@@ -5,17 +5,8 @@
 
 #include "../Utilities/Affected.hpp"
 
-// struct RGBA_effect
-// {
-// 	int r;
-// 	int g;
-// 	int b;
-// 	int a;
-// };
 
 extern const Color DEFAULT_BACKGROUND_COLOR;
-
-class Canvas;
 
 class Canvas : public Visual_object, public Affected<Canvas>
 {
@@ -24,6 +15,9 @@ protected:
 
 	// Color current_background_color;
 	Color current_drawing_color;
+
+	// Finally
+	Color *preview;
 
 	Color *original_drawing;
 	Color *drawing;
@@ -41,6 +35,8 @@ public:
 
 	~Canvas()
 	{
+		delete [] preview;
+
 		delete [] original_drawing;
 		delete [] drawing;
 	}
@@ -52,6 +48,8 @@ public:
 	// void set_blue (const unsigned char from, const unsigned char to);
 
 	Color *get_drawing() { return original_drawing; }
+
+	void make_drawing();
 
 	void draw(Screen_information *screen) override;
 	bool point_inside (const size_t par_x, const size_t par_y) override;

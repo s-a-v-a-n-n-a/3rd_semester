@@ -77,11 +77,11 @@ public:
 
 	// drawings
 	// ---------------------------------------------------------------------
-	void draw_circle(const Vector_ll &par_position, const double par_radius, const Color &par_color, const Color &par_fill_color = TRANSPARENT, const Blend_mode mode = Blend_mode::ALPHA);
-	void draw_rectangle(const Vector_ll &par_position, const double par_width, const double par_height, const Color &par_color, const Color &par_fill_color = TRANSPARENT, const Blend_mode mode = Blend_mode::ALPHA);
-	void draw_triangle(const Vector_ll &point1, const Vector_ll &point2, const Vector_ll &point3, const Color &par_color, const Color &par_fill_color = TRANSPARENT, const Blend_mode mode = Blend_mode::ALPHA);
-	void draw_point(const Vector_ll &point, const Color &par_color, const Blend_mode mode = Blend_mode::ALPHA);
-	void draw_line(const Vector_ll &left, const Vector_ll &right, const Color &par_color, const Blend_mode mode = Blend_mode::ALPHA);
+	void draw_circle(const Vector_ll &par_position, const double par_radius, const Color &par_color, const Color &par_fill_color = TRANSPARENT, const Blend_mode mode = Blend_mode::ALPHA);//, Color *pixels = nullptr, const Vector_ll params = {0, 0});
+	void draw_rectangle(const Vector_ll &par_position, const double par_width, const double par_height, const Color &par_color, const Color &par_fill_color = TRANSPARENT, const Blend_mode mode = Blend_mode::ALPHA);//, Color *pixels = nullptr, const Vector_ll params = {0, 0});
+	void draw_triangle(const Vector_ll &point1, const Vector_ll &point2, const Vector_ll &point3, const Color &par_color, const Color &par_fill_color = TRANSPARENT, const Blend_mode mode = Blend_mode::ALPHA);//, Color *pixels = nullptr, const Vector_ll params = {0, 0});
+	void draw_point(const Vector_ll &point, const Color &par_color, const Blend_mode mode = Blend_mode::ALPHA);//, Color *pixels = nullptr, const Vector_ll params = {0, 0});
+	void draw_line(const Vector_ll &left, const Vector_ll &right, const Color &par_color, const Blend_mode mode = Blend_mode::ALPHA);//, Color *pixels = nullptr, const Vector_ll params = {0, 0});
 	void draw_text(const char *par_text, const Vector_ll &par_position, const Color &par_color, const size_t text_size, const bool centered = true);
 	void draw_image(const Color *array, const Vector_ll &position, const size_t width, const size_t height, const Blend_mode mode = Blend_mode::ALPHA);
 	void draw_texture(const Vector_ll &position, const char *texture_name, const Blend_mode mode = Blend_mode::ALPHA);

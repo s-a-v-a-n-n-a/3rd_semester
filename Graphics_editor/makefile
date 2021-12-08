@@ -7,12 +7,12 @@ else
 ASAN = 
 endif
  
-COMPILATOR  = g++ -std=c++17
+COMPILATOR  = clang++# g++ -std=c++17
 INC     	= 
 SFML    	= -lsfml-graphics -lsfml-window -lsfml-system
 OPT     	= -O3
 DEF     	= -DNDEBUG
-CFLAGS  	= $(OPT) $(DEF) $(ASAN) -g $(INC) 
+CFLAGS  	= $(OPT) $(DEF) $(ASAN) -g $(INC)
 DLL			= -ldl -lm -lpthread -pthread
 OBJ     	= obj/
 EXE     	= main
@@ -51,6 +51,7 @@ FILES   	= $(OBJ)main.o \
 			$(OBJ)Editor/Search_box.o \
 			$(OBJ)Plugin/Plugin_manager.o \
 			$(OBJ)Plugin/Plugin_tool.o \
+			$(OBJ)Plugin/Plugin_effect.o \
 
           # остальные файлы по правилу a.cpp -> $(OBJ)a.o (a может содержать путь)
  

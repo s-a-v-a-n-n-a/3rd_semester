@@ -52,7 +52,7 @@ public:
 		size_t effects_amount = effects.get_length();
 		for (size_t i = 0; i < effects_amount; ++i)
 		{
-			if (effect = effects[i])
+			if (effect == effects[i])
 			{
 				effects.slow_delete(i);
 				return;

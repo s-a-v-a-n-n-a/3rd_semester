@@ -8,6 +8,8 @@
 
 #include "Color_picker.hpp"
 
+extern const size_t PICKER_SIZE;
+
 const size_t BAR_DEFAULT_WIDTH = 30;
 const size_t DEFAULT_COLORS_AMOUNT = 7;
 const Color COLOR_SEQUENCE[] = { BLACK, RED, FUCHSIA, BLUE, CYAN, GREEN, YELLOW };

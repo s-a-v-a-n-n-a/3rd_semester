@@ -54,26 +54,22 @@ bool Button::on_mouse_click(const bool state, const size_t par_x, const size_t p
 	{
 		set_active_state(true);
 	    if (click)
+	    {
+	    	bool result = false;
 	    	if (state)
 	    	{
-	    		// printf("mouse click\n");
-	    		bool result = click->on_mouse_click(par_x, par_y);
+	    		result = click->on_mouse_click(par_x, par_y);
 	    		if (result)
 	    			pressed = true;
 	    	}
-	    	// else if (state == Mouse_state::MOVED)
-	    	// 	return click->on_mouse_move(par_x, par_y);
 	    	else if (pressed)
-	    	{
-	    		bool result = click->on_mouse_release();
+	    	{ 
+	    		result = click->on_mouse_release();
 	    		if (result)
 	    			pressed = false;
 	    	}
-	    	else
-	    	{
-	    		pressed = false;
-	    	}
-
+	    }
+	    	
 	    return true;
 	}
 	else
@@ -270,5 +266,4 @@ bool Magnetic::on_mouse_move(const Vector_ll from, const Vector_ll to)
 
 		return false;
 	}
-	return true;
 }

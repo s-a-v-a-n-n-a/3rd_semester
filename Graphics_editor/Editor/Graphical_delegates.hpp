@@ -224,7 +224,7 @@ public:
 	Drag_and_drop_delegate(Visual_object *par_to_change_place);
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
-	bool on_mouse_release();
+	bool on_mouse_release() override;
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
 };
 
@@ -245,7 +245,7 @@ public:
 	One_dim_move(Visual_object *par_to_change_place, const bool par_x_dimension);
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
-	bool on_mouse_release();
+	bool on_mouse_release() override;
 	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
 };
 

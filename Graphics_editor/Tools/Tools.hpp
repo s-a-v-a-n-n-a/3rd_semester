@@ -23,6 +23,7 @@ protected:
 
 public:
 	Tool();
+	virtual ~Tool() = default;
 
 	virtual void set_color(const Color &par_color) { color = par_color; }
 	virtual void set_size(const size_t par_size) { size = par_size; }

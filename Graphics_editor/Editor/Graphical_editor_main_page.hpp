@@ -10,9 +10,6 @@
 
 #include "Vidget_types.hpp"
 
-// #include "Editor_control_panel.hpp"
-
-// #include "Canvases_list.hpp"
 #include "Canvas_manager_manager.hpp"
 #include "Color_selection.hpp"
 #include "Brush_size_selection.hpp"
@@ -23,6 +20,8 @@
 
 #include "Test.hpp"
 
+// #define WITH_SPLINE
+
 class Editor_control_panel;
 class Palette;
 class Canvas_manager_manager;
@@ -30,6 +29,7 @@ class Canvas_manager_manager;
 class Graphical_editor_main_page : public Visual_object
 {
 private:
+	Canvas_manager_manager *canvases;
 
 public:
 	Graphical_editor_main_page(const Visual_object::Config &par_base);
@@ -57,6 +57,7 @@ public:
 	Brush_size_selection_window *create_size_vidget(const Vector_ll &position, const size_t width, const size_t height);
 	Button *create_plugin_info_button(Button_manager *panel, const char *text, const size_t width, const size_t height);
 
+	Canvas *get_active_canvas();
 	// test
 	Test_button *create_test_button(const Vector_ll &position, const char *text, const size_t width, const size_t height);
 };

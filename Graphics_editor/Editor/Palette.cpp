@@ -84,7 +84,6 @@ bool Palette::on_mouse_click(const bool state, const size_t par_x, const size_t 
 		{
 			new_color->set_color(color_picker->get_color()); 
 			chosen_color = color_picker->get_color();
-			printf("here\n");
 		}
 		if (!result)
 		{
@@ -95,3 +94,26 @@ bool Palette::on_mouse_click(const bool state, const size_t par_x, const size_t 
 
 	return false;
 }
+
+bool Palette::on_mouse_move(const Vector_ll from, const Vector_ll to)
+{
+	if (point_inside(to.get_x(), to.get_y()))
+	{
+		bool result = Visual_object::on_mouse_move(from, to);
+
+		if ((result = color_picker->get_color_picker()->on_mouse_move(from, to)) || 
+				(result = color_picker->get_gradient_bar()->on_mouse_move(from, to)))
+		{
+			new_color->set_color(color_picker->get_color()); 
+			chosen_color = color_picker->get_color();
+		}
+		if (!result)
+		{
+			result = ok_button->on_mouse_move(from, to);
+		}
+		return result;
+	}
+
+	return false;
+}
+

@@ -58,17 +58,18 @@ bool Search_box::on_mouse_click(const bool state, const size_t par_x, const size
 {
 	if (point_inside(par_x, par_y))
 	{
-		bool result = Visual_object::on_mouse_click(state, par_x, par_y);
+		Visual_object::on_mouse_click(state, par_x, par_y);
 
-		if (result = field->on_mouse_click(state, par_x, par_y))
+		bool result = field->on_mouse_click(state, par_x, par_y);
+		if (result)
 		{
 			update_text(field->get_message());
+			return true;
 		}
-		if (!result)
-		{
-			update_text(field->get_message());
-			result = ok_button->on_mouse_click(state, par_x, par_y);
-		}
+
+		update_text(field->get_message());
+		result = ok_button->on_mouse_click(state, par_x, par_y);
+		
 		return result;
 	}
 
