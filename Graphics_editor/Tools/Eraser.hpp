@@ -9,7 +9,7 @@ public:
 	Eraser()
 	: Tool() 
 	{ 
-		Tool::set_color(WHITE); 
+		Tool::set_color(TRANSPARENT); 
 	}
 	~Eraser() = default;
 	

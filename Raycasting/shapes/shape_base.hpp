@@ -7,15 +7,7 @@
 class Shape
 {
 public:
-	virtual void draw_shape(sf::RenderWindow *window)
-	{
-		
-	}
-
-	// virtual void draw_shape()
-	// {
-		
-	// }
+	virtual void draw_shape(sf::RenderWindow *window) { ; }
 };
 
 

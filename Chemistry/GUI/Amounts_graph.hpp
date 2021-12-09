@@ -38,6 +38,8 @@ public:
 	void set_shape_color(const Shape_types par_type, Color const &color) { shapes_colors[(size_t)par_type] = color; }
 	void set_scale(const double par_scale) { scale = par_scale; }
 
+	double get_scale() const { return scale; }
+
 	void draw(Screen_information *screen) override;
 	void tick(Screen_information *screen, const double delta_time) override;
 };

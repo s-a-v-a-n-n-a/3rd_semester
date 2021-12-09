@@ -30,5 +30,6 @@ const Color YELLOW = { 255, 255, 255, 0 };
 const Color PURPLE = { 255, 128, 0, 128 };
 const Color FUCHSIA = { 255, 255, 0, 255 };
 const Color MEDIUM_PURPLE = { 255, 147, 112, 219 };
+const Color DARK_GREY = {255, 32, 32, 32};
 
 #endif // COLORS_USED

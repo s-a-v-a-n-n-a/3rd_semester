@@ -39,7 +39,8 @@ Visual_objects_manager::Visual_objects_manager(const Radius_vector &par_position
     Add_molecula_delegate *molecula_delegate = new Add_molecula_delegate(manager);
     Button *add_molecula = new Button(molecula_delegate, 
     								  DEFAULT_ADD_MOLECULA_TEXT, 
-    								  Radius_vector(Radius_vector(par_width, 0) - Radius_vector(button_width, 0.0)), 
+    								  Radius_vector
+    								  (Radius_vector(par_width, 0) - Radius_vector(button_width, 0.0)), 
     								  DEFAULT_MOLECULA_COLOR, 
     								  button_width, 
     								  button_height);
@@ -57,7 +58,7 @@ Visual_objects_manager::Visual_objects_manager(const Radius_vector &par_position
     size_t graph_width = par_width;
     size_t graph_height = par_height < DEFAULT_AMOUNTS_GRAPH_HEIGHT? par_height / 2 : DEFAULT_AMOUNTS_GRAPH_HEIGHT;
 
-    Amounts_graph *graph = new Amounts_graph(manager, Radius_vector(Radius_vector(0, par_height) - Radius_vector(0, graph_height)), BLACK, graph_width, graph_height);
+    Amounts_graph *graph = new Amounts_graph(manager, Radius_vector(Radius_vector(0, par_height) - Radius_vector(0, graph_height)), DARK_GREY, graph_width, graph_height);
     graph->set_shape_color(Shape_types::MOLECULA, DEFAULT_MOLECULA_COLOR);
     graph->set_shape_color(Shape_types::RECTANGLE, DEFAULT_RECTANGLE_COLOR);
 
@@ -66,7 +67,7 @@ Visual_objects_manager::Visual_objects_manager(const Radius_vector &par_position
     Change_scale *change_scale = new Change_scale(graph);
     Button *change_scale_button = new Button(change_scale, 
     								  "change graph scale", 
-    								  Radius_vector(Radius_vector(par_width, 0) - Radius_vector(button_width, -3.0 * button_height)), 
+    								  Radius_vector(Radius_vector(par_width, 0) - Radius_vector(button_width, -4.0 * button_height)), 
     								  RED, // ???????????????????????????????? 
     								  button_width, 
     								  button_height);

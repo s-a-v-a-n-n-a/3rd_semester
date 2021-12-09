@@ -15,7 +15,7 @@
 
 class Texture
 {
-private:
+protected:
 	char *texture_name;
 	Vector_ll size;
 
@@ -95,6 +95,27 @@ public:
 	// }
 
 	~Full_texture() = default;
+
+	Color *get_pixels()
+	{
+		sf::Image image = (*get_texture()).copyToImage();
+
+		size_t width = size.get_x();
+		size_t height = size.get_y();
+
+		Color *array = new Color[width * height];
+
+		for (size_t i = 0; i < size.get_y(); ++i)
+		{
+			for (int j = 0; j < size.get_x(); ++j)
+			{
+				sf::Color pixel = image.getPixel(j, i);
+				array[i * width + j] = *((Color*)&pixel);
+			}
+		}
+
+		return array;
+	}
 
 	const Shelled_texture *get_texture() override
 	{ 

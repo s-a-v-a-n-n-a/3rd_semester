@@ -75,8 +75,11 @@ void Tools_window::tick(Screen_information *screen, const double delta_time)
 	size_t current_tools_amount = Toolbar::get_instance()->get_tools_amount();
 	if (current_tools_amount != (tools_amount - 1))
 	{
-		Tool *add = Toolbar::get_instance()->get_tools()[current_tools_amount - 1];
-		add_tool(add);
+		for (size_t i = tools_amount - 1; i < current_tools_amount; ++i)
+		{
+			Tool *add = Toolbar::get_instance()->get_tools()[i];
+			add_tool(add);
+		}
 	}
 }
 

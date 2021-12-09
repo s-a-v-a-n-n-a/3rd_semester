@@ -75,7 +75,7 @@ void draw_world()
 
 void generate_random_shapes(Shape_manager *world, const Radius_vector &left_high, const Radius_vector &right_low)
 {
-    for (int i = 0; i < 5; ++i)
+    for (int i = 0; i < 40; ++i)
     {
         size_t type = rand()%2;
 

@@ -8,7 +8,7 @@ class Pixel_shape
 public:
 	virtual void draw_shape(Screen_information *screen)
 	{
-		
+		;
 	}
 };
 

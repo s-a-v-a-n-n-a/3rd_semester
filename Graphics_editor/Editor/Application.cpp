@@ -8,13 +8,13 @@ Application_destroyer Application::destroyer;
 Application::Application()
 : graphics_wrapper(nullptr), default_main(nullptr), current_main(nullptr), timer()
 {
-	plugins = new Plugin_manager();
-
     graphics_wrapper = new Screen_information(DEFAULT_SIZE, DEFAULT_SIZE);
 
 	Graphical_editor_main_page *editor = new Graphical_editor_main_page({(size_t)Vidget_type::EDITOR, Vector_ll(0, 0), nullptr, DARK_GREY, DEFAULT_SIZE, DEFAULT_SIZE});
 	default_main = editor;
 	current_main = default_main;
+
+    plugins = new Plugin_manager();
 }
 
 Application::~Application()

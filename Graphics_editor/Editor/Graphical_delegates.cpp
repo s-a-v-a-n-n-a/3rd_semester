@@ -592,6 +592,26 @@ bool Change_fixedly::on_mouse_click(const size_t par_x, const size_t par_y)
 	return true;
 }
 
+// ----------------------------------------------------------------------------------------------------------------------------
+
+Animating_change_fixedly::Animating_change_fixedly(Visual_object *par_to_control, const long long par_delta, const bool par_change_x, Visual_object *par_to_animate)
+: Change_fixedly(par_to_control, par_delta, par_change_x), Animating(par_to_animate) {}
+
+bool Animating_change_fixedly::on_mouse_click(const size_t par_x, const size_t par_y)
+{
+	Change_fixedly::on_mouse_click(par_x, par_y);
+	return Animating::on_mouse_click(par_x, par_y);
+}
+bool Animating_change_fixedly::on_mouse_release()
+{
+	Change_fixedly::on_mouse_release();
+	return Animating::on_mouse_release();
+}
+bool Animating_change_fixedly::on_mouse_move(const Vector_ll from, const Vector_ll to)
+{
+	return Animating::on_mouse_move(from, to);
+}
+
 // Pick tool
 // ----------------------------------------------------------------------------------------------------------------------------
 

@@ -32,9 +32,13 @@ const char CANVAS_TEXTURE[] = "graphical_attributes/Textures/Canvas.png";
 
 const char SLIDER_LINE_HOR[] = "graphical_attributes/Textures/Line.png";
 const char SLIDER_LEFT[] = "graphical_attributes/Textures/Arrow_left.png";
+const char SLIDER_LEFT_ACTIVE[] = "graphical_attributes/Textures/Arrow_left_active.png";
 const char SLIDER_RIGHT[] = "graphical_attributes/Textures/Arrow_right.png";
+const char SLIDER_RIGHT_ACTIVE[] = "graphical_attributes/Textures/Arrow_right_active.png";
 const char SLIDER_DOWN[] = "graphical_attributes/Textures/Arrow_down.png";
-const char SLIDER_UP[] = "graphical_attributes/Textures/Arrow_right.png";
+const char SLIDER_DOWN_ACTIVE[] = "graphical_attributes/Textures/Arrow_down_active.png";
+const char SLIDER_UP[] = "graphical_attributes/Textures/Arrow_up.png";
+const char SLIDER_UP_ACTIVE[] = "graphical_attributes/Textures/Arrow_up_active.png";
 const char SLIDER[] = "graphical_attributes/Textures/Magnet.png";
 
 const char PENCIL_TEXTURE[] = "graphical_attributes/Textures/Brush.png";
@@ -47,6 +51,8 @@ const char TEXT_FIELD_ACTIVE[] = "graphical_attributes/Textures/Text_field_activ
 
 const char UNKNOWN_TOOL[] = "graphical_attributes/Textures/Question.png";
 const char UNKNOWN_TOOL_ACTIVE[] = "graphical_attributes/Textures/Question_active.png";
+
+const char CAT_TEXTURE[] = "graphical_attributes/Textures/cat.jpg";
 
 extern const char *COLORED_BUTTONS[];
 extern const char *TOOLS_BUTTONS[];

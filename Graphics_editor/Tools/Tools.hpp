@@ -39,6 +39,7 @@ public:
 
 	// virtual void apply(Canvas *to_apply, const Vector_ll &position) = 0;
 	virtual void apply(Color *to_apply, const Vector_ll &parameters, const Vector_ll &position) = 0;
+	virtual void set_data(Color *to_apply, const Vector_ll &parameters);
 	virtual void release_data();
 
 	virtual void on_mouse_move(const Vector_ll &from, const Vector_ll &to);

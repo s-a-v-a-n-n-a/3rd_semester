@@ -16,15 +16,10 @@ int main()
     Screen_information screen(700, 700);
 
     Circle test({150, 150}, 200);
-    // test.draw_shape(&screen);
     Colored_point light(Radius_vector(150, 350, 500), Radius_vector(255, 255, 102));
 
-    // Lightened_sphere test_sphere(test, {0, 0, 300}, {700, 700, 0});
-    
     Lightened_sphere test_sphere(test, Radius_vector(255.0, 192.0, 203.0), light, Radius_vector(350, 350, 500));
     
-    // test_sphere.draw_normal(&screen);
-    // test_sphere.draw_lambert_and_fong(&screen);
     test_sphere.draw_lambert_and_fong_in_color(&screen);
 
     while (window.isOpen())

@@ -12,13 +12,21 @@ Canvas::Canvas(const Visual_object::Config &par_base) //, Pencil *par_pencil
 	drawing          = new Color[get_width() * get_height()];
 	original_drawing = new Color[get_width() * get_height()];
 	
+	Color *array = ((Full_texture*)get_texture())->get_pixels();
+
 	for (size_t i = 0; i < get_width() * get_height(); ++i)
 	{
-		preview[i] = TRANSPARENT;
-		original_drawing[i] = DEFAULT_BACKGROUND_COLOR;
-		drawing[i] = DEFAULT_BACKGROUND_COLOR;
+		preview[i] = array[i];
+		original_drawing[i] = array[i];
+		drawing[i] = array[i];
 	}
 
+	delete [] array;
+
+	Tool *current_tool = Toolbar::get_instance()->get_active_tool();
+	if (!current_tool->get_pixels())
+		current_tool->set_data(get_drawing(), Vector_ll(get_width(), get_height()));
+	
 	// for (int i = 0; i <= (int)MAX_COLOR_VALUE; ++i)
 	// {
 	// 	effect[i] = { -1, -1, -1, -1 };

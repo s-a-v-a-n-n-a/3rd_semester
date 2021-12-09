@@ -69,15 +69,28 @@ void Canvas_manager_manager::tick(Screen_information *screen, const double delta
 
 			offset_coefficient++;
 
+			for (size_t j = 0; j < objects_amount; ++j)
+			{
+				if (i == j || objects_array[j]->get_type() != (size_t)Vidget_type::CANVAS_MANAGER)
+					continue;
+
+				if (((Canvas_manager*)objects_array[j])->get_offset().get_x() > ((Canvas_manager*)objects_array[i])->get_offset().get_x())
+				{
+					((Canvas_manager*)objects_array[j])->set_offset(((Canvas_manager*)objects_array[j])->get_offset() - Vector_ll(DEFAULT_TAB_WIDTH, 0.0));
+
+				}
+			}
+
 			slow_delete_visual_object(i);
 			i--;
 			objects_amount--;
+
 			continue;
 		}
-		else if (objects_array[i]->get_type() == (size_t)Vidget_type::CANVAS_MANAGER && offset_coefficient)
-		{
-			((Canvas_manager*)objects_array[i])->set_offset(((Canvas_manager*)objects_array[i])->get_offset() - Vector_ll(DEFAULT_TAB_WIDTH, 0.0) * offset_coefficient);
-		}
+		// else if (objects_array[i]->get_type() == (size_t)Vidget_type::CANVAS_MANAGER && offset_coefficient)
+		// {
+		// 	((Canvas_manager*)objects_array[i])->set_offset(((Canvas_manager*)objects_array[i])->get_offset() - Vector_ll(DEFAULT_TAB_WIDTH, 0.0) * offset_coefficient);
+		// }
 
 		objects_array[i]->tick(screen, delta_time);
 	}

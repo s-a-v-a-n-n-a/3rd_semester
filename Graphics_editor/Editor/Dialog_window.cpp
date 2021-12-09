@@ -34,23 +34,63 @@ void destroy_dialog_window(Dialog *dialog_window)
 }
 
 Dialog::Dialog(const Visual_object::Config &par_base)
-: Window(par_base)
+: Window(par_base), offset(DEFAULT_BUTTON_HEIGHT)
 {
 	;
 }
 
-void Dialog::create_slider(const Vector_ll &position, const size_t width, const size_t height, Button_delegate *par_delegate)
+Slider *Dialog::create_slider()
 {
-	Slider *slider = new Slider({(size_t)Vidget_type::SLIDER, position, NULL, TRANSPARENT, width, height}, par_delegate, 0, 1, true);
+	size_t height = 100 < (get_height() - offset) ? 100 : get_height() - offset; 
+	Slider *slider = new Slider({(size_t)Vidget_type::SLIDER, get_position() + Vector_ll(0, offset), NULL, TRANSPARENT, get_width(), height}, NULL, 0, 1, true);
+
+	offset += height;
 
 	add_visual_object(slider);
+
+	return slider;
 }
 
-void Dialog::create_color_picker(const Vector_ll &position, const size_t width, const size_t height, const Color &color)
+Color_selection_window *Dialog::create_color_picker()
 {
-	Visual_object::Config picker_base = { (size_t)Vidget_type::COLOR_SELECTION, position, NULL, TRANSPARENT, width, height};
+	size_t width = get_width();
+	size_t height = width < (get_height() - offset) ? width : get_height() - offset; 
+	Visual_object::Config picker_base = { (size_t)Vidget_type::COLOR_SELECTION, get_position() + Vector_ll(0, offset), NULL, TRANSPARENT, get_width(), height};
 
-	Color_selection_window *picker = new Color_selection_window(picker_base, color);
+	Color_selection_window *picker = new Color_selection_window(picker_base, RED);
+
+	offset += height;
+
 	add_visual_object(picker);
+
+	return picker;
+}
+
+Input_string *Dialog::create_input_string()
+{
+	size_t height = 50 < (get_height() - offset) ? 50 : get_height() - offset; 
+	Animating_texture *text_field_texture = Resources::get_instance()->create_texture(TEXT_FIELD, get_width(), height, TEXT_FIELD_ACTIVE, NULL);
+	Input_string *input = new Input_string({(size_t)Vidget_type::INPUT_STRING, get_position() + Vector_ll(0, offset), text_field_texture, TRANSPARENT, get_width(), height});
+	
+	offset += height;
+
+	add_visual_object(input);
+
+	return input;
+}
+
+double Dialog::get_fraction(Slider *slider)
+{
+	return slider->get_relation();
+}
+
+Color Dialog::get_color(Color_selection_window *color_picker)
+{
+	return color_picker->get_color();
+}
+
+char *Dialog::get_text(Input_string *input)
+{
+	return input->get_message();
 }
 

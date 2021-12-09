@@ -47,7 +47,7 @@ void Amounts_graph::draw(Screen_information *screen)
 			size_t point = shapes_amounts[i][j % get_width()];
 
 			// screen->set_color(y_offset + get_height() - point, x_offset + k, shapes_colors[i]);
-			screen->draw_point(Radius_vector((x_offset + k) * scale, (y_offset + get_height() - point) * scale), shapes_colors[i]);
+			screen->draw_point(Radius_vector((x_offset + k), y_offset + get_height() - point * scale), shapes_colors[i]);
 		}
 	}
 }

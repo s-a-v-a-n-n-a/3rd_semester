@@ -159,13 +159,11 @@ Radius_vector Lightened_sphere::count_pixel_color(Radius_vector current_pixel)
 	if (perpendicular.scalar_multiplication(light_vector) <= 0)
 	{
 		Radius_vector point_color = result_color(0, 0);
-		screen->set_color(y, x, { MAX_COLOR_VALUE, (unsigned char)point_color.get_x(), (unsigned char)point_color.get_y(), (unsigned char)point_color.get_z() });
-
-		continue;
+		
+		return Radius_vector((unsigned char)point_color.get_x(), (unsigned char)point_color.get_y(), (unsigned char)point_color.get_z());
 	}
 
 	Radius_vector view_vector(view_point - current_pixel);
-	// view_vector -= Radius_vector((double)x, (double)y, z);
 
 	double diffuse_cos  = diffuse_angle(perpendicular, light_vector);
 	double specular_cos = specular_angle(perpendicular, light_vector, view_vector);
@@ -173,11 +171,6 @@ Radius_vector Lightened_sphere::count_pixel_color(Radius_vector current_pixel)
 	specular_cos = calculate_power(specular_cos, material_coefficient); 
 
 	return result_color(diffuse_cos, specular_cos);
-
-	// screen->set_color(, x, { MAX_COLOR_VALUE, 
-	// 	                     (unsigned char)point_color.get_x(), 
-	// 	                     (unsigned char)point_color.get_y(), 
-	// 	                     (unsigned char)point_color.get_z() });
 }
 
 void Lightened_sphere::draw_lambert_and_fong_in_color (Screen_information *screen)
@@ -192,28 +185,6 @@ void Lightened_sphere::draw_lambert_and_fong_in_color (Screen_information *scree
 			if (if_point_in_circle((double)x, (double)y))
 			{
 				Radius_vector current_pixel = count_current_pixel((double)x, (double)y);
-
-				// double z = count_z_coordinate((double)(x - center_point.x), (double)(y - center_point.y));
-				// sphere_center = { center_point.x, center_point.y, 0 };
-
-				// Radius_vector perpendicular(count_normal_to_surface((double)x, (double)y, z));
-				// Radius_vector light_vector(Radius_vector((double)x, (double)y, z) - light.get_point());
-				
-				// if (perpendicular.scalar_multiplication(light_vector) <= 0)
-				// {
-				// 	Radius_vector point_color = result_color(0, 0);
-				// 	screen->set_color(y, x, {MAX_COLOR_VALUE, (unsigned char)point_color.get_x(), (unsigned char)point_color.get_y(), (unsigned char)point_color.get_z()});
-
-				// 	continue;
-				// }
-
-				// Radius_vector view_vector(view_point);
-				// view_vector -= Radius_vector((double)x, (double)y, z);
-
-				// double diffuse_cos = diffuse_angle(perpendicular, light_vector);
-				// double specular_cos = specular_angle(perpendicular, light_vector, view_vector);
-
-				// specular_cos = calculate_power(specular_cos, material_coefficient); 
 
 				Radius_vector point_color = count_pixel_color(current_pixel);
 
@@ -235,4 +206,30 @@ void Lightened_sphere::move_light_in_circle()
 	Radius_vector tmp_vector(light.get_point() - sphere_center);
 	set_light_position(tmp_vector.rotate_point(ROTATE_ANGLE_Y, ROTATE_ANGLE_Z) + sphere_center);
 }
+
+/*
+// double z = count_z_coordinate((double)(x - center_point.x), (double)(y - center_point.y));
+// sphere_center = { center_point.x, center_point.y, 0 };
+
+// Radius_vector perpendicular(count_normal_to_surface((double)x, (double)y, z));
+// Radius_vector light_vector(Radius_vector((double)x, (double)y, z) - light.get_point());
+
+// if (perpendicular.scalar_multiplication(light_vector) <= 0)
+// {
+// 	Radius_vector point_color = result_color(0, 0);
+// 	screen->set_color(y, x, {MAX_COLOR_VALUE, (unsigned char)point_color.get_x(), (unsigned char)point_color.get_y(), (unsigned char)point_color.get_z()});
+
+// 	continue;
+// }
+
+// Radius_vector view_vector(view_point);
+// view_vector -= Radius_vector((double)x, (double)y, z);
+
+// double diffuse_cos = diffuse_angle(perpendicular, light_vector);
+// double specular_cos = specular_angle(perpendicular, light_vector, view_vector);
+
+// specular_cos = calculate_power(specular_cos, material_coefficient); 
+*/
+
+				
 

@@ -31,17 +31,17 @@ Slider::Slider(const Visual_object::Config &par_base, Button_delegate *par_deleg
 	// magic !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Button *left = NULL;
 	if (horizontal)
-		left = create_control_button(get_position(), height, height, SLIDER_LEFT, -1 * (line_length / 10), true, slider);
+		left = create_control_button(get_position(), height, height, SLIDER_LEFT, SLIDER_LEFT_ACTIVE, -1 * (line_length / 10), true, slider);
 	else
-		left = create_control_button(get_position(), width, width, SLIDER_DOWN,  -1 * (line_length / 10), false, slider);
+		left = create_control_button(get_position(), width, width, SLIDER_DOWN, SLIDER_DOWN, -1 * (line_length / 10), false, slider);
 	
 	// кнопка вправо
 	// magic !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Button *right = NULL;
 	if (horizontal)
-		right = create_control_button(get_position() + Vector_ll(width - height, 0), height, height, SLIDER_RIGHT, (line_length / 10), true, slider);
+		right = create_control_button(get_position() + Vector_ll(width - height, 0), height, height, SLIDER_RIGHT, SLIDER_RIGHT_ACTIVE, (line_length / 10), true, slider);
 	else
-		right = create_control_button(get_position() + Vector_ll(height - width, 0), width, width, SLIDER_UP, (line_length / 10), false, slider);
+		right = create_control_button(get_position() + Vector_ll(height - width, 0), width, width, SLIDER_UP, SLIDER_UP, (line_length / 10), false, slider);
 	
 	// полосочка, по которой ездят
 	// а кто он и что он будет уметь? Светиться? Фон рисовать?
@@ -63,12 +63,14 @@ Magnetic *Slider::create_sliding_button(const Vector_ll &position, const size_t 
 	return magnet;
 }
 
-Button *Slider::create_control_button(const Vector_ll &position, const size_t width, const size_t height, const char *texture_name, const long long delta, const bool x_coord, Visual_object *to_control)
+Button *Slider::create_control_button(const Vector_ll &position, const size_t width, const size_t height, const char *texture_name, const char *animating_texture, const long long delta, const bool x_coord, Visual_object *to_control)
 {
-	Full_texture *texture = Resources::get_instance()->create_texture(texture_name, width, height);
+	Animating_texture *texture = Resources::get_instance()->create_texture(texture_name, width, height, animating_texture, nullptr);
 
-	Change_fixedly *change = new Change_fixedly(to_control, delta, x_coord);
-	Button *control = new Button({(size_t)Vidget_type::BUTTON, position, texture, TRANSPARENT, width, height}, change, "");
+	// Change_fixedly *change = new Change_fixedly(to_control, delta, x_coord);
+	Button *control = new Button({(size_t)Vidget_type::BUTTON, position, texture, TRANSPARENT, width, height}, NULL, "");
+	Animating_change_fixedly *change = new Animating_change_fixedly(to_control, delta, x_coord, control);
+	control->set_delegate(change);
 
 	add_visual_object(control);
 

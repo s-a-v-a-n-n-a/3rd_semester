@@ -90,14 +90,28 @@ public:
 		size_t **shapes_amounts = graph->get_shapes_amounts();
 
 		size_t amounts_graph_width = graph->get_width();
+		size_t amounts_graph_height = graph->get_height();
 		
-		for (size_t i = 0; i < shape_types_amount; ++i)
+		size_t max_amount = 0;
+		for (size_t i = 0; i < amounts_graph_width; ++i)
 		{
-			for (size_t j = 0; j < amounts_graph_width; ++j)
+			for (size_t j = 0; j < shape_types_amount; ++j)
 			{
-				if (shapes_amounts[i][j] > amounts_graph_width)
-					graph->set_scale(amounts_graph_width / shapes_amounts[i][j]);
+				if (shapes_amounts[j][i] > max_amount)
+					max_amount = shapes_amounts[j][i];
+				// printf("new scale %lg\n", graph->get_scale());
 			}
+		}
+
+		if (max_amount * graph->get_scale() > amounts_graph_height)
+		{
+			// graph->set_scale(amounts_graph_width / shapes_amounts[i][j]);
+			graph->set_scale(graph->get_scale() / (amounts_graph_height / max_amount));
+		}
+		else if (max_amount * graph->get_scale() < (amounts_graph_height / 2.0) && max_amount * graph->get_scale() * (amounts_graph_height / max_amount / 2.0) <= amounts_graph_height)
+		{
+			// printf("came here\n");
+			graph->set_scale(graph->get_scale() * (amounts_graph_height / max_amount / 2.0));
 		}
 	}
 };

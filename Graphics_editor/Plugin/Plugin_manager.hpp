@@ -125,10 +125,11 @@ public:
 
 	PAppInterface *create_app_interface();
 
-	void add_plugin(const char *filename);
+	void load_from_dir(const char *path);
+	
+	void add_plugin(const char *filename, bool is_path = false);
 
 	void add_tool(const PPluginInterface *plugin, const PAppInterface *app_interface, void *par_handle);
-
 	void add_effect(const PPluginInterface *plugin, const PAppInterface *app_interface, void *par_handle);
 
 	Plugin *get_plugin(const PPluginInterface *self);

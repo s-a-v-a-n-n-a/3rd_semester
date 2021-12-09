@@ -3,16 +3,24 @@
 
 #include "Window.hpp"
 #include "Color_selection.hpp"
+#include "../GUI/Input_string.hpp"
 #include "../GUI/Slider.hpp"
 
 class Dialog : public Window
 {
+private:
+	size_t offset;
+
 public:
 	Dialog(const Visual_object::Config &par_base);
 	
-	void create_slider(const Vector_ll &position, const size_t width, const size_t height, Button_delegate *par_delegate);
-	void create_color_picker(const Vector_ll &position, const size_t width, const size_t height, const Color &color = DEFAULT_COLOR);
-	// void create_spline();
+	Slider *create_slider();
+	Color_selection_window *create_color_picker();
+	Input_string *create_input_string();
+
+	double get_fraction(Slider *slider);
+	Color get_color(Color_selection_window *color_picker);
+	char *get_text(Input_string *input);
 };
 
 Dialog *create_dialog_window(const size_t width, const size_t height);

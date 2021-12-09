@@ -251,7 +251,7 @@ public:
 
 // --------------------------------------------------------------------------------------------------------------------------
 
-class Change_fixedly : public Button_delegate
+class Change_fixedly : virtual public Button_delegate
 {
 private:
 	Visual_object *to_control;
@@ -264,6 +264,18 @@ public:
 
 	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
 };
+
+// --------------------------------------------------------------------------------------------------------------------------
+
+class Animating_change_fixedly : public Change_fixedly, public Animating
+{
+public:
+	Animating_change_fixedly(Visual_object *par_to_control, const long long par_delta, const bool par_change_x, Visual_object *par_to_animate);
+
+	bool on_mouse_click(const size_t par_x, const size_t par_y) override;
+	bool on_mouse_release() override;
+	bool on_mouse_move(const Vector_ll from, const Vector_ll to) override;
+}; 
 
 // --------------------------------------------------------------------------------------------------------------------------
 

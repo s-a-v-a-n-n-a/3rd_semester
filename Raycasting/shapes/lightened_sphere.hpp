@@ -6,6 +6,7 @@
 #include "circle.hpp"
 #include "../math_structures/math_functions.hpp"
 #include "../lighting/Colored_point.hpp"
+#include "../sfml_drawing/screen_functions.hpp"
 
 extern const Radius_vector AMBIENT;
 extern const double ROTATE_ANGLE_Y;

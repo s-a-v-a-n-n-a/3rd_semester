@@ -11,7 +11,7 @@ Plugin_effect::Plugin_effect(const PPluginInterface *par_plugin, const PAppInter
 Plugin_effect::~Plugin_effect()
 {
 	plugin->general.deinit();
-	delete plugin;
+	// delete plugin;
 }
 
 void Plugin_effect::apply()

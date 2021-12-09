@@ -1,5 +1,9 @@
 #include "Plugin_manager.hpp"
 
+#include <sys/types.h>
+#include <dirent.h>
+#include <libgen.h>
+
 #include "../Editor/Application.hpp"
 #include "../sfml_drawing/screen_functions.hpp"
 #include "../math_structures/math_functions.hpp"
@@ -19,7 +23,14 @@ Blend_mode app_translate_mode(PBlendMode mode)
 
 PRGBA *app_get_pixels()
 {
-	return (PRGBA*)Toolbar::get_instance()->get_active_tool()->get_pixels();
+	Vector_ll params = Toolbar::get_instance()->get_active_tool()->get_params();
+	Color *data = Toolbar::get_instance()->get_active_tool()->get_pixels();
+
+	PRGBA *pixels = new	PRGBA[params.get_x() * params.get_y()];
+	for (size_t i = 0; i < params.get_x() * params.get_y(); ++i)
+		pixels[i] = *((PRGBA*)&(data[i]));
+
+	return pixels;
 }
 
 void app_get_size(size_t *width, size_t *height)
@@ -48,7 +59,13 @@ void app_log(const char *fmt, ...)
 
 void app_release_pixels(PRGBA *pixels)
 {
-	;
+	Vector_ll params = Toolbar::get_instance()->get_active_tool()->get_params();
+	Color *data = Toolbar::get_instance()->get_active_tool()->get_pixels();
+
+	for (size_t i = 0; i < params.get_x() * params.get_y(); ++i)
+		data[i] = *((Color*)&(pixels[i]));
+
+	delete [] pixels;
 }
 
 PRGBA app_get_current_color()
@@ -203,12 +220,49 @@ void app_destroy_surface(const PPluginInterface *self)
 
 void *app_add(const PPluginInterface *self, PSettingType type, const char *name)
 {
+	Plugin *plugin = Application::get_app()->get_plugins()->get_plugin(self);
+	// destroy_dialog_window((Dialog*)plugin->get_surface());
+
+	if (!strcmp(name, PST_SLIDER_1D))
+	{
+		return ((Dialog*)plugin->get_surface())->create_slider();
+	}
+
+	if (!strcmp(name, PST_COLOR_PICKER))
+	{
+		return ((Dialog*)plugin->get_surface())->create_color_picker();
+	}
+
+	if (!strcmp(name, PST_TEXT_LINE))
+	{
+		return ((Dialog*)plugin->get_surface())->create_input_string();
+	}
+
 	return nullptr;
 }
 
 void app_get(const PPluginInterface *self, void *handle, void *answer)
 {
+	Plugin *plugin = Application::get_app()->get_plugins()->get_plugin(self);
 
+	if (((Visual_object*)handle)->get_type() == (size_t)Vidget_type::SLIDER)
+	{
+		*((float*)answer) = ((Dialog*)plugin->get_surface())->get_fraction((Slider*)handle);
+		return;
+	}
+
+	if (((Visual_object*)handle)->get_type() == (size_t)Vidget_type::COLOR_SELECTION)
+	{
+		Color color = ((Dialog*)(plugin->get_surface()))->get_color((Color_selection_window*)handle);
+		*((PRGBA*)answer) = *((PRGBA*)&(color));
+		return;
+	}
+
+	if (((Visual_object*)handle)->get_type() == (size_t)Vidget_type::INPUT_STRING)
+	{
+		*((char**)answer) = ((Dialog*)plugin->get_surface())->get_text((Input_string*)handle);
+		return;
+	}
 }
 
 // Plugin_manager::log = nullptr;
@@ -267,12 +321,16 @@ Plugin_manager::Plugin_manager()
 	triangle = &app_triangle;
 	line = &app_line;
 	pixels = &app_pixels;
+
+	// gAppInterface->general.feature_level & PFL_SETTINGS_SUPPORT	
 	create_surface = &app_create_surface;
 	destroy_surface = &app_destroy_surface;
 	add = &app_add;
 	get = &app_get;
 
 	app_interface = create_app_interface();
+
+	load_from_dir("Plugins_self/");
 }
 
 Plugin_manager::~Plugin_manager()
@@ -306,6 +364,8 @@ PAppInterface *Plugin_manager::create_app_interface()
 	interface->extensions.enable = nullptr;
 	interface->extensions.get_func = nullptr;
 
+	// interface->general.feature_level = PFL_SETTINGS_SUPPORT;
+
 	interface->general.log = log;
 	interface->general.get_absolute_time = get_absolute_time;
 	interface->general.release_pixels = release_pixels;
@@ -337,17 +397,60 @@ PAppInterface *Plugin_manager::create_app_interface()
 	return interface;
 }
 
-void Plugin_manager::add_plugin(const char *filename)
+void Plugin_manager::load_from_dir(const char *path)
+{
+	DIR *directory = opendir(path);
+
+	struct dirent *to_read = nullptr;
+
+    char extension[] = ".so";
+    size_t extension_length = strlen(extension);
+
+    size_t path_length = strlen(path);
+
+    while ((to_read = readdir(directory)) != NULL) 
+    {
+        size_t dir_name_length = strlen(to_read->d_name);
+ 
+        if (strcmp(extension, to_read->d_name + dir_name_length - extension_length) != 0) 
+        	continue;
+
+        char *libname = new char[path_length + dir_name_length + 1];
+        sprintf(libname, "%s%s", path, to_read->d_name);
+        libname[path_length + dir_name_length] = '\0';
+        printf("%s\n", libname);
+
+        add_plugin(libname, true);
+
+        delete [] libname;
+    }
+
+    (void)closedir(directory);
+}
+
+void Plugin_manager::add_plugin(const char *filename, bool is_path)
 {
 	PAppInterface *app_interface = create_app_interface();
 
-	char *path = create_path(filename);
-	void *handle = dlopen(path, RTLD_LAZY);
-	if (!handle)
-		return;
+	void *handle = nullptr;
+	if (!is_path)
+	{
+		char *path = create_path(filename);
+		handle = dlopen(path, RTLD_LAZY);
+		if (!handle)
+			return;
+		else
+			printf("[Application message]: found plugin (congratulations!)\n");
+		delete_path(path);
+	}
 	else
-		printf("[Application message]: found plugin (congratulations!)\n");
-	delete_path(path);
+	{
+		handle = dlopen(filename, RTLD_LAZY);
+		if (!handle)
+			return;
+		else
+			printf("[Application message]: found plugin (congratulations!)\n");
+	}
 	
 	get_plugin_interface = (const PPluginInterface *(*)())dlsym(handle, PGET_INTERFACE_FUNC);
 	const PPluginInterface *plugin = get_plugin_interface();
@@ -361,7 +464,6 @@ void Plugin_manager::add_plugin(const char *filename)
 	{
 		add_effect(plugin, app_interface, handle);
 	}
-
 }
 
 void Plugin_manager::add_tool(const PPluginInterface *plugin, const PAppInterface *app_interface, void *par_handle)
@@ -375,9 +477,11 @@ void Plugin_manager::add_tool(const PPluginInterface *plugin, const PAppInterfac
 void Plugin_manager::add_effect(const PPluginInterface *plugin, const PAppInterface *app_interface, void *par_handle)
 {
 	Plugin_effect *effect = new Plugin_effect(plugin, app_interface, par_handle, ((Graphical_editor_main_page*)(Application::get_app()->get_default()))->get_active_canvas());
-	plugins.add_to_end(effect);
+	// plugins.add_to_end(effect);
 
 	effect->apply();
+
+	delete effect;
 }
 
 Plugin *Plugin_manager::get_plugin(const PPluginInterface *self)
